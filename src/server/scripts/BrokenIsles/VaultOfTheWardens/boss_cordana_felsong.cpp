@@ -19,6 +19,7 @@
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "vault_of_the_wardens.h"
 

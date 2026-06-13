@@ -20,6 +20,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "ScriptedFollowerAI.h"
 
 class npc_elemental_energy_quest : public CreatureScript

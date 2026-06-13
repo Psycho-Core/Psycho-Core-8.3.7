@@ -17,6 +17,7 @@
 
 # include "highmaul.h"
 #include "SpellMgr.h"
+#include "InstanceScript.h"
 
 Position const g_PolMovePos[3] =
 {

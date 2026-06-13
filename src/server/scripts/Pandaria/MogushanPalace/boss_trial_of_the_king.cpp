@@ -17,6 +17,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "mogu_shan_palace.h"
 

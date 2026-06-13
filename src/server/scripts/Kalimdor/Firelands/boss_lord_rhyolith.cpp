@@ -19,6 +19,7 @@
 #include "firelands.h"
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Vehicle.h"
 
 enum ScriptedTexts

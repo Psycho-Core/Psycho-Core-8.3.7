@@ -1,6 +1,7 @@
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellHistory.h"
 #include "shrine_of_the_storm.h"
 

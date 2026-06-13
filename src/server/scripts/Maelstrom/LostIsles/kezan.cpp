@@ -25,6 +25,7 @@
 #include "PhasingHandler.h"
 #include "Player.h"
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "ScriptedCreature.h"
 #include "ScriptedEscortAI.h"
 #include "ScriptedGossip.h"

@@ -28,6 +28,7 @@
 #include "ScriptedGossip.h"
 #include "ScriptedCreature.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Player.h"
 #include "WorldSession.h"
 

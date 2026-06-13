@@ -1,3 +1,9 @@
+#include "ScriptMgr.h"
+#include "ScriptedCreature.h"
+#include "SpellScript.h"
+#include "Player.h"
+#include "Unit.h"
+#include "Containers.h"
 
 #include "GameEventMgr.h"
 #include "GameObject.h"

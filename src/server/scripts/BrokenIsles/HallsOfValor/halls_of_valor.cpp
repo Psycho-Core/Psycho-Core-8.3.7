@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "halls_of_valor.h"
 
 enum hallsOfValorSpells

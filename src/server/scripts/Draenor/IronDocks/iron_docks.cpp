@@ -3,6 +3,7 @@
 #include "GridNotifiers.h"
 #include "iron_docks.hpp"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Vehicle.h"
 
 enum eSpells

@@ -18,6 +18,7 @@
 #include "PetBattlePackets.h"
 #include "BattlePet.h"
 #include "ObjectAccessor.h"
+#include "Position.h"
 
 #ifndef PetBattle_h__
 #define PetBattle_h__

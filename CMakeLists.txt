@@ -8,8 +8,8 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-# We require CMake >= 3.2
-cmake_minimum_required(VERSION 3.8)
+# We require CMake >= 4.3.2 (aligned with Psycho_Core toolchain)
+cmake_minimum_required(VERSION 4.3.2)
 
 # add this options before PROJECT keyword
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
@@ -57,6 +57,7 @@ endif()
 include(CheckCXXSourceRuns)
 include(CheckIncludeFiles)
 include(ConfigureScripts)
+include(ConfigureModules)
 
 # set default buildoptions and print them
 include(cmake/options.cmake)
@@ -88,6 +89,21 @@ include(cmake/showoptions.cmake)
 
 # add dependencies
 add_subdirectory(dep)
+
+# add modules (top-level modules/ folder - Psycho_Core module system)
+# Configured before src so the "modules" target + dynamic-module deps exist
+# when worldserver / the static loader reference them.
+if (NOT MODULES STREQUAL "none")
+  add_subdirectory(modules)
+endif()
+
+# PSYCHO_MODULES_GNU_NARROWING_COMPAT:
+# Imported module code keeps BfA race constants in uint8 containers. GCC treats
+# enum-to-uint8 brace initialization as narrowing; MSVC accepts the original code.
+# Keep the module source unchanged and relax only the modules target under GCC/Clang.
+if (TARGET modules AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  target_compile_options(modules PRIVATE -Wno-narrowing)
+endif()
 
 # add core sources
 add_subdirectory(src)

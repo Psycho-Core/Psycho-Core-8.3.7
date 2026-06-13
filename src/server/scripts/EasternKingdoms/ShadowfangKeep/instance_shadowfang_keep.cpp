@@ -23,6 +23,7 @@ SDCategory: Shadowfang Keep
 EndScriptData */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "shadowfang_keep.h"
 #include "GameObject.h"
 

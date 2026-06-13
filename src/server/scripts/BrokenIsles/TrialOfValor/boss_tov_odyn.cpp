@@ -20,6 +20,7 @@
 #include "AreaTriggerAI.h"
 #include "AreaTrigger.h"
 #include "trial_of_valor.h"
+#include "InstanceScript.h"
 
  /*
  TODO:

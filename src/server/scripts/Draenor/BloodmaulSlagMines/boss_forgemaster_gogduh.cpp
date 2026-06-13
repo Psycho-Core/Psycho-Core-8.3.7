@@ -21,6 +21,7 @@
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
 #include "SpellAuraEffects.h"
+#include "InstanceScript.h"
 
 namespace Instances { namespace Bloodmaul
 {
@@ -1053,16 +1054,16 @@ namespace Instances { namespace Bloodmaul
                 switch ((Spells)at->GetSpellId())
                 {
                     case Spells::ShatterEarthNW:
-                        orientation = float(M_PI) / 4.f; // 45°
+                        orientation = float(M_PI) / 4.f; // 45
                         break;
                     case Spells::ShatterEarthSW:
-                        orientation = float(M_PI) / 4.f * 3.f; // 135°
+                        orientation = float(M_PI) / 4.f * 3.f; // 135
                         break;
                     case  Spells::ShatterEarthSE:
-                        orientation = float(M_PI) / 4.f * 5.f; // 225°
+                        orientation = float(M_PI) / 4.f * 5.f; // 225
                         break;
                     case Spells::ShatterEarthNE:
-                        orientation = float(M_PI) / 4.f * 7.f; // 315°
+                        orientation = float(M_PI) / 4.f * 7.f; // 315
                         break;
                     default:
                         orientation = 0.f;
@@ -1126,16 +1127,16 @@ namespace Instances { namespace Bloodmaul
                 switch ((Spells)at->GetSpellId())
                 {
                     case Spells::VolcanicTrantrumNW:
-                        orientation = float(M_PI) / 4.f; // 45°
+                        orientation = float(M_PI) / 4.f; // 45
                         break;
                     case Spells::VolcanicTrantrumSW:
-                        orientation = float(M_PI) / 4.f * 3.f; // 135°
+                        orientation = float(M_PI) / 4.f * 3.f; // 135
                         break;
                     case Spells::VolcanicTrantrumSE:
-                        orientation = float(M_PI) / 4.f * 5.f; // 225°
+                        orientation = float(M_PI) / 4.f * 5.f; // 225
                         break;
                     case Spells::VolcanicTrantrumNE:
-                        orientation = float(M_PI) / 4.f * 7.f; // 315°
+                        orientation = float(M_PI) / 4.f * 7.f; // 315
                         break;
                     default:
                         orientation = 0.f;

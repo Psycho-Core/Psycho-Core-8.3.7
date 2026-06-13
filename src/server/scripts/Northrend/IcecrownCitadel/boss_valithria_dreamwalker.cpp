@@ -26,6 +26,7 @@
 #include "SpellAuraEffects.h"
 #include "SpellInfo.h"
 #include "SpellScript.h"
+#include "CreatureAIImpl.h"
 
 enum Texts
 {

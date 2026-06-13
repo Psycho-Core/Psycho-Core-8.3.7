@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "gate_setting_sun.h"
 #include "Vehicle.h"

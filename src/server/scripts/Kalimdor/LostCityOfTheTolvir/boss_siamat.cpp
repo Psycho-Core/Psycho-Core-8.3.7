@@ -18,6 +18,8 @@
 #include "AchievementMgr.h"
 #include "lost_city_of_the_tolvir.h"
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
+#include "InstanceScript.h"
 #include "Spell.h"
 #include "SpellAuras.h"
 

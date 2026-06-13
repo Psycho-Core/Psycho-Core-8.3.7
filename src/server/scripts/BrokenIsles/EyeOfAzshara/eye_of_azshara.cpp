@@ -21,6 +21,7 @@
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "eye_of_azshara.h"
 
 // 196027

@@ -1,4 +1,5 @@
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Creature.h"
 #include "CreatureAI.h"
 #include "Unit.h"

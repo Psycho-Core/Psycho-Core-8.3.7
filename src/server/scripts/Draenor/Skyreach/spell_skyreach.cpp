@@ -2,6 +2,7 @@
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Spell.h"
 #include "SpellScript.h"
 #include "SpellMgr.h"

@@ -19,6 +19,7 @@
 #include "GameObject.h"
 #include "PhasingHandler.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 
 #define MAX_ENCOUNTER 6
 

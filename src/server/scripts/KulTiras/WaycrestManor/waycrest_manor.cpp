@@ -1,4 +1,5 @@
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "waycrest_manor.h"
 
 enum Texts

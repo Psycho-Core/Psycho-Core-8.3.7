@@ -1,5 +1,6 @@
 #include "boss_blackhand.h"
 #include "SpellAuraEffects.h"
+#include "InstanceScript.h"
 
 /// Blackhand <Warlord of the Blackrock> - 77325
 class boss_blackhand : public CreatureScript

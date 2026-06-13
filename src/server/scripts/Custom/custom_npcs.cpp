@@ -250,7 +250,7 @@ public:
         EventMap events;
         uint8 curPoint;
 
-        void OnQuestAccept(Player* player, const Quest quest)
+        void OnQuestAccept(Player* player, Quest const* quest)
         {
             me->AddUnitFlag(UnitFlags(UNIT_NPC_FLAG_GOSSIP));
         }

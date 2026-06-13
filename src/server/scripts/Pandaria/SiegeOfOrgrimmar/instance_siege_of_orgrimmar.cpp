@@ -16,6 +16,7 @@
  */
 
 #include "siege_of_orgrimmar.hpp"
+#include "InstanceScript.h"
 
 Position npcAfterShaOfPridePos2[7] =
 {

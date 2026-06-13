@@ -1,6 +1,7 @@
 #include "siege_of_orgrimmar.hpp"
 #include "GameObjectAI.h"
 #include "SceneHelper.h"
+#include "InstanceScript.h"
 
 #define THOK_POWER_TYPE POWER_MANA
 #define THOK_POWER_MAX 100

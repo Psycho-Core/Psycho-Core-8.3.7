@@ -17,6 +17,7 @@
 
 #include "AchievementMgr.h"
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "ScriptedEscortAI.h"
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"

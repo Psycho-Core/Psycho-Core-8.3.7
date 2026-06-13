@@ -24,6 +24,7 @@ SDCategory: Karazhan
 EndScriptData */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "InstanceScript.h"
 #include "karazhan.h"
 #include "ObjectAccessor.h"

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 BfaCore Reforged
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,6 +24,7 @@
 #include <map>
 #include <vector>
 #include <unordered_set>
+#include <boost/asio/ip/tcp.hpp>
 
 struct RealmBuildInfo
 {
@@ -116,7 +117,7 @@ private:
     std::unordered_set<std::string> _subRegions;
     uint32 _updateInterval;
     std::unique_ptr<Trinity::Asio::DeadlineTimer> _updateTimer;
-    std::unique_ptr<boost::asio::ip::tcp_resolver> _resolver;
+    std::unique_ptr<boost::asio::ip::tcp::resolver> _resolver;
 };
 
 #define sRealmList RealmList::Instance()

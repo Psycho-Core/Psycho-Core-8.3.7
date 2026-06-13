@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "siege_of_boralus.h"
 #include "ScriptedGossip.h"
 

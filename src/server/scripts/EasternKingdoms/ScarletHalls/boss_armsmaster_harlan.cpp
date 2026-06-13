@@ -1,4 +1,5 @@
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "ScriptedCreature.h"
 #include "scarlet_halls.h"
 

@@ -23,6 +23,7 @@ SDCategory: Temple of Ahn'Qiraj
 EndScriptData */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "InstanceScript.h"
 #include "Map.h"
 #include "MapReference.h"

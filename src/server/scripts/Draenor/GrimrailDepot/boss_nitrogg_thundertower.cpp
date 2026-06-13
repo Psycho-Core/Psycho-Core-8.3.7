@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
+#include "InstanceScript.h"
 
 enum eNitroggThundertowerTalks
 {

@@ -22,6 +22,7 @@
 */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "the_vortex_pinnacle.h"
 
 enum Texts

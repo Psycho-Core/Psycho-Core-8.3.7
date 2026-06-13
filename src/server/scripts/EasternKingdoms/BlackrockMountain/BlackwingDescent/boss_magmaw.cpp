@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "blackwing_descent.h"
 #include "Map.h"
 #include "Vehicle.h"

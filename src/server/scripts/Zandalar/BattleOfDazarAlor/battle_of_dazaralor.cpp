@@ -3,6 +3,7 @@
 #include "GameObjectAI.h"
 #include "Player.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
 #include "CombatAI.h"

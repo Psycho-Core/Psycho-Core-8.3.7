@@ -21,6 +21,7 @@ Quest support: 3628.
 */
 
 #include "ScriptMgr.h"
+#include "ZoneScript.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
 #include "SpellScript.h"

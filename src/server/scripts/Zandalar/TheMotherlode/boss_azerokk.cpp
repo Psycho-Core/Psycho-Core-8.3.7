@@ -17,6 +17,7 @@
 
 #include "the_motherlode.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellMgr.h"
 #include "SpellScript.h"
 #include "SpellAuraEffects.h"

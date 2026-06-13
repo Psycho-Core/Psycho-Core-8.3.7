@@ -2,6 +2,7 @@
 #include "Vehicle.h"
 #include "SpellAuraEffects.h"
 #include "SpellAuraDefines.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

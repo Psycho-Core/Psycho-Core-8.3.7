@@ -2,6 +2,7 @@
 #include "GameObjectAI.h"
 #include "ObjectMgr.h"
 #include "SceneHelper.h"
+#include "InstanceScript.h"
 
 #define MAX_SHA_POWER 100
 #define SHA_POWER_PERIODIC 600

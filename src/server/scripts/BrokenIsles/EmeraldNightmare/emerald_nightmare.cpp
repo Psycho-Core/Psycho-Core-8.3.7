@@ -16,6 +16,7 @@
  */
 
 #include "emerald_nightmare.h"
+#include "InstanceScript.h"
 
 enum Says
 {

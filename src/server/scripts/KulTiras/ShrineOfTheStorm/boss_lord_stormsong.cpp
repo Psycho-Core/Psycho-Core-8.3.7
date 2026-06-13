@@ -19,6 +19,7 @@
 #include "AreaTriggerAI.h"
 #include "PlayerAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellAuraEffects.h"
 #include "shrine_of_the_storm.h"
 

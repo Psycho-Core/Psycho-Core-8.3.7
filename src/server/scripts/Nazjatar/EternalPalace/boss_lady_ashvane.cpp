@@ -6,6 +6,7 @@
 #include "SpellAuraDefines.h"
 #include "SpellAuraEffects.h"
 #include "G3D/Vector3.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

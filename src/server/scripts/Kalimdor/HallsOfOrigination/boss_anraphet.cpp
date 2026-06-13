@@ -17,6 +17,7 @@
   */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "halls_of_origination.h"
 #include "GameObject.h"
 #include "ScriptedGossip.h"

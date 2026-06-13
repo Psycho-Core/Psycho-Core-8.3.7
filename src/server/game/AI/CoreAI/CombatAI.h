@@ -19,6 +19,8 @@
 #define TRINITY_COMBATAI_H
 
 #include "CreatureAI.h"
+#include "Optional.h"
+#include "Position.h"
 
 class Creature;
 

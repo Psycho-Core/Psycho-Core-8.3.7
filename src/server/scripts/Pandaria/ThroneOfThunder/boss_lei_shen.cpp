@@ -2,6 +2,7 @@
 #include "SpellAuraEffects.h"
 #include "throne_of_thunder.h"
 #include "GameObject.h"
+#include "InstanceScript.h"
 
 Position PillarPosition[4] =
 {

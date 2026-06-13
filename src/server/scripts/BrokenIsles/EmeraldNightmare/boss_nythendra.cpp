@@ -20,6 +20,7 @@
 #include "emerald_nightmare.h"
 #include "ScriptedCreature.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"
 #include "SpellScript.h"

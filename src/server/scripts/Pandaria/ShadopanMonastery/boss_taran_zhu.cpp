@@ -17,6 +17,7 @@
 
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "shadopan_monastery.h"
 #include "SpellAuras.h"

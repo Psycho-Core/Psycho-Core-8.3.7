@@ -3,6 +3,7 @@
 #include "MoveSplineInit.h"
 #include <G3D/Vector3.h>
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Vehicle.h"
 
 enum Spells

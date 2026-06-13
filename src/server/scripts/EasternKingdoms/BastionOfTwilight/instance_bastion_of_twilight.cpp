@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "bastion_of_twilight.h"
 
 #define MAX_ENCOUNTER 5

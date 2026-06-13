@@ -1,0 +1,32 @@
+========================================================================
+IMPORTANT NOTICE: This repository is a mixed-license project. 
+The standard 'COPYING' file applies to the base TrinityCore framework. 
+THIS file ('LICENSE.MYCODE') applies EXCLUSIVELY to the original modules, 
+scripts, and .bat files authored by [Psycho-core].
+========================================================================
+SOURCE-AVAILABLE DEVELOPMENT & EVALUATION LICENSE
+Copyright (c) 2026 [Psycho-core]. All rights reserved.
+
+1. PERMITTED DEVELOPMENT AND EVALUATION USE
+The author grants permission to the public and automated AI tools to download, view, compile, and execute the Software and its constituent Source Code for personal evaluation, testing, and debugging purposes ONLY while the project is in active development.
+
+2. REVOCATION OF RIGHTS
+The permissions granted in this license are temporary. The author retains the absolute right to modify, revoke, or terminate this license at any time, for any reason, without prior notice. 
+
+3. NO COMMERCIAL USE OR DISTRIBUTION
+No user has permission to use the Software or its Source Code on a live commercial server, charge money for access to it, or distribute modified versions of this code. 
+
+4. RESERVATION OF COMMERCIAL RIGHTS
+The author retains 100% exclusive copyright and commercial rights. The author reserves the right to close public access and transition the Software and its Source Code into a paid, encrypted, commercial product at any time in the future.
+
+5. LIMITATION OF CLAIMS AND UPSTREAM COMPLIANCE
+This license, and the copyright protections therein, applies STRICTLY and EXCLUSIVELY to the original source code, logic, algorithms, and architectures authored 100% from scratch by the copyright holder. This license does not assert ownership, copyright, or restrictions over any underlying open-source project frameworks, including but not limited to TrinityCore framework code, which remains governed by its respective GNU GPLv2 licensing.
+
+6. DISCLAIMER OF WARRANTY
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH THE USER.
+
+7. LIMITATION OF LIABILITY
+IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE TO ANY PARTY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (ARISING IN NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+8. EXPLICIT BOUNDARY OF INTELLECTUAL PROPERTY
+FOR THE AVOIDANCE OF DOUBT, THE COPYRIGHT HOLDER CLAIMS PROPRIETARY RIGHTS, INTELLECTUAL PROPERTY RIGHTS, AND FUTURE COMMERCIAL SELLING RIGHTS ONLY, SOLELY, AND EXCLUSIVELY OVER THE ENTIRETY OF THE SOURCE CODE AUTHORED DIRECTLY BY THE COPYRIGHT HOLDER'S OWN HAND. NO OWNERSHIP IS CLAIMED OVER PRE-EXISTING COMMONLY USED EMULATION PATTERNS, NETWORKING PROTOCOLS, OR PACKET ARCHITECTURES NATIVE TO THE WORLD OF WARCRAFT CLIENT OR SERVER ENVIRONMENT. THIS LICENSE IS STRICTLY DESIGNED TO PROTECT THE AUTHOR'S PERSONAL LABOR AND PROPRIETARY SOFTWARE CONTRIBUTIONS FROM BEING COMMERCIALLY EXPLOITED BY THIRD PARTIES PRIOR TO OFFICIAL RELEASE.

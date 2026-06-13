@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "blackwing_descent.h"
 #include "Vehicle.h"
 #include "Unit.h"

@@ -1,0 +1,516 @@
+===========================================================================
+ Copyright (c) 2026 Psycho-core. All rights reserved.
+ Original work authored 100% from scratch for Psycho_Core.
+ Licensed under LICENSE.MYCODE (see LICENSE.MYCODE.txt in the repo root).
+ NOT covered by the base GPL framework license. Development/evaluation only.
+===========================================================================
+
+================================================================================
+ FUTURE MOD-PSYCHOBOT UPGRADES — Roadmap & Ideas
+================================================================================
+ Date: 2026-06-09
+ Scope: mod-psychobot (engine, classes, world systems, AHBot, integrations)
+ Status: Ideas & documented hooks. NOT implemented yet. NOT bugs.
+================================================================================
+
+
+1. ENGINE & AI CORE UPGRADES
+================================================================================
+
+1.1 REACTION ENGINE (ReactionEngine)
+   - Current: proc-driven triggers (Clearcasting, Hot Streak, Killing Machine)
+     are handled by regular trigger checks each tick (~250ms).
+   - Upgrade: A lightweight ReactionEngine that runs on event callbacks
+     (OnAuraApply, OnDamageTaken, OnSpellCastSuccess) with a sub-100ms response
+     latency for critical interrupts, defensive cooldowns, and proc reactions.
+   - Benefit: Faster bot reactions to boss mechanics, PvP burst, and procs.
+   - Effort: Medium. Add EventListener plumbing to PsychobotAI, wire into
+     core event hooks (Aura/Spell/Unit hooks). Keep existing Engine for
+     steady-state rotation.
+
+1.2 LEARNING / ADAPTIVE ROTATION
+   - Current: Rotations are static spell-priority lists per spec.
+   - Upgrade: Track spell cast success/failure and DPS output per encounter.
+     Adjust priority weights at runtime (e.g., if Frostbolt consistently clips
+     a GCD, lower its weight). Add a simple memory structure:
+       spell_id -> { casts, hits, avg_dmg, last_cast_time }
+   - Benefit: Bots adapt to gear changes, talent choices, and encounter
+     length without hand-tuned priority lists.
+   - Effort: Medium-High. Needs damage-meter integration and a weight-adjustment
+     heuristic that doesn't oscillate wildly.
+
+1.3 THREAT ENGINE (Tank Priority)
+   - Current: Tanks use basic taunt on "threat low" trigger.
+   - Upgrade: Full threat-meter simulation (GetThreat vs main tank, off-tank
+     swap logic, taunt-if-below-90%, AOE threat distribution). Integrate with
+     EncounterScript for boss-specific tank-swap mechanics (e.g., Zul trash,
+     MOTHER Laser Matric, Taloc elevator).
+   - Benefit: Tanks actually hold aggro in dungeons/raids. No more accidental
+     DPS pulls.
+   - Effort: Medium. Core has threat APIs (Unit::GetThreatManager, etc.).
+     Need to expose them through ServerFacade and add tank-swap strategies.
+
+1.4 INTERRUPT COORDINATION
+   - Current: Each bot interrupts independently when it sees "target casting".
+   - Upgrade: Group-level interrupt assignment (bot 1 gets cast 1, bot 2 gets
+     cast 2, etc.). Use a shared interrupt table per group so 5 bots don't
+     blow all interrupts on the same heal.
+   - Benefit: Efficient CC in dungeons, PvP, and raid trash. Less waste.
+   - Effort: Low. Add a GroupMgr interrupt registry, assign on pull.
+
+1.5 COOLDOWN SYNC / BURST WINDOWS
+   - Current: Bots use cooldowns when their individual triggers fire.
+   - Upgrade: Bloodlust / Heroism coordination. When a boss enters a burn
+     phase (e.g., 30% health), bots pop offensive cooldowns together.
+     Add a "burst window" trigger tied to encounter state or group leader
+     command (".psychobot burst").
+   - Benefit: Meaningful DPS contribution in raids. No more wasted Bloodlust.
+   - Effort: Low-Medium. Add a group broadcast message or encounter trigger.
+
+1.6 MULTI-TARGET (CLEAVE) INTELLIGENCE
+   - Current: AOE spells fire when "enemy count > 2" trigger is active.
+   - Upgrade: Smart target selection for AOE (e.g., Seed of Corruption on the
+     target with most health so it survives to detonate; Blizzard on the
+     densest cluster; Starfall on the target in the center of the pack).
+   - Benefit: More realistic AOE behavior, less wasted GCDs on dying targets.
+   - Effort: Medium. Needs position-aware AOE value estimation.
+
+
+2. WORLD & NON-COMBAT SYSTEMS
+================================================================================
+
+2.1 VENDOR / SELL / REPAIR / BUY
+   - Current: Hooks exist but are not implemented (PsychobotWorldMgr stubs).
+   - Upgrade: Real vendor interaction. When inventory is full or gear is broken:
+     1. Find nearest vendor (GameObject/Unit query by type)
+     2. Path to vendor (TravelMgr / local nav)
+     3. Open gossip, select "Repair", repair all
+     4. Sell gray/white items below a quality threshold (config: SellQualityMax)
+     5. Buy reagents / food / drink if gold > threshold and stock low
+   - Needs: Gossip selection API, item quality filter, pathing to vendor NPCs.
+   - Effort: Medium. Core has GossipDef, PlayerTalkClass, vendor NPC types.
+
+2.2 LOOT PICKUP (CORPSE + GAMEOBJECT)
+   - Current: Hook exists but not implemented.
+   - Upgrade: After combat, loot all corpses within radius. Priority:
+     1. Quest items (if on a quest)
+     2. Rare+ items (config: LootQualityMin)
+     3. Gold
+     4. Everything else (if bag space)
+     Also: herb / mining / skinning nodes when traveling (gathering mode).
+   - Needs: Loot interaction API, bag-space check, item-level filter.
+   - Effort: Low-Medium. Core has LootItem, SendLoot, etc.
+
+2.3 QUEST ACCEPT / COMPLETE / TURN-IN
+   - Current: Hooks exist but not implemented.
+   - Upgrade: Full quest lifecycle support.
+     - Accept quests from quest givers (gossip option detection)
+     - Track quest objectives (kill counts, item counts, explore zones)
+     - Auto-complete quests at turn-in NPCs when all objectives met
+     - Reward selection (healer picks +int, tank picks +sta, etc.)
+   - Needs: Quest template data, gossip reward option selection, objective
+     tracking via core QuestMgr APIs.
+   - Effort: Medium-High. Quest data is in world DB; reward logic needs class
+     awareness.
+
+2.4 GATHERING PROFESSIONS (HERBALISM / MINING / SKINNING)
+   - Current: Not implemented.
+   - Upgrade: When in "gathering mode" (config toggle or world behavior):
+     - Scan for nearby gathering nodes (GameObject query by type)
+     - Path to node, cast appropriate spell (Find Herbs / Find Minerals)
+     - Loot the node, add to bags
+     - Skin corpses of skinnable beasts after combat
+   - Needs: GameObject type detection, profession skill check, gather spell cast.
+   - Effort: Medium. Core has skill/profession APIs, GameObject interaction.
+
+2.5 MOUNT / FLIGHT / TRAVEL DEPTH
+   - Current: MountForTravel hook exists but not fully implemented.
+   - Upgrade: Multi-tier travel system.
+     - Local: Walk/run (short distances < 100y)
+     - Ground mount: distances 100-500y, or zone-level travel
+     - Flight master: cross-zone travel (needs flight node graph)
+     - Flying mount (if unlocked): direct point-to-point in flyable zones
+     - Teleport: Hearthstone, mage portals, dungeon teleport
+   - Needs: Flight master NPC data, node graph, mount spell casting, taxi API.
+   - Effort: Medium-High. The flight node data exists in the DB; building a
+     usable graph takes work but is well-understood.
+
+2.6 FLEE / RETREAT BEHAVIOR
+   - Current: NOT IMPLEMENTED. Bots fight to the death.
+   - Upgrade: Survival logic.
+     - If bot health < 15% AND no healer nearby AND no defensive cooldowns
+       available -> attempt to flee (run away, use speed boosts, potions)
+     - Healers: if being melee'd and no peel available -> fade / fade-like
+     - Tanks: never flee unless group is wiping (then retreat to graveyard)
+   - Needs: FleeManager (from reference), path-away logic, speed-boost spell
+     detection, potion use.
+   - Effort: Low-Medium. The reference ike3/mangosbot has FleeManager we can
+     port; the logic is straightforward.
+
+2.7 REST / EAT / DRINK (REAL CONSUMABLES)
+   - Current: RestAction is a stub that restores health/mana deterministically.
+   - Upgrade: Use real food/water items from inventory.
+     - When out of combat and HP/Mana < 70%, use best available food/drink
+     - Prefer conjured food (mage) if available
+     - Track food buff duration; don't waste buffed food on short rests
+   - Needs: Item inventory scan, item use API, food/drink quality ranking.
+   - Effort: Low. Core has Item::Use, inventory iteration.
+
+2.8 BANK / GUILD BANK / MAIL
+   - Current: Not implemented.
+   - Upgrade: Inventory management for long-term bots.
+     - Deposit crafting materials in guild bank (if in a guild)
+     - Send excess items to an alt (mail system)
+     - Withdraw reagents from bank before a dungeon run
+   - Needs: Mail API, guild bank interaction, item classification (mat vs gear).
+   - Effort: Medium. Core has MailMgr, guild bank packet handling.
+
+
+3. PvP & BATTLEGROUND UPGRADES
+================================================================================
+
+3.1 PER-BG OBJECTIVE PLAY
+   - Current: Bots fight in BGs using standard combat rotation. No objective play.
+   - Upgrade: BG-specific objective AI.
+     - WSG: defend flag carrier, attack enemy flag carrier, coordinate hand-off
+     - AB / EotS: capture nodes, defend held nodes, rotate based on map state
+     - AV: attack/defend towers, summon bosses, collect turn-ins
+     - IoC: gate destruction, vehicle usage, workshop control
+     - Strand: attack/defend bombs, gate sequencing
+   - Needs: BG packet/objective state parsing, per-BG strategy module,
+     vehicle AI (if applicable).
+   - Effort: High. Each BG needs its own state machine and objective map.
+     Start with 1-2 BGs (WSG + AB) as a proof of concept.
+
+3.2 ARENA TACTICS
+   - Current: Bots fight using standard PvP rotation. No arena-specific logic.
+   - Upgrade: Arena target-calling, LOS usage, pillar humping, burst windows,
+     CC chains (sheep -> fear -> cyclone), defensive cooldown rotation.
+     - Add "arena caller" bot that marks kill target (skull / X)
+     - Bots focus fire on called target
+     - Healers hide behind pillars when focused
+   - Needs: Arena map data (LOS geometry), pillar positions, CC duration tracking.
+   - Effort: High. Arena is the most demanding PvP environment.
+
+3.3 OPEN-WORLD PvP
+   - Current: GetPvpTarget uses basic hostile-player detection.
+   - Upgrade: Honor farming logic. Bots fight only in appropriate zones,
+     respect level differences, use terrain (high ground), escape if outnumbered.
+   - Effort: Low-Medium. Mostly parameter tuning + zone awareness.
+
+
+4. DUNGEON & RAID UPGRADES
+================================================================================
+
+4.1 PER-ENCOUNTER BOSS REACTIONS (EncounterScript depth)
+   - Current: Framework exists (RegisterEncounter/RunEncounterScript) but
+     only has basic "detect boss / interrupt casts" logic.
+   - Upgrade: Full encounter scripts for major bosses.
+     - Position-based: "move to safe spot" (e.g., avoid breath, soak puddles)
+     - Stack/spread: "stack for debuff split" vs "spread for AoE"
+     - Add assignments: "bot A takes left orb, bot B takes right orb"
+     - Phase transitions: change rotation/strategy when boss changes phase
+     - Pre-pull: buffs, food, pre-potting
+   - Needs: Per-boss mechanic data (positions, spell IDs, timing). This is
+     encounter-specific and best done by players who know the fights.
+   - Effort: High per encounter, but low per-script effort. A community-driven
+     script bank would work well here.
+
+4.2 DUNGEON FINDER (LFG) INTEGRATION
+   - Current: Not implemented.
+   - Upgrade: Bots queue for dungeons, form groups, and run them.
+     - Tank + Healer + 3 DPS auto-form
+     - Enter dungeon, complete objectives, kill bosses, loot chest
+     - Exit and re-queue
+   - Needs: LFG queue API (core has LFGMgr), role assignment, dungeon pathing.
+   - Effort: Medium-High. The LFG system is in the core; need bot-aware queueing.
+
+4.3 RAID FINDER (LFR) SIMULATION
+   - Current: Not implemented.
+   - Upgrade: 25-bot raid composition, role assignments (2 tanks, 4-6 healers,
+     rest DPS), basic encounter coordination (tank swaps, healer assignments).
+   - Needs: Raid composition builder, role-assignment UI or config, encounter
+     scripts for LFR bosses (simplified mechanics).
+   - Effort: High. Composition tuning + encounter depth.
+
+
+5. AUCTION HOUSE BOT (AHBot) UPGRADES
+================================================================================
+
+5.1 LIVE AUCTION POSTING (PostAuction hook)
+   - Current: IsSellable / PriceItem / BuildListings logic exists, but the
+     actual AddAuction call is a gated hook (needs owner account + item DB2).
+   - Upgrade: Real auction posting.
+     - Create a bot "bank alt" character (or use a real player's alt)
+     - Transfer items to the alt via mail or trade
+     - Post auctions with duration 12/24/48h based on item velocity
+     - Undercut existing auctions by 1% (configurable)
+     - Cancel and repost if severely undercut (config: UndercutThreshold)
+   - Needs: Account creation for bank alt, mail send/receive, AddAuction API
+     with proper owner account ID, item stack splitting.
+   - Effort: Medium. The core AHMgr has AddAuction; the gap is the bot-alt
+     lifecycle and mail integration.
+
+5.2 AUCTION BUYING (AHBot buyer)
+   - Current: Not implemented.
+   - Upgrade: AHBot scans for underpriced items and buys them.
+     - Price DB: track historical average sale price per item
+     - Buy if current price < X% of historical average (config: BuyDiscount%)
+     - Resell at market price (or higher if scarce)
+     - Focus on crafting materials, consumables, and gear upgrades
+   - Needs: AH query API (AuctionHouseMgr::GetAuctions), price tracking DB,
+     buy-out logic.
+   - Effort: Medium. Core has auction browsing; need a price DB and decision
+     engine.
+
+5.3 CRAFTING PROFIT BOT
+   - Current: Not implemented.
+   - Upgrade: Bots that craft and sell for profit.
+     - Scan AH for material prices
+     - Calculate craft cost vs sale price for each recipe
+     - Craft profitable items, post on AH
+     - Level crafting professions as a side effect
+   - Needs: Profession recipe data, material cost calculation, crafting spell
+     casting, inventory management.
+   - Effort: High. Complex economy simulation; needs careful tuning to avoid
+     market flooding.
+
+5.4 ECONOMY STABILIZATION (server-wide)
+   - Current: Not implemented.
+   - Upgrade: AHBot as a market maker.
+     - If an item has 0 auctions, post one at a fair price (prevents scarcity)
+     - If an item is overpriced (>200% of historical), post one at 150%
+     - Gradually inject/removes gold to keep inflation in check
+   - Needs: Historical price DB, market-depth analysis, gold injection limits.
+   - Effort: High. This is economic design, not just code.
+
+
+6. GEAR & PROGRESSION UPGRADES
+================================================================================
+
+6.1 GEAR EVALUATION (iLvl + Stat Weights)
+   - Current: PsychobotGearMgr gives level-appropriate gear but doesn't
+     evaluate item quality.
+   - Upgrade: Stat-weight-based gear scoring per spec.
+     - Pre-computed stat weights: e.g., Frost Mage = Int > Crit > Haste > Mastery
+     - Compare equipped vs new item, equip if score higher
+     - Support Azerite traits (BfA) if data available
+   - Needs: Item stat parsing, spec->weight mapping, ItemTemplate DB access.
+   - Effort: Low-Medium. Item stats are in DB2; weights can be hand-tuned or
+     imported from simulators (e.g., Raidbots weights).
+
+6.2 ENCHANT / GEM / CONSUMABLE MANAGEMENT
+   - Current: Not implemented.
+   - Upgrade: Auto-enchant gear, socket gems, apply weapon coatings.
+     - After equipping a new item, check if enchantable
+     - Apply best known enchant (or buy from AH if missing)
+     - Socket gems in items with sockets (pre-computed best gems per spec)
+     - Apply flasks / food buffs before raid/dungeon
+   - Needs: Enchanting / jewelcrafting spell lists, material availability,
+     AH purchase fallback.
+   - Effort: Medium. Enchant/spell IDs need to be curated per expansion.
+
+6.3 TALENT AUTO-OPTIMIZATION
+   - Current: PsychobotTalentMgr applies a fixed talent build per spec.
+   - Upgrade: Multiple talent presets per spec (raid, dungeon, PvP, questing).
+     - "Raid build" = max single-target DPS
+     - "Dungeon build" = cleave + utility
+     - "PvP build" = survivability + burst
+     - Auto-switch based on content type (encounter vs open world vs BG)
+   - Needs: Multiple talent row choices per spec, content-type detection.
+   - Effort: Low-Medium. The talent grid is small (7 rows x 3 choices). Mostly
+     data entry for the presets.
+
+6.4 AZERITE / ESSENCE SYSTEM (BfA)
+   - Current: Not implemented (BfA-specific systems are stubs).
+   - Upgrade: Azerite power selection, Heart of Azeroth leveling, essence
+     equipping for major/minor slots.
+     - Select best azerite traits per spec (e.g., Frost Mage = Flash Freeze)
+     - Equip essences: Blood of the Enemy (major) for burst, etc.
+   - Needs: Azerite item data, essence spell data, trait scoring per spec.
+   - Effort: High. BfA systems are complex and data-heavy.
+
+
+7. SOCIAL & COMMUNICATION UPGRADES
+================================================================================
+
+7.1 CHAT GRAMMAR (ChatFilter / ChatHelper)
+   - Current: Not implemented. Command parsing is basic string match.
+   - Upgrade: Natural-ish command parsing.
+     - "heal me", "heal the tank", "heal <name>" -> resolve to heal target
+     - "pull", "wait", "go", "stop" -> map to group commands
+     - "cast <spell> on <target>" -> resolve spell name + target
+     - Item/spell link parsing: [Frostbolt] -> cast Frostbolt
+   - Needs: Tokenizer, fuzzy spell name matching, target resolution (self/
+     party1-4, focus, target, targettarget).
+   - Effort: Low-Medium. Mostly string parsing; no NLP needed for WoW commands.
+
+7.2 CHAT REPLIES / BOT PERSONALITY
+   - Current: Bots are silent.
+   - Upgrade: Configurable bot chat.
+     - Greet on login, farewell on logout
+     - Call out mechanics ("dispel me", "interrupt the healer", "stack up")
+     - React to loot (/roll, need/greed based on spec)
+     - Simple random chat lines (configurable)
+   - Needs: Chat message API, randomized response bank, context-aware triggers.
+   - Effort: Low. Fun but not gameplay-critical.
+
+7.3 LLM INTEGRATION (deferred / long-term)
+   - Current: Not implemented. PlayerbotLLMInterface exists in reference but
+     was deferred.
+   - Upgrade: Connect to a local LLM (e.g., Ollama, llama.cpp) for bot "chat".
+     - Bots respond to player questions about mechanics, loot, quests
+     - Not for rotation control (too slow) — purely social
+     - Rate-limited to avoid spam
+   - Needs: LLM server endpoint, prompt engineering, context window management.
+   - Effort: High. Requires external LLM setup. Not recommended for production
+     servers unless heavily rate-limited.
+
+7.4 GUILD MANAGEMENT
+   - Current: GuildAcceptAction exists in reference but not implemented.
+   - Upgrade: Bot guild behavior.
+     - Accept guild invites (if from master)
+     - Deposit materials in guild bank
+     - Participate in guild chat (minimal)
+     - Sign guild charters (for guild creation)
+   - Needs: Guild packet handling, bank access, charter interaction.
+   - Effort: Low-Medium. Core has GuildMgr, packet handlers exist.
+
+
+8. PERFORMANCE & SCALING UPGRADES
+================================================================================
+
+8.1 PerformanceMonitor (deferred)
+   - Current: Not implemented.
+   - Upgrade: Track per-bot CPU usage, tick duration, AI decision time.
+     - Log slow ticks (>100ms) for investigation
+     - Identify hot-path triggers (e.g., "target casting" spam)
+   - Needs: High-resolution timer integration, logging framework hook.
+   - Effort: Low. Mostly instrumentation.
+
+8.2 MemoryMonitor (deferred)
+   - Current: Not implemented.
+   - Upgrade: Track per-bot memory allocation (AiObjectContext, Engine, Queue).
+     - Detect memory leaks (growth over time)
+     - Cap maximum memory per bot (configurable)
+   - Needs: Allocation hooks or periodic size snapshots.
+   - Effort: Low. More useful for debugging than production.
+
+8.3 SmartScale / BotActiveAlone (already in PsychobotPopulationMgr)
+   - Current: Implemented in config but not fully tuned.
+   - Upgrade: Dynamic scaling based on server load.
+     - If world tick time > 50ms, reduce active bot count by 20%
+     - If < 20ms, increase by 10%
+     - Prioritize bots near real players; sleep far-away bots
+   - Needs: World tick time measurement, distance-based priority queue.
+   - Effort: Low. The framework is there; needs tuning parameters.
+
+8.4 BOT SESSION POOLING
+   - Current: Each bot = one WorldSession + one Player.
+   - Upgrade: Session pooling for high-density bot populations.
+     - Idle bots (out of combat, not moving) share a lightweight "sleep session"
+       that ticks at 1-second instead of 250ms
+     - Wake on event (combat start, master command, damage taken)
+   - Needs: Sleep/wake state machine, event subscription for wake triggers.
+   - Effort: Medium. Could reduce server load by 50%+ for idle bot populations.
+
+
+9. DATABASE & PERSISTENCE UPGRADES
+================================================================================
+
+9.1 CROSS-RELOG PERSISTENCE (PsychobotDbStore depth)
+   - Current: Save/Load hooks exist and round-trip to CharacterDatabase, but
+     only strategy set is persisted.
+   - Upgrade: Full bot state persistence.
+     - Saved strategy set (done)
+     - Saved talent choices per spec
+     - Saved gear set (item IDs + enchants + gems)
+     - Saved skill levels (professions)
+     - Saved gold / inventory snapshot
+   - Needs: DB schema extension (already created psychobot_strategies.sql).
+     Add more tables: psychobot_talents, psychobot_gear, psychobot_inventory.
+   - Effort: Medium. Mostly SQL + load/save logic in PsychobotDbStore.
+
+9.2 BOT CHARACTER CREATION (RandomPlayerbotFactory)
+   - Current: RandomPlayerbotMgr can spawn bots but factory is basic.
+   - Upgrade: Full bot character factory.
+     - Create random name, race, class, appearance
+     - Level to configurable range (1-120 for BfA)
+     - Apply gear appropriate to level and spec
+     - Assign random talents from a curated build
+     - Place in world at appropriate starting zone
+   - Needs: Name generator, race-class combo validation, appearance data,
+     zone placement logic.
+   - Effort: Medium-High. The reference RandomPlayerbotFactory is 5700 LOC;
+     we can adapt the design but rewrite for BfA.
+
+9.3 BOT ACHIEVEMENTS / PROGRESSION
+   - Current: Not implemented.
+   - Upgrade: Bots earn achievements, reputation, and mounts over time.
+     - Achievement tracking (kill bosses, explore zones, earn honor)
+     - Reputation grinding (daily quests, turn-ins)
+     - Mount collection (based on achievement/reputation unlocks)
+   - Needs: AchievementMgr integration, reputation tracking, quest completion DB.
+   - Effort: High. Long-term persistent simulation.
+
+
+10. HONEST GAPS SUMMARY (current state, not bugs)
+================================================================================
+
+These are documented as hooks or deferred. They are NOT broken:
+
+- Vendor sell / buy / repair    -> world/PsychobotWorldMgr stubs
+- Loot pickup (corpse + GO)     -> world/PsychobotWorldMgr stubs
+- Quest accept / complete       -> world/PsychobotWorldMgr stubs
+- Gather (herb/mining/skin)     -> world/PsychobotWorldMgr stubs
+- AH live AddAuction            -> PsychobotAhBot::PostAuction hook
+- AH buy / price tracking       -> Not implemented
+- Per-BG objectives             -> PvpMgr stubs
+- Per-encounter boss reactions  -> EncounterScript stubs (framework exists)
+- Chat link parsing             -> Not implemented
+- Flee / retreat behavior       -> Not implemented (FleeManager deferred)
+- PerformanceMonitor            -> Deferred
+- MemoryMonitor                 -> Deferred
+- PlayerbotCommandServer        -> Deferred (not needed for local use)
+- BroadcastHelper               -> Deferred
+- LLM interface                 -> Deferred / experimental
+
+
+11. RECOMMENDED PRIORITY ORDER (if building from here)
+================================================================================
+
+Phase 1: Stability & Basic QoL (1-2 weeks)
+  - FleeManager (retreat behavior) — low effort, high survival impact
+  - Real vendor sell / repair / buy — low effort, QoL for long-term bots
+  - Real loot pickup — low effort, bots feel more alive
+  - Rest with real food/drink — low effort
+
+Phase 2: PvE Depth (2-4 weeks)
+  - Per-encounter boss scripts (start with 5-10 major dungeons/raids)
+  - Interrupt coordination (group-level)
+  - Threat engine for tanks
+  - Cooldown sync / burst windows
+
+Phase 3: Economy & World (2-4 weeks)
+  - AH live posting + buying
+  - Crafting profit bot (basic)
+  - Gathering professions
+  - Quest system (basic accept/complete)
+
+Phase 4: PvP & Social (4+ weeks)
+  - Per-BG objective play
+  - Arena tactics
+  - Chat grammar + personality
+  - LLM integration (experimental)
+
+Phase 5: Advanced Systems (ongoing)
+  - Adaptive rotation / learning
+  - Azerite / essence systems
+  - Full bot character factory + progression
+  - Raid finder simulation
+  - Economy stabilization
+
+
+================================================================================
+ END OF FUTURE UPGRADES DOCUMENT
+================================================================================

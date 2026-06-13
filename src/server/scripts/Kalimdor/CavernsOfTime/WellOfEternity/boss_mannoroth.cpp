@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "well_of_eternity.h"
 #include "Group.h"
 #include "ObjectMgr.h"

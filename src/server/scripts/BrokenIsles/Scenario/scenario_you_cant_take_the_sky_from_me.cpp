@@ -1,3 +1,4 @@
+#include "InstanceScript.h"
 /*
  * Copyright (C) 2022 BfaCore Reforged
  *

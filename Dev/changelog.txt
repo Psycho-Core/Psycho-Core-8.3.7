@@ -1,0 +1,195 @@
+# Changelog
+CRITICAL NOTE: Must record any changes to code with date and time stamps. NO LOCATION, and be updated after each step is complete before reporting back.
+## 2026-06-13
+
+### Base
+- Cloned original `Titans-Project/Psycho_Core-8.3.7` into workspace at `Psycho_Core-8.3.7`.
+- Base commit: `bba77f6 Merge pull request #39 from Thordekk/main`.
+
+### Toolchain alignment already applied before this changelog
+- Set root CMake minimum to `4.3.2`.
+- Added/updated Psycho_Core toolchain files:
+  - `cmake/macros/FindBoost.cmake`
+  - `cmake/macros/FindMySQL.cmake`
+  - `cmake/macros/FindOpenSSL.cmake`
+  - `dep/boost/CMakeLists.txt`
+  - `dep/cotire/CMake/cotire.cmake`
+- Aligned OpenSSL/Resolver runtime compatibility files with Psycho_Core:
+  - `src/common/Cryptography/OpenSSLCrypto.cpp`
+  - `src/common/Cryptography/OpenSSLCrypto.h`
+  - `src/common/Asio/Resolver.h`
+  - `src/server/bnetserver/REST/LoginRESTService.cpp`
+  - `src/server/shared/Realm/RealmList.cpp`
+  - `src/server/shared/Realm/RealmList.h`
+  - `src/server/worldserver/Main.cpp`
+- Updated README toolchain requirements.
+
+### Current session
+- Created `changelog.txt`.
+- Created `chatlog.txt`.
+
+### Module support port
+- Added Psycho_Core module build infrastructure, excluding `mod-psychobot` itself:
+  - `cmake/macros/ConfigureModules.cmake`
+  - `modules/CMakeLists.txt`
+  - `modules/ModulesLoader.cpp.in.cmake`
+  - `modules/ModulesLoader.h`
+  - `modules/README.md`
+- Replaced `cmake/options.cmake` with Psycho_Core version to add `MODULES=none|static|dynamic` support.
+- Updated root `CMakeLists.txt` to include `ConfigureModules` and add `modules/` before `src/` when modules are enabled.
+- Updated `src/server/worldserver/CMakeLists.txt` to link the `modules` target and depend on dynamic module targets.
+- Updated `src/server/game/Scripting/ScriptMgr.cpp` to call `AddModulesScripts()` after static core scripts load.
+- Adapted `cmake/macros/FindOpenSSL.cmake` for this Psycho_Core branch so Unix/Linux configure respects `OPENSSL_ROOT_DIR` before falling back to system OpenSSL. This allows local OpenSSL 3.5.6 extraction to be used without replacing system packages.
+
+### Local dependency setup for configure-only test
+- Installed CMake 4.3.2 locally for the session under `/tmp/cmake-4.3.2-py` using Python package `cmake==4.3.2`.
+- Downloaded and extracted Debian Boost 1.83 packages locally under `/tmp/boost183-root` without system install/root privileges.
+- Downloaded and extracted Debian OpenSSL 3.5.6 packages locally under `/tmp/openssl356-root` without system install/root privileges.
+
+### Configure-only verification
+- Ran CMake configure only with:
+  - `CMake 4.3.2`
+  - `Boost 1.83.0` from `/tmp/boost183-root/usr`
+  - `OpenSSL 3.5.6` from `/tmp/openssl356-root/usr`
+  - `MariaDB client 11.8.6`
+  - `SCRIPTS=static`
+  - `MODULES=static`
+  - `TOOLS=1`
+- Configure completed successfully with exit code `0`.
+- No build command was run.
+
+### Psycho_Core-specific configure fix
+- Adapted `cmake/macros/FindOpenSSL.cmake` so Unix/Linux configure prefers `OPENSSL_ROOT_DIR` include/lib paths before falling back to system OpenSSL. This was required to make local OpenSSL 3.5.6 detection work on Linux.
+
+### Complete module folder import
+- Replaced workspace `modules/` with the complete Psycho_Core `modules/` folder.
+- `modules/` now includes full `mod-psychobot` source, SQL, config, docs, and loader files.
+- Copied module-related docs referenced by `modules/README.md` where available:
+  - `docs/HOW_TO_BUILD_A_MODULE.md`
+  - `docs/HOW_TO_INSTALL_MODULES.md`
+  - `Dev/playerbots_docs/ModuleAPI_Reference.txt`
+  - `Dev/playerbots_docs/FUTURE_MOD_PSYCHOBOT_UPGRADES.txt`
+
+### mod-psychobot socketless core hooks
+- Added Psycho_Core-compatible `WorldSession` constructor overload for Psycho/mod-psychobot's 11-argument socketless session construction.
+- Added `WorldSession::IsBot`, `SetBot`, `SetBotRemove`, `IsBotRemoving`, and `BotLogin` API used by `mod-psychobot`.
+- Added bot-safe null-socket handling in `WorldSession::SendPacket`, `WorldSession::Update`, `WorldSession::KickPlayer`, and `World::AddSession_` queue logic.
+- Added `WorldSession::BotLogin(ObjectGuid)` in `CharacterHandler.cpp` using the existing `LoginQueryHolder` async login path.
+
+### Research/documentation reports
+- Added `MODULE_RESEARCH_REPORT.md` documenting module architecture, docs reviewed, imported module files, mod-psychobot architecture, and integration status.
+- Added `API_DIFFERENCE_REPORT.md` documenting relevant Psycho_Core vs Psycho API differences, spell/talent/DB2 risk areas, module include dependencies, and S28 hook presence.
+
+### Final configure-only verification after full modules import and S28 hooks
+- Reran CMake configure with full `mod-psychobot` present and S28 socketless hooks added.
+- Configure succeeded with exit code `0`.
+- CMake detected:
+  - `Boost 1.83.0`
+  - `OpenSSL 3.5.6`
+  - `MariaDB client 11.8.6`
+  - `MODULES=static`
+  - `mod-psychobot` under module configuration
+- No build command was run.
+
+### File completeness verification
+- Added `FILE_COMPLETENESS_REPORT.md`.
+- Verified workspace Psycho_Core contains all original cloned Psycho_Core files; no original files are missing/deleted.
+- Verified workspace `modules/` file inventory against Psycho repo; no module files are missing.
+- Verified workspace `modules/mod-psychobot` against Psycho repo; all 159 files are present and byte-identical.
+
+### Corrected file completeness verification
+- Re-generated `FILE_COMPLETENESS_REPORT.md` using the Psycho_Core workspace Git index for original tracked file completeness and a fresh Psycho reference clone at `/tmp/Psycho_Core_ref` for module hash verification.
+- Verified 0 deleted/missing original tracked Psycho_Core files.
+- Verified `modules/` is complete: 163/163 files present and byte-identical to Psycho reference.
+- Verified `modules/mod-psychobot` is complete: 159/159 files present and byte-identical to Psycho reference.
+
+### bnetserver build verification
+- User permitted exactly one `bnetserver` build.
+- Ran one build command targeting `bnetserver` only.
+- Result: success, exit code `0`.
+- Final build line: `[100%] Built target bnetserver`.
+- `worldserver` was not built.
+- `modules` / `mod-psychobot` were not built as worldserver-linked targets.
+
+### Non-worldserver build target check
+- Inspected generated Makefile targets without building.
+- Available non-worldserver targets include `modules`, `mapextractor`, `vmap4extractor`, `vmap4assembler`, `mmaps_generator`, and support libraries.
+- Chose `modules` as the most useful next target because it compiles the module library and `mod-psychobot` without building `worldserver`.
+- User permitted exactly one non-worldserver build command.
+- Ran one build command: `make -C configure-test modules -j2`.
+- Result: failed before compilation because generated Makefiles referenced `/tmp/cmake-4.3.2-py/cmake/data/bin/cmake`, which was missing.
+- Exit code: `2`.
+- Error: `make: /tmp/cmake-4.3.2-py/cmake/data/bin/cmake: No such file or directory`.
+- Fix applied after the failed attempt: restored CMake 4.3.2 to `/tmp/cmake-4.3.2-py`.
+- No second build command was run.
+
+### Non-worldserver build error fixes
+- Fixed core include/API issues found while building non-worldserver targets:
+  - Added `MotionMaster.h` include to `Player.h` so `GetMotionMaster()->Initialize()` is usable by external/module code.
+  - Added `<cmath>` to `ArenaHelper.h` for `exp`, `expf`, `floor`, `ceil`, `log` under GCC 14.
+  - Added `Timer.h` to `BattlegroundPackets.h` for `getMSTime()`.
+  - Added `Group::GetMemberFlags(ObjectGuid) const` compatibility helper used by `mod-psychobot`.
+  - Added module-target-only `-Wno-narrowing` for GCC/Clang to keep imported module source unchanged while accepting enum-to-uint8 brace initialization.
+- Added core race-name compatibility aliases in `RaceMask.h`: `RACE_NIGHT_ELF`, `RACE_UNDEAD`, `RACE_BLOOD_ELF`.
+
+### Non-worldserver build retry and donor suggestion scan
+- Reconfigured successfully after core compatibility fixes.
+- Re-ran explicit non-worldserver targets: `bnetserver modules scripts mapextractor vmap4extractor vmap4assembler mmaps_generator`.
+- Did not build `worldserver`.
+- `bnetserver` remained successful.
+- `modules` progressed further but stopped in `mod-psychobot` because `PsychobotMgr` has no `SummonBot` member while `mod_psychobot.cpp` calls it.
+- Did not edit `mod-psychobot` source.
+- Added `DONOR_SUGGESTIONS_REPORT.md` with low/medium/high-risk script and SQL candidates.
+- Added missing `PsychobotMgr::SummonBot` declaration/implementation used by `.psychobot summon`.
+- Added `<iostream>` to `src/common/Logging/Log.cpp` for non-PCH builds using `std::cout` / `std::cerr`.
+- Guarded fallback `localtime_r` declaration/definition behind `_WIN32` so Linux uses the system function in non-PCH builds.
+- Added `<ctime>` to `WowTime.h` and `WowTime.cpp` for non-PCH builds.
+- Adapted `mod-psychobot` spell lookup to this core: `SpellNameEntry::Name` pointer handling and one-argument `sSpellMgr->GetSpellInfo(spellId)`.
+- Fixed `NGrid::SetGridId` const-correctness for GCC/non-PCH builds by removing the invalid `const` qualifier.
+- Added `ZoneScript.h` include to `AlliedRaces/allied_races.cpp` for non-PCH scripts build.
+- Added `SpellScript.h` include to `BrawlersGuild/brawlers_guild.cpp` for AuraScript definitions in non-PCH scripts build.
+- Added `SpellScript.h` include to `BrawlersGuild/brawlers_guild.cpp` for AuraScript definitions in non-PCH scripts build.
+- Added non-PCH includes to `BrokenIsles/boss_ana_mouz.cpp`: `ScriptedCreature.h`, `SpellScript.h`, `UnitDefines.h`.
+- Added `HealInfo` forward declaration to `SpellScript.h` for non-PCH scripts build.
+- Added non-PCH includes to `BrokenIsles/boss_apocron.cpp`: `ScriptedCreature.h`, `SpellScript.h`, `UnitDefines.h`, `MotionMaster.h`.
+- Added `Optional.h` include to `MotionMaster.h` for non-PCH builds.
+- Added `Optional.h` include to `MotionMaster.h` for non-PCH builds.
+- Added `SpellScript.h` and `ScriptedCreature.h` to `ScriptMgr.h` to restore common script include expectations in non-PCH scripts builds.
+- Added `InstanceScript` forward declaration to `CreatureAI.h` for non-PCH include order.
+- Added `TemporarySummon.h` include to `BrokenIsles/boss_flotsam.cpp` for TempSummon definitions in non-PCH scripts build.
+- Added `TemporarySummon.h` to `ScriptMgr.h` shared script include path for non-PCH scripts using `TempSummon`.
+- Added `ZoneScript.h` to `ScriptMgr.h` shared script include path for non-PCH zone scripts.
+- Removed invalid global `ZoneScript.h` include from `ScriptMgr.h`; added `ZoneScript.h` directly to `BrokenIsles/zone_argus_antoran_wastes.cpp`.
+- Added `ZoneScript.h` to all script files deriving from `ZoneScript` for non-PCH zone script builds.
+- Added `EventProcessor.h` to `GameObject.h` and `SpellInfo.h` to `ScriptMgr.h` for non-PCH script builds.
+- Added `InstanceScript.h` to `ScriptMgr.h` shared script include path for non-PCH encounter scripts.
+- Removed invalid global `InstanceScript.h` include from `ScriptMgr.h`; added local `InstanceScript.h` includes to scripts using instance boss-state APIs.
+- Added `Creature` forward declaration to `MotionMaster.h` for non-PCH builds.
+- Added non-PCH header dependencies: `Errors.h` and `<boost/any.hpp>` to `Chat.h`, `Optional.h` to `CombatAI.h`, and `DB2Structure.h` to `LFGQueue.h`.
+
+### Current non-worldserver build pass
+- Added `Position.h` to `CombatAI.h` for `Optional<Position>` in non-PCH builds.
+- Added `CreatureAIImpl.h` to all script headers using `GetInstanceAI` for non-PCH builds.
+- Added missing script/player/spell/container includes to `BrokenIsles/MicroHolidays/AuctionHouseDanceParty.cpp` for non-PCH scripts build.
+- Added `InstanceScript.h` to all scripts using `GetInstanceScript()` for non-PCH builds.
+- Added `InstanceScript.h` to scripts using `RegisterInstanceScript` or deriving from `InstanceScript`.
+- Added self-contained includes for pet battle headers and Violet Hold assault header: `Position.h`, `DatabaseEnvFwd.h`, and `Player.h` where required.
+- Added `Position.h` to `BattlePetPackets.h` for `TaggedPosition` definitions.
+- Added missing script/common includes to `Draenor/BloodmaulSlagMines/mob_bloodmaul.cpp` for non-PCH builds.
+- Added `<map>` to `GarrisonPackets.h` and `Timer.h` to `Garrison.h` for non-PCH builds.
+- Added include guard and required includes to `Draenor/GrimrailDepot/grimrail_depot.h` for non-PCH builds.
+- Removed invalid `WorldObject.h` include from `grimrail_depot.h`; `Creature.h` provides the required type in this tree.
+- Added `ScriptedCreature.h` to `grimrail_depot.h` for `GetCreatureListWithEntryInGrid` helper.
+- Added `CreatureAIImpl.h` to scripts using `RAND(...)` helper for non-PCH builds.
+- Added missing includes to `Draenor/IronDocks/iron_docks.hpp` for non-PCH builds.
+- Added `Common.h` to `Draenor/ShadowmoonBurialGrounds/shadowmoon_burial_grounds.h` for base integer types.
+- Added `<string>` to `ConditionMgr.h`; added `Common.h` and `Optional.h` to `Spell.h` for non-PCH builds.
+- Added missing script/spell/unit scheduler includes to `EasternKingdoms/zone_stormwind_city.cpp` for non-PCH builds.
+
+### Current non-worldserver build pass status
+- Configured once successfully with low-memory non-PCH flags.
+- Built non-worldserver targets only; `worldserver` was not targeted.
+- `bnetserver` builds successfully.
+- `modules` builds successfully, including `mod-psychobot`.
+- `scripts` progressed significantly but is currently blocked by a non-PCH include issue in `EasternKingdoms/BastionOfTwilight/bastion_of_twilight.h` where `Position` is used without including `Position.h`.
+- Current blocker: `static const Position Positions[2]` in `bastion_of_twilight.h`.

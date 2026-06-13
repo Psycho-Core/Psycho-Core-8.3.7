@@ -22,6 +22,7 @@
 #include "Util.h"
 #include <list>
 #include <map>
+#include <cmath>
 
 class WorldSession;
 class WorldPacket;

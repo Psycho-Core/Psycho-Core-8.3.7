@@ -16,6 +16,7 @@
  */
 
 #include "Define.h"
+#include <ctime>
 
 #pragma once
 

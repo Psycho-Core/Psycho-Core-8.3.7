@@ -24,6 +24,7 @@ SDComment:
 EndScriptData */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "end_time.h"
 #include "SpellInfo.h"

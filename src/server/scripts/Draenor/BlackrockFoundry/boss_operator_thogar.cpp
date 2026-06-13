@@ -1,4 +1,5 @@
 #include "boss_operator_thogar.h"
+#include "InstanceScript.h"
 
 /// Operator Thogar <Grimrail Overseer> - 76906
 class boss_operator_thogar : public CreatureScript

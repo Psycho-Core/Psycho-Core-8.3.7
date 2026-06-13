@@ -1,5 +1,6 @@
 #include "GameObjectAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "MovementGenerator.h"
 #include "terrace_of_endless_spring.h"

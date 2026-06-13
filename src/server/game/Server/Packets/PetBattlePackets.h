@@ -20,6 +20,7 @@
 
 #include "Packet.h"
 #include "ObjectGuid.h"
+#include "Position.h"
 #include "Optional.h"
 #include "UnitDefines.h"
 

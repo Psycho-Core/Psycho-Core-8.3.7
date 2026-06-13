@@ -22,6 +22,7 @@
 #include "PassiveAI.h"
 #include "ScriptedCreature.h"
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "SpellAuraEffects.h"
 #include "SpellScript.h"
 #include "black_temple.h"

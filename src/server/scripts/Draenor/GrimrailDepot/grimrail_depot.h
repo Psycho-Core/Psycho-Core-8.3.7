@@ -1,3 +1,12 @@
+#ifndef GRIMRAIL_DEPOT_H
+#define GRIMRAIL_DEPOT_H
+
+#include "Creature.h"
+#include "GridNotifiers.h"
+#include "Position.h"
+#include "ScriptedCreature.h"
+#include <list>
+
 
 static void DespawnCreaturesInArea(uint32 p_Entry, WorldObject* p_Object)
 {
@@ -187,3 +196,4 @@ enum GrimrailDepotAchivement
     AchievementGrimrailDepotThisIsWhyWeCantHaveNiceThings = 9024   /// Defeat Railmaster Rocketspark and Borka the Brute after destroying all of the Priceless Paraphernalia in Grimrail Depot on Heroic diffculty.
 };
 
+#endif // GRIMRAIL_DEPOT_H

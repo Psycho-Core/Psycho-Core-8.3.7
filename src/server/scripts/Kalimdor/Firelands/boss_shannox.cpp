@@ -20,6 +20,7 @@
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 
 enum ScriptTexts
 {
@@ -113,11 +114,11 @@ enum Other
 
 enum AreaIds
 {
-    AREA_1          = 5764, // Логово Бет'тилак
-    AREA_2          = 5821, // Порочный путь
-    AREA_3          = 5766, // Каменный Венец
-    AREA_4          = 5791, // Гряда Древнего Пламени
-    AREA_5          = 5765, // Огненный портал
+    AREA_1          = 5764, //  '
+    AREA_2          = 5821, //  
+    AREA_3          = 5766, //  
+    AREA_4          = 5791, //   
+    AREA_5          = 5765, //  
 };
 
 const Position dogPos[2] =

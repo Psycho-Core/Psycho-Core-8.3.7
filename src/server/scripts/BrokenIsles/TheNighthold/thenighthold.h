@@ -17,6 +17,7 @@
 
 #include <G3D/Vector3.h>
 #include "MoveSplineInitArgs.h"
+#include "CreatureAIImpl.h"
 
 #ifndef THE_HIGHTHOLD_H_
 #define THE_HIGHTHOLD_H_

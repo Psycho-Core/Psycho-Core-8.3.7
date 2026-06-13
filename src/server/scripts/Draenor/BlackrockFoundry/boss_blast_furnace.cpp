@@ -1,4 +1,5 @@
 #include "boss_blast_furnace.h"
+#include "InstanceScript.h"
 
 /// Heart of the Mountain - 76806
 class boss_heart_of_the_mountain : public CreatureScript

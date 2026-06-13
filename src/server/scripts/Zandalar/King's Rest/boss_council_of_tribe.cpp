@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "GameObjectAI.h"
 #include "kings_rest.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

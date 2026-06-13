@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Player.h"
 #include "SpellMgr.h"
 #include "Conversation.h"

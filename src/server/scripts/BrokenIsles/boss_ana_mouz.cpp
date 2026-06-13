@@ -17,6 +17,9 @@
 
 #include "ScriptMgr.h"
 #include "AreaTriggerAI.h"
+#include "UnitDefines.h"
+#include "SpellScript.h"
+#include "ScriptedCreature.h"
 
 enum eSpells
 {

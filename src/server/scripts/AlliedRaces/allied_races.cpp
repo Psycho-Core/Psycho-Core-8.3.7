@@ -27,6 +27,7 @@
 #include "PassiveAI.h"
 #include "ScriptedCreature.h"
 #include "TemporarySummon.h"
+#include "ZoneScript.h"
 
 
 enum

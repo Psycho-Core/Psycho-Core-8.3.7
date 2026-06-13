@@ -21,10 +21,12 @@
 #include "Common.h"
 #include "Errors.h"
 #include "ObjectGuid.h"
+#include "Optional.h"
 #include "Position.h"
 #include "SharedDefines.h"
 #include <vector>
 
+class Creature;
 class MovementGenerator;
 class Unit;
 class PathGenerator;

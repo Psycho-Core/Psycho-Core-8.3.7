@@ -18,10 +18,12 @@
 #ifndef TRINITYCORE_CHAT_H
 #define TRINITYCORE_CHAT_H
 
+#include "Errors.h"
 #include "ObjectGuid.h"
 #include "SharedDefines.h"
 #include "StringFormat.h"
 #include <vector>
+#include <boost/any.hpp>
 
 class ChatHandler;
 class Creature;

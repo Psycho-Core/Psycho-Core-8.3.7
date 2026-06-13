@@ -21,6 +21,7 @@
 #include "Map.h"
 #include "Creature.h"
 #include "ObjectMgr.h"
+#include "CreatureAIImpl.h"
 
 #define DataHeader "MOS"
 #define MOSScriptName "instance_maw_of_souls"

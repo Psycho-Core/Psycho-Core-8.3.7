@@ -1,4 +1,5 @@
 #include "boss_kromog.h"
+#include "InstanceScript.h"
 
 /// Kromog <Legend of the Mountain> - 77692
 class boss_kromog : public CreatureScript

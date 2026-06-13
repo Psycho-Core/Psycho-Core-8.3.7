@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "drak_tharon_keep.h"
 #include "GameObject.h"
 #include "InstanceScript.h"

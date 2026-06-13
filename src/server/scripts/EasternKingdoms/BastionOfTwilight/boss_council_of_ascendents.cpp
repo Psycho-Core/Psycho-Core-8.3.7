@@ -27,6 +27,7 @@ Website: www.forgottenlands.eu
 //gli achievements vengon dati tutti alla prima uccisione senza criterio
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptMgr.h"
 #include "bastion_of_twilight.h"
 #include "ScriptedCreature.h"

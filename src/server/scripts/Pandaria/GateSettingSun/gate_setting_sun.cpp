@@ -17,6 +17,7 @@
 
 #include "gate_setting_sun.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "Vehicle.h"
 #include "GameObject.h"

@@ -1,4 +1,5 @@
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "the_underrot.h"
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"

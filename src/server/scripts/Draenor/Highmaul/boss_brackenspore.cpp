@@ -17,6 +17,7 @@
 
 # include "highmaul.h"
 #include "Group.h"
+#include "InstanceScript.h"
 
 Position g_CreepingMossPos[eHighmaulDatas::MaxCreepingMoss] =
 {

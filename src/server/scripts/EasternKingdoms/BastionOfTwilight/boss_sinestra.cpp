@@ -17,6 +17,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Spell.h"
 #include "SpellAuras.h"
 #include "bastion_of_twilight.h"

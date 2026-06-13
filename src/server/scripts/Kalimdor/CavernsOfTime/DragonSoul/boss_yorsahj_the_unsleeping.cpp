@@ -25,6 +25,7 @@
 #include "GridNotifiersImpl.h"
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellMgr.h"
 
 enum ScriptedTexts

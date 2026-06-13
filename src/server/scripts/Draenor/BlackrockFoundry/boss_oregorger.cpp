@@ -1,4 +1,5 @@
 #include "boss_oregorger.h"
+#include "InstanceScript.h"
 
 /// Oregorger <The Devourer> - 77182
 class boss_oregorger : public CreatureScript

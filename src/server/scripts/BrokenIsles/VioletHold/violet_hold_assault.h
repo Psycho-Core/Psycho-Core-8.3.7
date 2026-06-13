@@ -22,6 +22,7 @@
 #include "Creature.h"
 #include "ObjectMgr.h"
 #include "InstanceScenario.h"
+#include "Player.h"
 
 
 #define DataHeader "VHA"

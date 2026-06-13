@@ -21,6 +21,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "hour_of_twilight.h"
 #include "ScriptedEscortAI.h"
 #include "ScriptedGossip.h"

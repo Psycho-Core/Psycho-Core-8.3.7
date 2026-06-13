@@ -17,6 +17,7 @@
 
 
 #include "ScriptMgr.h"
+#include "ZoneScript.h"
 #include "Player.h"
 #include "SpellMgr.h"
 

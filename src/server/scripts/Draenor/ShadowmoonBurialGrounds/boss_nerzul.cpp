@@ -19,6 +19,7 @@
 #include "shadowmoon_burial_grounds.h"
 #include "SpellMgr.h"
 #include "SpellAuras.h"
+#include "InstanceScript.h"
 
 enum eNerzulSpells
 {

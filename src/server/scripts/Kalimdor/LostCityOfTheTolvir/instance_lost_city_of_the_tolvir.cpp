@@ -19,6 +19,7 @@
 #include "MapInstanced.h"
 #include "lost_city_of_the_tolvir.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 
 enum eScriptText
 {

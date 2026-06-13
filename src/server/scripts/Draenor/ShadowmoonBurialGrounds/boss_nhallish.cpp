@@ -22,6 +22,7 @@
 #include "PhasingHandler.h"
 #include "SpellAuras.h"
 #include "SpellMgr.h"
+#include "InstanceScript.h"
 
 enum eNhalishSpells
 {

@@ -1,4 +1,4 @@
-# Copyright (C) 2020 BfaCore
+# This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
 #
 # This file is free software; as a special exception the author gives
 # unlimited permission to copy and/or distribute it, with or without
@@ -18,11 +18,25 @@ if(WIN32)
       set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.0)
     else()
       list(APPEND BOOST_LIBRARYDIR
+        ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.3
+        ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.2
         ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.1
-        ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.0)
+        ${BOOST_ROOT}/lib${PLATFORM}-msvc-14.0
+        ${BOOST_ROOT}/stage/lib
+        ${BOOST_ROOT}/lib)
     endif()
   elseif(NOT DEFINED Boost_DIR AND NOT DEFINED BOOST_ROOT AND NOT DEFINED BOOSTROOT)
-    message(FATAL_ERROR "No BOOST_ROOT environment variable could be found! Please make sure it is set and the points to your Boost installation.")
+    # CMake 4.x + portable Windows builds: try the common local Boost install
+    # folders before failing. The local cmake/macros/FindBoost.cmake also checks
+    # these paths, but setting BOOST_ROOT here keeps the old TrinityCore logic
+    # compatible with users who did not set an environment variable.
+    if(EXISTS "C:/local/boost_1_83_0/boost/version.hpp")
+      set(BOOST_ROOT "C:/local/boost_1_83_0" CACHE PATH "Boost root" FORCE)
+    elseif(EXISTS "C:/boost_1_83_0/boost/version.hpp")
+      set(BOOST_ROOT "C:/boost_1_83_0" CACHE PATH "Boost root" FORCE)
+    else()
+      message(STATUS "BOOST_ROOT was not set; FindBoost will search common paths. If Boost is not found, set BOOST_ROOT to your Boost 1.83 folder.")
+    endif()
   endif()
 
   set(Boost_USE_STATIC_LIBS        ON)
@@ -37,12 +51,10 @@ endif()
 
 include (CheckCXXSourceCompiles)
 
-if (WIN32)
-  # On windows the requirements are higher according to the wiki.
-  set(BOOST_REQUIRED_VERSION 1.66)
-else()
-  set(BOOST_REQUIRED_VERSION 1.58)
-endif()
+# Psycho_Core targets Boost 1.83 on all platforms.
+# CMake 4.x no longer ships the old FindBoost module, so the project provides
+# cmake/macros/FindBoost.cmake for classic Boost variables.
+set(BOOST_REQUIRED_VERSION 1.83)
 
 find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED system filesystem thread program_options iostreams regex)
 

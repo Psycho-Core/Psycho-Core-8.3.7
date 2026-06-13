@@ -17,6 +17,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "throne_of_the_tides.h"
 #include "SpellAuras.h"
 #include "SpellScript.h"

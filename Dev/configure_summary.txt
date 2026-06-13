@@ -1,0 +1,29 @@
+# Configure Summary
+
+Status: SUCCESS
+Exit code: 0
+
+No build command was run.
+
+Dependency versions used:
+- CMake 4.3.2
+- Boost 1.83.0
+- OpenSSL 3.5.6
+- MariaDB client 11.8.6
+
+Important configure detections:
+- Found Boost 1.83.0: /tmp/boost183-root/usr/include
+- Found OpenSSL library: /tmp/openssl356-root/usr/lib/x86_64-linux-gnu/libssl.so;/tmp/openssl356-root/usr/lib/x86_64-linux-gnu/libcrypto.so
+- Found OpenSSL headers: /tmp/openssl356-root/usr/include
+- Detected OpenSSL version: 3.5.6
+- Found MySQL/MariaDB library: /usr/lib/x86_64-linux-gnu/libmariadbclient.so
+- Found MySQL/MariaDB headers: /usr/include/mariadb
+- Module configuration: static
+- Module detected: mod-psychobot
+- Script configuration: static
+
+Generated configure directory:
+- configure-test/
+
+Important note:
+- Configure validates CMake generation only. It does not compile `mod-psychobot` or any core C++ source.

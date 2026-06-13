@@ -17,6 +17,7 @@
 
 #include "GameObjectAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "heart_of_fear.h"
 

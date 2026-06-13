@@ -309,7 +309,10 @@ void World::AddSession_(WorldSession* s)
     if (decrease_session)
         --Sessions;
 
-    if (pLimit > 0 && Sessions >= pLimit && !s->HasPermission(rbac::RBAC_PERM_SKIP_QUEUE) && !HasRecentlyDisconnected(s))
+    // [Psychobot S28] Bot sessions never queue: a socketless session cannot
+    // receive the queue-position packet and must reach InitializeSession()
+    // directly so the bot can be loaded into the world.
+    if (pLimit > 0 && Sessions >= pLimit && !s->IsBot() && !s->HasPermission(rbac::RBAC_PERM_SKIP_QUEUE) && !HasRecentlyDisconnected(s))
     {
         AddQueuedPlayer(s);
         UpdateMaxSessionCounters();

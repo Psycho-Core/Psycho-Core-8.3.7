@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 BfaCore Reforged
+ * This file is part of the TrinityCore Project. See AUTHORS file for Copyright information
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,14 +17,21 @@
 
 #include <OpenSSLCrypto.h>
 #include <openssl/crypto.h>
+#include <openssl/opensslv.h>
 #include <vector>
 #include <thread>
 #include <mutex>
 
+// Psycho_Core: OpenSSL >= 1.1.0 is internally thread-safe and removed the
+// manual locking API (CRYPTO_num_locks / CRYPTO_set_locking_callback /
+// CRYPTO_THREADID_*). These symbols do not exist in OpenSSL 1.1+/3.x, so the
+// legacy callback setup below is compiled only for OpenSSL < 1.1.0.
+#if defined(OPENSSL_VERSION_NUMBER) && OPENSSL_VERSION_NUMBER < 0x10100000L
+
 std::vector<std::mutex*> cryptoLocks;
 void ValgrindRandomSetup();
 
-static void lockingCallback(int mode, int type, const char* /*file*/, int /*line*/)
+static void lockingCallback(int mode, int type, char const* /*file*/, int /*line*/)
 {
     if (mode & CRYPTO_LOCK)
         cryptoLocks[type]->lock();
@@ -32,7 +39,7 @@ static void lockingCallback(int mode, int type, const char* /*file*/, int /*line
         cryptoLocks[type]->unlock();
 }
 
-static void threadIdCallback(CRYPTO_THREADID * id)
+static void threadIdCallback(CRYPTO_THREADID* id)
 {
     (void)id;
     CRYPTO_THREADID_set_numeric(id, std::hash<std::thread::id>()(std::this_thread::get_id()));
@@ -45,10 +52,8 @@ void OpenSSLCrypto::threadsSetup()
 #endif
 
     cryptoLocks.resize(CRYPTO_num_locks());
-    for(int i = 0 ; i < CRYPTO_num_locks(); ++i)
-    {
+    for (int i = 0; i < CRYPTO_num_locks(); ++i)
         cryptoLocks[i] = new std::mutex();
-    }
 
     (void)&threadIdCallback;
     CRYPTO_THREADID_set_callback(threadIdCallback);
@@ -61,10 +66,10 @@ void OpenSSLCrypto::threadsCleanup()
 {
     CRYPTO_set_locking_callback(nullptr);
     CRYPTO_THREADID_set_callback(nullptr);
-    for(int i = 0 ; i < CRYPTO_num_locks(); ++i)
-    {
+
+    for (int i = 0; i < CRYPTO_num_locks(); ++i)
         delete cryptoLocks[i];
-    }
+
     cryptoLocks.resize(0);
 }
 
@@ -129,4 +134,14 @@ void ValgrindRandomSetup()
         valgrind_rand.status = &Valgrind_RAND_status;
     RAND_set_rand_method(&valgrind_rand);
 }
-#endif
+#endif // VALGRIND
+
+#else // OPENSSL_VERSION_NUMBER >= 0x10100000L
+
+// Psycho_Core: OpenSSL >= 1.1.0 initializes itself and is internally
+// thread-safe; the legacy locking callbacks were removed. These become
+// no-ops so the call sites in Main.cpp keep working unchanged.
+void OpenSSLCrypto::threadsSetup() { }
+void OpenSSLCrypto::threadsCleanup() { }
+
+#endif // OPENSSL_VERSION_NUMBER < 0x10100000L

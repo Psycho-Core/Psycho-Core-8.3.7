@@ -1,6 +1,7 @@
 #include "instance_skyreach.h"
 #include "ScriptedCreature.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 
 class mob_skyreach_arcanologist : public CreatureScript
 {

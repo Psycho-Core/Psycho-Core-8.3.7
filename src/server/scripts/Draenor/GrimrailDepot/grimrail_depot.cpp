@@ -5,6 +5,7 @@
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
 #include "GridNotifiers.h"
+#include "InstanceScript.h"
 
 enum eMovementInformed
 {

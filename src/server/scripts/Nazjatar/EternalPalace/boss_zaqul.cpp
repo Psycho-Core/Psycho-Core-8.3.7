@@ -24,6 +24,7 @@
 #include "PhaseShift.h"
 #include "PhasingHandler.h"
 #include "Player.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

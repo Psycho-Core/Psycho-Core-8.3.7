@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedGossip.h"
 #include "bastion_of_twilight.h"
 #include "GameObject.h"

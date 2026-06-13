@@ -18,6 +18,7 @@
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "black_rook_hold.h"
 #include "WaypointDefines.h"
 

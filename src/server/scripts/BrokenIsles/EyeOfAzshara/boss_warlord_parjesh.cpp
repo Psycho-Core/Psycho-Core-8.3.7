@@ -1,4 +1,5 @@
 #include "AreaTriggerAI.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

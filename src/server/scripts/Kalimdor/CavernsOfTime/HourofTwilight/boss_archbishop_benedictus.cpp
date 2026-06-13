@@ -24,6 +24,7 @@
 #include"hour_of_twilight.h"
 #include "GameObject.h"
 #include "GridNotifiers.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

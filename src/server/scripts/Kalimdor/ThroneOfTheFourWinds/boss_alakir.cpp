@@ -17,6 +17,7 @@
 
 #include "throne_of_the_four_winds.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "Spell.h"
 #include "SpellAuraEffects.h"

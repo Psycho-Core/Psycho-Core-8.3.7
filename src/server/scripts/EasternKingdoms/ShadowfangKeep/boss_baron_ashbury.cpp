@@ -22,6 +22,7 @@
 */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptMgr.h"
 #include "shadowfang_keep.h"
 #include "SpellAuras.h"

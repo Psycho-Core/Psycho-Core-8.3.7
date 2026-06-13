@@ -4,6 +4,7 @@
 #include "Vehicle.h"
 #include "blackrock_foundry.h"
 #include "SpellAuraEffects.h"
+#include "InstanceScript.h"
 /// Iron Flame Binder - 87515
 class npc_foundry_iron_flame_binder : public CreatureScript
 {

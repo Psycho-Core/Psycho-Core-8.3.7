@@ -19,6 +19,7 @@
 #include "GameObject.h"
 #include "PhasingHandler.h"
 #include "Log.h"
+#include "InstanceScript.h"
 enum StepID
 {
     STEP_0 = 2175,

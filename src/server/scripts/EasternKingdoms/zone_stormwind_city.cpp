@@ -1,3 +1,8 @@
+#include "ScriptMgr.h"
+#include "SpellScript.h"
+#include "SpellInfo.h"
+#include "TaskScheduler.h"
+#include "Unit.h"
 /*
  * Copyright (C) 2022 BfaCore Reforged
  *

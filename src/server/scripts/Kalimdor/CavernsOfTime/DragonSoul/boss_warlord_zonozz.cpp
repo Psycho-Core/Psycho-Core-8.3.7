@@ -17,6 +17,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "CreatureTextMgr.h"
 #include "Containers.h"
 #include "MoveSplineInit.h"

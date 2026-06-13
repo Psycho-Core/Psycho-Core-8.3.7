@@ -1,4 +1,5 @@
 #include "blackrock_foundry.h"
+#include "InstanceScript.h"
 
 Position const g_CinderWolfSpawnPos = { 131.1977f, 3788.002f, 101.8597f, 0.0f };
 

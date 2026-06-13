@@ -3,6 +3,7 @@
 #include "DB2Stores.h"
 #include  "CriteriaHandler.h"
 #include "LFGMgr.h"
+#include "InstanceScript.h"
 
 DoorData const g_DoorData[] =
 {

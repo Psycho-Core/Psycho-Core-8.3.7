@@ -2,6 +2,7 @@
 #include "MoveSplineInit.h"
 #include "SpellMgr.h"
 #include <algorithm>
+#include "InstanceScript.h"
 
 enum ScriptedTexts
 {

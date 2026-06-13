@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"
+#include "InstanceScript.h"
 
 enum eSpells
 {

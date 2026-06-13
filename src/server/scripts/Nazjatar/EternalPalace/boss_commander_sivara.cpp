@@ -23,6 +23,7 @@
 #include <G3D/Vector3.h>
 #include "AreaTriggerAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

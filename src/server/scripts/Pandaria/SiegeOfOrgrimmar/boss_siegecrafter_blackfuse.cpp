@@ -3,6 +3,7 @@
 #include "MovementGenerator.h"
 #include "MoveSplineInit.h"
 #include "SpellMgr.h"
+#include "InstanceScript.h"
 
 // todo implement movement forces
 

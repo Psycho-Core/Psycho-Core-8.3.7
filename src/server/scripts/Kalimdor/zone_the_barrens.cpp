@@ -28,6 +28,7 @@ EndContentData */
 
 #include "AchievementMgr.h"
 #include "ScriptMgr.h"
+#include "ZoneScript.h"
 #include "MotionMaster.h"
 #include "ObjectAccessor.h"
 #include "Player.h"

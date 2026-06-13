@@ -2,6 +2,7 @@
 #include "SpellAuraEffects.h"
 #include "ScriptedGossip.h"
 #include "Pet.h"
+#include "InstanceScript.h"
 
 enum ScriptedTexts
 {

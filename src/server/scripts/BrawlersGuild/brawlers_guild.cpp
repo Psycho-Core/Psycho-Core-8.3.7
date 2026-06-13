@@ -19,6 +19,7 @@
 #include "BrawlersGuild.h"
 #include "ScriptedGossip.h"
 #include "Creature.h"
+#include "SpellScript.h"
 
 // 68408, 67267
 class npc_brawlers_guild_queue : public CreatureScript

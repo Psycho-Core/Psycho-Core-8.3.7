@@ -1,4 +1,5 @@
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "GameObject.h"
 #include "AreaTrigger.h"
 #include "Log.h"

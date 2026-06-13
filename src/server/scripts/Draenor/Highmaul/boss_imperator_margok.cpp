@@ -17,6 +17,8 @@
 
 # include "highmaul.h"
 #include "CreatureTextMgr.h"
+#include "InstanceScript.h"
+#include "CreatureAIImpl.h"
 
 Position const g_GorianReaverPos = { 4026.755f, 8584.76f, 572.6546f, 3.138298f };
 

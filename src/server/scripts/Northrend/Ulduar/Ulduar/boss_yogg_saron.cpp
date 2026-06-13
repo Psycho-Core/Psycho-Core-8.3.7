@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "CreatureTextMgr.h"
 #include "GridNotifiers.h"
 #include "InstanceScript.h"

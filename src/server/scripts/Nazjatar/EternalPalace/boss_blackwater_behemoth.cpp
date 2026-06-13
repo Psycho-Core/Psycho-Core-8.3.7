@@ -20,6 +20,7 @@
 #include "SpellAuraDefines.h"
 #include "SpellAuraEffects.h"
 #include "GridNotifiersImpl.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

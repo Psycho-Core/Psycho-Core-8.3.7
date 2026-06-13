@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "tol_dagor.h"
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"

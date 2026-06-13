@@ -19,6 +19,7 @@
 #include "GameObjectAI.h"
 #include "Player.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedGossip.h"
 #include "eternal_palace.h"
 

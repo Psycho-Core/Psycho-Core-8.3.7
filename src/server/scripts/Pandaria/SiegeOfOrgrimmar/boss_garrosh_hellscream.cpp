@@ -5,6 +5,7 @@
 #include "SpellAuraEffects.h"
 #include "SpellMgr.h"
 #include "SceneHelper.h"
+#include "InstanceScript.h"
 
 // todo readd update spellscripts
 

@@ -1063,7 +1063,30 @@ class TC_GAME_API WorldSession
         WorldSession(uint32 id, std::string&& name, uint32 battlenetAccountId, std::shared_ptr<WorldSocket> sock, AccountTypes sec, uint8 expansion, time_t mute_time,
         std::string os, LocaleConstant locale, uint32 recruiter, bool isARecruiter, AuthFlags flag, std::string&& battlenetAccountName);
 
+        // Psycho_Core / mod-psychobot compatibility overload. BfaCore's native
+        // constructor carries AuthFlags and Battle.net account name; socketless
+        // bot sessions do not need either, so delegate with safe defaults.
+        WorldSession(uint32 id, std::string&& name, uint32 battlenetAccountId, std::shared_ptr<WorldSocket> sock, AccountTypes sec, uint8 expansion, time_t mute_time,
+            std::string os, LocaleConstant locale, uint32 recruiter, bool isARecruiter);
+
         ~WorldSession();
+
+        // [Psychobot S28] Socketless bot session support. A bot session is
+        // constructed with sock=nullptr; this flag lets every null-socket path
+        // (SendPacket / Update / IsConnectionIdle / KickPlayer / queue) behave
+        // safely instead of dereferencing the absent socket. See BotLogin().
+        bool IsBot() const { return m_isBot; }
+        void SetBot(bool bot) { m_isBot = bot; }
+        // Request that this bot session be torn down: the next Update() returns
+        // false so World::UpdateSessions erases + deletes it (the normal removal
+        // path keyed on socket closure does not apply to socketless bots).
+        void SetBotRemove() { m_botRemove = true; }
+        bool IsBotRemoving() const { return m_botRemove; }
+        // Socketless character load: builds a LoginQueryHolder for guid and
+        // drives the existing _charLoginCallback path (HandlePlayerLogin fires
+        // from ProcessQueryCallbacks once the DB queries complete). Defined in
+        // CharacterHandler.cpp where LoginQueryHolder is visible.
+        void BotLogin(ObjectGuid guid);
 
         bool PlayerLoading() const { return !m_playerLoading.IsEmpty(); }
         bool PlayerLogout() const { return m_playerLogout; }
@@ -1259,6 +1282,10 @@ class TC_GAME_API WorldSession
 
         bool IsConnectionIdle() const
         {
+            // [Psychobot S28] Bots have no socket and never "time out"; keeping
+            // this false avoids CloseSocket() null-derefs in Update().
+            if (m_isBot)
+                return false;
             return m_timeOutTime <= 0 && !m_inQueue;
         }
 
@@ -2141,6 +2168,8 @@ class TC_GAME_API WorldSession
         ObjectGuid::LowType m_GUIDLow;                      // set logined or recently logout player (while m_playerRecentlyLogout set)
         Player* _player;
         std::shared_ptr<WorldSocket> m_Socket[MAX_CONNECTION_TYPES];
+        bool m_isBot = false;                               // [Psychobot S28] socketless bot session
+        bool m_botRemove = false;                           // [Psychobot S28] tear down this bot on next Update()
         std::string m_Address;                              // Current Remote Address
      // std::string m_LAddress;                             // Last Attempted Remote Adress - we can not set attempted ip for a non-existing session!
 

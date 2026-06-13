@@ -17,6 +17,7 @@
 
 #include "BattlePetPackets.h"
 #include "Common.h"
+#include "DatabaseEnvFwd.h"
 
 #ifndef BattlePet_h__
 #define BattlePet_h__

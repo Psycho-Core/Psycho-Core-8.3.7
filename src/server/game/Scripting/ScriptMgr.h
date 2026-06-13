@@ -23,6 +23,10 @@
 #include <vector>
 #include "WorldSession.h"
 #include "SpellMgr.h"
+#include "SpellInfo.h"
+#include "ScriptedCreature.h"
+#include "TemporarySummon.h"
+#include "SpellScript.h"
 #include <boost/property_tree/ptree.hpp>
 
 class AccountMgr;

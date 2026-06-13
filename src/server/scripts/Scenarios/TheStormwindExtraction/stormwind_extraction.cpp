@@ -21,6 +21,7 @@
 #include "GameObjectAI.h"
 #include "Scenario.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "stormwind_extraction.h"
 
 // 281484 - Sewer access portal

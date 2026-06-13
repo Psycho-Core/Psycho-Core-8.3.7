@@ -18,6 +18,7 @@
 #include "ScriptedCreature.h"
 #include "mogu_shan_vault.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedGossip.h"
 #include "ScriptedEscortAI.h"
 #include "CreatureAI.h"

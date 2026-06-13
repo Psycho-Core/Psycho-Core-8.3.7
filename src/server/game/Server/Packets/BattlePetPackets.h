@@ -20,6 +20,7 @@
 
 #include "Packet.h"
 #include "LFGPacketsCommon.h"
+#include "Position.h"
 
 static uint16 const BATTLE_PET_MAX_JOURNAL_PETS = 1000;
 static uint8 const PARTICIPANTS_COUNT = 2;

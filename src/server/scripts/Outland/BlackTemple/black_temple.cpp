@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "black_temple.h"
 #include "ObjectAccessor.h"
 #include "ScriptedCreature.h"

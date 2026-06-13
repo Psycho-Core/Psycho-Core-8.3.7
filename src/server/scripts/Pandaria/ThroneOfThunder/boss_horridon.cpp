@@ -4,6 +4,7 @@
 #include "GameObjectAI.h"
 #include "SpellAuraDefines.h"
 #include "SpellAuraEffects.h"
+#include "InstanceScript.h"
 
 enum eSpells
 {

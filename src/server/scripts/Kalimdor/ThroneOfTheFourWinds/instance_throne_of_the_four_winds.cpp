@@ -21,6 +21,7 @@
 #include "AchievementMgr.h"
 #include "GameObject.h"
 #include "SpellAuras.h"
+#include "InstanceScript.h"
 
 #define ENCOUNTERS 2
 

@@ -16,6 +16,7 @@
 */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "lost_city_of_the_tolvir.h"
 #include "Vehicle.h"
 

@@ -13,6 +13,44 @@
 
 set( MYSQL_FOUND 0 )
 
+# Psycho_Core bundled MariaDB support
+# -----------------------------------
+# Windows builds for this project keep the UNZIPPED/EXTRACTED MariaDB client
+# package under dep/mysql:
+#   <Psycho_Core-8.3.7>/dep/mysql
+# Use CMAKE_SOURCE_DIR instead of a hardcoded drive/user path so the same layout
+# works for every user, even when the repo is cloned somewhere else.
+#
+# Supported layouts:
+#   dep/mysql/include, dep/mysql/lib, dep/mysql/bin
+#   dep/mysql/mariadb-11.8.6-winx64/include, lib, bin  (if the extracted folder
+#                                                       is placed under dep/mysql)
+set(PSYCHOCORE_BUNDLED_MARIADB_ROOT
+  "${CMAKE_SOURCE_DIR}/dep/mysql"
+)
+set(PSYCHOCORE_BUNDLED_MARIADB_INCLUDE_PATHS
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/include"
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/include/mysql"
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/mariadb-11.8.6-winx64/include"
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/mariadb-11.8.6-winx64/include/mysql"
+)
+set(PSYCHOCORE_BUNDLED_MARIADB_LIBRARY_PATHS
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/lib"
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/lib/opt"
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/lib/mariadb"
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/mariadb-11.8.6-winx64/lib"
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/mariadb-11.8.6-winx64/lib/opt"
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/mariadb-11.8.6-winx64/lib/mariadb"
+)
+set(PSYCHOCORE_BUNDLED_MARIADB_BINARY_PATHS
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/bin"
+  "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/mariadb-11.8.6-winx64/bin"
+)
+
+if(WIN32 AND EXISTS "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}")
+  message(STATUS "Using bundled MariaDB search root: ${PSYCHOCORE_BUNDLED_MARIADB_ROOT}")
+endif()
+
 if( UNIX )
   set(MYSQL_CONFIG_PREFER_PATH "$ENV{MYSQL_HOME}/bin" CACHE FILEPATH
     "preferred path to MySQL (mysql_config)"
@@ -28,18 +66,18 @@ if( UNIX )
   if( MYSQL_CONFIG )
     message(STATUS "Using mysql-config: ${MYSQL_CONFIG}")
     # set INCLUDE_DIR
-    exec_program(${MYSQL_CONFIG}
-      ARGS --include
+    execute_process(COMMAND ${MYSQL_CONFIG} --include
       OUTPUT_VARIABLE MY_TMP
+      OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 
     string(REGEX REPLACE "-I([^ ]*)( .*)?" "\\1" MY_TMP "${MY_TMP}")
     set(MYSQL_ADD_INCLUDE_PATH ${MY_TMP} CACHE FILEPATH INTERNAL)
     #message("[DEBUG] MYSQL ADD_INCLUDE_PATH : ${MYSQL_ADD_INCLUDE_PATH}")
     # set LIBRARY_DIR
-    exec_program(${MYSQL_CONFIG}
-      ARGS --libs_r
+    execute_process(COMMAND ${MYSQL_CONFIG} --libs_r
       OUTPUT_VARIABLE MY_TMP
+      OUTPUT_STRIP_TRAILING_WHITESPACE
     )
     set(MYSQL_ADD_LIBRARIES "")
     string(REGEX MATCHALL "-l[^ ]*" MYSQL_LIB_LIST "${MY_TMP}")
@@ -80,6 +118,7 @@ find_path(MYSQL_INCLUDE_DIR
   NAMES
     mysql.h
   PATHS
+    ${PSYCHOCORE_BUNDLED_MARIADB_INCLUDE_PATHS}
     ${MYSQL_ADD_INCLUDE_PATH}
     /usr/include
     /usr/include/mysql
@@ -117,8 +156,9 @@ if( UNIX )
   foreach(LIB ${MYSQL_ADD_LIBRARIES})
     find_library( MYSQL_LIBRARY
       NAMES
-        mysql libmysql ${LIB}
+        mysql libmysql libmariadb mariadbclient ${LIB}
       PATHS
+        ${PSYCHOCORE_BUNDLED_MARIADB_LIBRARY_PATHS}
         ${MYSQL_ADD_LIBRARIES_PATH}
         /usr/lib
         /usr/lib/mysql
@@ -134,7 +174,11 @@ if( WIN32 )
   find_library( MYSQL_LIBRARY
     NAMES
       libmysql
+      libmariadb
+      mariadbclient
+      mysqlclient
     PATHS
+      ${PSYCHOCORE_BUNDLED_MARIADB_LIBRARY_PATHS}
       ${MYSQL_ADD_LIBRARIES_PATH}
       "${PROGRAM_FILES_64}/MySQL/MySQL Server 8.0/lib"
       "${PROGRAM_FILES_64}/MySQL/MySQL Server 5.7/lib"
@@ -207,6 +251,7 @@ endif( UNIX )
 if( WIN32 )
     find_program(MYSQL_EXECUTABLE mysql
       PATHS
+        ${PSYCHOCORE_BUNDLED_MARIADB_BINARY_PATHS}
         "${PROGRAM_FILES_64}/MySQL/MySQL Server 8.0/bin"
         "${PROGRAM_FILES_64}/MySQL/MySQL Server 5.7/bin"
         "${PROGRAM_FILES_64}/MySQL/MySQL Server 5.6/bin"

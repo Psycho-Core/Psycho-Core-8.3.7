@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "CreatureGroups.h"
 #include "emerald_nightmare.h"
 

@@ -16,6 +16,7 @@
 */
 
 #include "cathedral_of_eternal_night.h"
+#include "InstanceScript.h"
 
 enum Says
 {

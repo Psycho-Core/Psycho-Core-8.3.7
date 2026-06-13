@@ -1,4 +1,5 @@
 #include "siege_of_orgrimmar.hpp"
+#include "InstanceScript.h"
 
 #define NAZGRIM_POWER_TYPE POWER_MANA
 #define NAZGRIM_POWER_MAX 100

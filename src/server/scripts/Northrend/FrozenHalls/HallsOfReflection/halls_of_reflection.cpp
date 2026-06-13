@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "halls_of_reflection.h"
 #include "InstanceScript.h"
 #include "MotionMaster.h"

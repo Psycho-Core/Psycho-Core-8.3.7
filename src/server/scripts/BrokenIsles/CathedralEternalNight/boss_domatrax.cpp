@@ -18,6 +18,7 @@
 #include "cathedral_of_eternal_night.h"
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
+#include "InstanceScript.h"
 
 enum Says
 {

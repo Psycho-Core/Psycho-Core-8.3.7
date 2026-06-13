@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "forge_of_souls.h"
 #include "InstanceScript.h"
 #include "Map.h"

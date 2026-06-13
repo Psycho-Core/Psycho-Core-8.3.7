@@ -17,6 +17,7 @@
 
 #include "shadopan_monastery.h"
 #include "SpellAuras.h"
+#include "InstanceScript.h"
 
 enum eSpells
 {

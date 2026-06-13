@@ -1,0 +1,8 @@
+## Interface: 80300
+## Title: Psychobot UI
+## Notes: UI for managing mod-psychobot bots.
+## Author: Psycho-core
+## Version: 1.0
+
+PsychobotUI.xml
+PsychobotUI.lua

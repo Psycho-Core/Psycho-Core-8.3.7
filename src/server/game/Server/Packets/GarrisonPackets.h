@@ -23,6 +23,7 @@
 #include "Position.h"
 #include "PacketUtilities.h"
 #include <list>
+#include <map>
 #include <unordered_set>
 #include <vector>
 

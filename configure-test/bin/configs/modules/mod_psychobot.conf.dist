@@ -1,0 +1,84 @@
+# ===========================================================================
+#  Copyright (c) 2026 Psycho-core. All rights reserved.
+#  Original work authored 100% from scratch for Psycho_Core.
+#  Licensed under LICENSE.MYCODE (see LICENSE.MYCODE.txt in the repo root).
+#  NOT covered by the base GPL framework license. Development/evaluation only.
+# ===========================================================================
+########################################
+# Psycho_Core mod-psychobot configuration  (Stage 1: Foundation + Main AI)
+########################################
+#
+# Copy to "mod_psychobot.conf" (drop .dist) in your server's configs/modules
+# directory, or merge the keys into worldserver.conf. Read via sConfigMgr.
+#
+[worldserver]
+
+#
+#    Psychobot.Enable
+#        Description: Master on/off switch for the Psychobot system.
+#                     When 0, the world tick and commands do nothing.
+#        Default:     0 (disabled)
+#
+Psychobot.Enable = 0
+
+#
+#    Psychobot.FollowDistance
+#        Description: yards a bot trails its master.
+#        Default:     2.0
+#
+Psychobot.FollowDistance = 2.0
+
+########################################
+# Stage 3 - World population + scaling (ported from the Cataclysm patch design)
+########################################
+
+# Master switch for the open-world random-bot population system.
+# (Open-world SPAWNING also requires socketless bot login - a later stage; these
+#  keys configure the population + scaling framework.)
+Psychobot.RandomBots.Enable = 0
+Psychobot.RandomBots.Min = 50
+Psychobot.RandomBots.Max = 200
+Psychobot.RandomBots.MinLevel = 1
+Psychobot.RandomBots.MaxLevel = 120
+Psychobot.SyncLevelWithPlayers = 0
+
+# --- BotActiveAlone / SmartScale (CPU scaling) ---
+# Percentage of bots that tick AI when no real player is nearby (0-100).
+Psychobot.ActiveAlone = 100
+# How often (seconds) the active roster rotates.
+Psychobot.ActiveAloneDuration = 120
+# Force-active any bot within this radius (yards) of a real player.
+Psychobot.ActiveAloneRadius = 200.0
+# Auto-reduce active bots as the world tick (ms) climbs.
+Psychobot.SmartScale = 1
+Psychobot.SmartScaleDiffFloor = 50
+Psychobot.SmartScaleDiffCeiling = 150
+
+# --- DisabledWithoutRealPlayer ---
+# When 1, bots stop ticking when no real player is online.
+Psychobot.DisabledWithoutRealPlayer = 1
+Psychobot.LoginDelay = 0
+Psychobot.LogoutDelay = 0
+
+# --- Gear ---
+# Max item quality for random gear (3 = rare/blue, 4 = epic/purple).
+Psychobot.GearQualityLimit = 3
+# Bots prefer armor matching their class proficiency.
+Psychobot.PreferClassArmorType = 1
+# Stop re-randomizing gear at/after a level (0 = at max level).
+Psychobot.EquipmentPersistence = 1
+Psychobot.EquipmentPersistenceLevel = 0
+
+########################################
+# Stage 4 - Group content + extras
+########################################
+
+# Auction House Bot (keeps the AH populated). Requires item data; safe no-op
+# until then. Interval is the posting cycle period in seconds.
+Psychobot.AhBot.Enable = 0
+Psychobot.AhBot.IntervalSeconds = 3600
+# S26: candidate selection + price model (used by BuildListings/PriceItem).
+Psychobot.AhBot.MaxListingsPerCycle = 20
+Psychobot.AhBot.MinItemLevel = 1
+Psychobot.AhBot.MaxQuality = 4
+Psychobot.AhBot.PriceMultiplier = 1.5

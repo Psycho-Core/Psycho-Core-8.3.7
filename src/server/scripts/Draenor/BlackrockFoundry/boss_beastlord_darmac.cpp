@@ -1,3 +1,4 @@
+#include "InstanceScript.h"
 # include "boss_beastlord_darmac.h"
 
 /// Beastlord Darmac <The Iron Claw> - 76865

@@ -20,6 +20,7 @@
 #include "GridNotifiersImpl.h"
 #include "instance_bloodmaul.h"
 #include <forward_list>
+#include "InstanceScript.h"
 
 namespace Instances
 {

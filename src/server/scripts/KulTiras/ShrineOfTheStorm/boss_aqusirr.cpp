@@ -2,6 +2,7 @@
 #include "AreaTriggerAI.h"
 #include "ScriptedCreature.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellAuraEffects.h"
 #include "Spell.h"
 #include "ObjectMgr.h"

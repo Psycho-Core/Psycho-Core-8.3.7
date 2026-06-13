@@ -17,6 +17,7 @@
 
 // 108469
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "well_of_eternity.h"
 #include "GameObject.h"
 

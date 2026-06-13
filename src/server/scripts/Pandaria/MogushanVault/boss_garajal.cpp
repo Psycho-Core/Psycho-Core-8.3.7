@@ -16,6 +16,8 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
+#include "InstanceScript.h"
 #include "CreatureTextMgr.h"
 #include "ScriptedCreature.h"
 #include "mogu_shan_vault.h"

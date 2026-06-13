@@ -17,6 +17,7 @@
 
 #include "shadowmoon_burial_grounds.h"
 #include "GameObject.h"
+#include "InstanceScript.h"
 
 enum eBoneMawSpells
 {

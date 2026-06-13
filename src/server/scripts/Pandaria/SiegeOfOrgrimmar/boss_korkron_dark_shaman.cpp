@@ -1,4 +1,5 @@
 #include "siege_of_orgrimmar.hpp"
+#include "InstanceScript.h"
 
 enum ScriptedTextHaromm
 {

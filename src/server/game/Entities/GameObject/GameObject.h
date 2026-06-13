@@ -19,6 +19,7 @@
 #define TRINITYCORE_GAMEOBJECT_H
 
 #include "Object.h"
+#include "EventProcessor.h"
 #include "DatabaseEnvFwd.h"
 #include "GameObjectData.h"
 #include "Loot.h"

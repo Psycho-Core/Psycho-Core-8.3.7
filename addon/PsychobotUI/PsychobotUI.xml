@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ui>
+    <Frame name="PsychobotUI_RootFrame" parent="UIParent">
+        <Size x="300" y="400"/>
+        <Anchors>
+            <Anchor point="CENTER"/>
+        </Anchors>
+    </Frame>
+</Ui>

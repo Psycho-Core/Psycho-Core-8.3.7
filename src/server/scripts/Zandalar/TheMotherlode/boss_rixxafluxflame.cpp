@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "the_motherlode.h"
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"

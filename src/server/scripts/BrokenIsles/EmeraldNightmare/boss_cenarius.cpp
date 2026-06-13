@@ -19,6 +19,7 @@
 #include "AreaTriggerAI.h"
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "emerald_nightmare.h"
 
 enum Says

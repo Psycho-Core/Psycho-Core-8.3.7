@@ -24,6 +24,7 @@
 #include "GarrisonPackets.h"
 #include "GarrisonMgr.h"
 #include "Optional.h"
+#include "Timer.h"
 #include <unordered_map>
 
 class ClassHall;

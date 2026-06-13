@@ -24,6 +24,7 @@ SDComment:
 EndScriptData */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "CellImpl.h"
 #include "GridNotifiers.h"

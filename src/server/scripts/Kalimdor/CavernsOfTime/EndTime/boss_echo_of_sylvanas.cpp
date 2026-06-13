@@ -24,6 +24,7 @@ SDComment:
 EndScriptData */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "end_time.h"
 #include "SpellInfo.h"
@@ -450,14 +451,14 @@ class mob_risen_ghoul : public CreatureScript
 
                         float cosAngle = ((meX - sylvanasX) * (nearbyGhoulX - sylvanasX) + (meY - sylvanasY) * (nearbyGhoulY - sylvanasY)) / (squareAB * squareBC);
 
-                        // If the agle is minor than 90°
+                        // If the agle is minor than 90
                         // (*iter) is the right ghoul for which we could check if player is in between
                         if (acos(cosAngle) < 1.57f && !nextGhoul1)
                         {
                             nextGhoul1 = (*iter);
                         }
 
-                        // If the agle is major than 270°
+                        // If the agle is major than 270
                         // (*iter) is the right ghoul for which we could check if player is in between
                         if (acos(cosAngle) > 4.71f && !nextGhoul2)
                         {

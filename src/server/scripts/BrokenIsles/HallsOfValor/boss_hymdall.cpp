@@ -19,6 +19,7 @@
 #include "AreaTriggerAI.h"
 #include "GameObject.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "halls_of_valor.h"
 
 enum hymdallSpells

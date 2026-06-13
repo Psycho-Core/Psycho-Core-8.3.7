@@ -22,6 +22,7 @@
 #include "SceneMgr.h"
 #include "Log.h"
 #include "Spell.h"
+#include "InstanceScript.h"
 enum
 {
     DATA_RESTOACQUSITON = 0,

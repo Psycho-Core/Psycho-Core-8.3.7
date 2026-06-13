@@ -19,6 +19,7 @@
 #include "AreaTriggerAI.h"
 #include "CombatAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "SpellScript.h"
 #include "the_everbloom.h"

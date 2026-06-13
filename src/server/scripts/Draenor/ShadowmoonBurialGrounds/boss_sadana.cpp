@@ -20,6 +20,7 @@
 #include "GameObject.h"
 #include "GridNotifiers.h"
 #include "shadowmoon_burial_grounds.h"
+#include "InstanceScript.h"
 
 enum eSadanaSpells
 {

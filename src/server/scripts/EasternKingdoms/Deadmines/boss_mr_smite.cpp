@@ -22,6 +22,7 @@ SDComment: Timers and say taken from acid script
 EndScriptData */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "deadmines.h"
 

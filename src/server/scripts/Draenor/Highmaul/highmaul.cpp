@@ -21,6 +21,7 @@
 #include "ScriptedGossip.h"
 #include "Chat.h"
 #include "ObjectMgr.h"
+#include "InstanceScript.h"
 
 /// Gharg positions
 Position const g_GhargFirstPos = { 3466.11f, 7577.58f, 15.203f, 0.8954f };

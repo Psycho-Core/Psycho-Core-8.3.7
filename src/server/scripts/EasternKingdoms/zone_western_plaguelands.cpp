@@ -29,6 +29,7 @@ npc_andorhal_tower
 EndContentData */
 
 #include "ScriptMgr.h"
+#include "ZoneScript.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
 #include "Player.h"

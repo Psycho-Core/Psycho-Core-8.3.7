@@ -1,4 +1,5 @@
 #include "blackrock_foundry.h"
+#include "InstanceScript.h"
 
 Position const g_CenterPos = { 373.618f, 3583.1f, 279.755f, 4.60341f };
 

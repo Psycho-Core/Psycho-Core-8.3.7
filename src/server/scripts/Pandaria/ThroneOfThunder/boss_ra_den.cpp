@@ -1,6 +1,7 @@
 #include "throne_of_thunder.h"
 #include "Group.h"
 #include "SpellAuras.h"
+#include "InstanceScript.h"
 
 // 7844 world state for heroic attempts
 

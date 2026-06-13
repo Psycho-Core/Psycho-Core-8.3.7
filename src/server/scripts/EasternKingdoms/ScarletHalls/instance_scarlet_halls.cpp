@@ -1,4 +1,5 @@
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "InstanceScript.h"
 #include "GameObject.h"
 #include "scarlet_halls.h"

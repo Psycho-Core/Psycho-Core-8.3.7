@@ -1,6 +1,7 @@
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellAuraEffects.h"
 
 enum Spells

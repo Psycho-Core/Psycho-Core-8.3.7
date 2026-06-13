@@ -2,6 +2,7 @@
 #include "SpellAuraEffects.h"
 #include "SpellAuraDefines.h"
 #include "throne_of_thunder.h"
+#include "InstanceScript.h"
 
 Position PlatformCenter = { 5895.829f,  4512.626f, -6.276f, 6.242f };
 

@@ -27,6 +27,7 @@
 #include "SpellMgr.h"
 #include "SpellScript.h"
 #include "TemporarySummon.h"
+#include "CreatureAIImpl.h"
 
 enum ScriptTexts
 {

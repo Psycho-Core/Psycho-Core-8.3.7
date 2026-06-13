@@ -16,6 +16,8 @@
 */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
+#include "InstanceScript.h"
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"

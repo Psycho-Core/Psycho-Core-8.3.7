@@ -1,4 +1,5 @@
 #include "iron_docks.hpp"
+#include "InstanceScript.h"
 
 enum eCreatures
 {

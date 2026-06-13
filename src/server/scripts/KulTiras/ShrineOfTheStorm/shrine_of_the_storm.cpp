@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "shrine_of_the_storm.h"
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"

@@ -17,6 +17,7 @@
 
 #include "SpellScript.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "Cell.h"
 #include "GridNotifiers.h"

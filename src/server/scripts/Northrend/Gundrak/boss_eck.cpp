@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "gundrak.h"
 #include "ScriptedCreature.h"
 

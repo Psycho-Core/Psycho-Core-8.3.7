@@ -23,6 +23,7 @@
 #include "PhasingHandler.h"
 #include "SceneMgr.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 
 enum DataTypes
 {

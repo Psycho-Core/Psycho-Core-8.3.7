@@ -17,6 +17,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Group.h"
 #include "dragon_soul.h"
 #include "CellImpl.h"

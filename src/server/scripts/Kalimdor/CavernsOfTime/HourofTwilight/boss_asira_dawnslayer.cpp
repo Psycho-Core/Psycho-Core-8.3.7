@@ -24,6 +24,7 @@
 #include"SpellAuraEffects.h"
 #include"hour_of_twilight.h"
 #include "DynamicObject.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

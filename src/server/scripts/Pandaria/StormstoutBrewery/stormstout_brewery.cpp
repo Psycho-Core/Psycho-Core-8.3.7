@@ -17,6 +17,7 @@
 
 #include "stormstout_brewery.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "SpellScript.h"
 

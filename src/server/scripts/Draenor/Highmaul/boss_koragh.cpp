@@ -18,6 +18,7 @@
 #include "highmaul.h"
 #include "GameObjectAI.h"
 #include "Group.h"
+#include "InstanceScript.h"
 
 Position const g_CenterPos = { 3903.39f, 8608.15f, 364.71f, 5.589f };
 

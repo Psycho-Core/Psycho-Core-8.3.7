@@ -16,6 +16,8 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
+#include "InstanceScript.h"
 #include "blackrock_caverns.h"
 #include "ScriptedCreature.h"
 #include "Spell.h"

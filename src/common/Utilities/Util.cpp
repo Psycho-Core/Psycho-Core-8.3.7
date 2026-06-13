@@ -101,11 +101,13 @@ void stripLineInvisibleChars(std::string &str)
 }
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__))
+#if defined(_WIN32)
 struct tm* localtime_r(const time_t* time, struct tm *result)
 {
     localtime_s(result, time);
     return result;
 }
+#endif
 #endif
 
 std::string secsToTimeString(uint64 timeInSecs, bool shortText, bool hoursOnly)

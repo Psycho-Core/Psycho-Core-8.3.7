@@ -1,3 +1,8 @@
+#include "Creature.h"
+#include "GridNotifiers.h"
+#include "Position.h"
+#include "ScriptedCreature.h"
+#include <list>
 
 #include "Vehicle.h"
 #include "GameObjectAI.h"

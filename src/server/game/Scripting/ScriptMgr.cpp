@@ -1174,6 +1174,11 @@ ScriptMgr* ScriptMgr::instance()
     return &instance;
 }
 
+// Psycho_Core module system: provided by the always-built "modules" static library
+// (modules/ModulesLoader.h). Forward-declared here so the game library can
+// invoke it without depending on the modules include directory.
+void AddModulesScripts();
+
 void ScriptMgr::Initialize()
 {
     ASSERT(sSpellMgr->GetSpellInfo(SPELL_HOTSWAP_VISUAL_SPELL_EFFECT)

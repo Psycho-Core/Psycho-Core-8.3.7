@@ -22,6 +22,7 @@
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedGossip.h"
 
 #define SAY_AGGRO1       "Valiona, Theralion, put them in their place."

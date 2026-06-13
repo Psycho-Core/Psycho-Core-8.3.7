@@ -1,4 +1,5 @@
 #include "boss_hansgar_and_franzok.h"
+#include "InstanceScript.h"
 
 /// Hans'gar - 76973
 class boss_hansgar : public CreatureScript

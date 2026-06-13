@@ -17,6 +17,7 @@
 
 #include "GameObjectAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "mogu_shan_vault.h"
 

@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "blackwing_lair.h"
 #include "Map.h"
 #include "Player.h"

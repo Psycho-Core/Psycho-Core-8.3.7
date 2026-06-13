@@ -31,6 +31,7 @@
 #include "ItemDefines.h"
 #include "ItemEnchantmentMgr.h"
 #include "MapReference.h"
+#include "MotionMaster.h"
 #include "Optional.h"
 #include "PetDefines.h"
 #include "PlayerTaxi.h"

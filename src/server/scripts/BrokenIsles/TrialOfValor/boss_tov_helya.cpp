@@ -17,6 +17,7 @@
 
 #include "trial_of_valor.h"
 #include "CombatPackets.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

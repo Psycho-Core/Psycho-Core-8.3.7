@@ -5,6 +5,7 @@
 */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "deadmines.h"
 #include "SpellMgr.h"
 

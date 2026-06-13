@@ -905,6 +905,45 @@ void WorldSession::HandleContinuePlayerLogin()
     _charLoginCallback = CharacterDatabase.DelayQueryHolder(holder);
 }
 
+// [Psychobot S28] Socketless bot login. Unlike a real client (which goes
+// HandlePlayerLoginOpcode -> SendConnectToInstance -> HandleContinuePlayerLogin),
+// a bot has no socket and no realm/instance handshake. We build the same
+// LoginQueryHolder used by HandleContinuePlayerLogin and assign it to
+// _charLoginCallback; the existing ProcessQueryCallbacks() in WorldSession::Update
+// then calls HandlePlayerLogin(holder) once the DB queries complete - reusing
+// the core's own tested login path. LoginQueryHolder is file-local to this
+// translation unit, which is why this helper lives here.
+void WorldSession::BotLogin(ObjectGuid guid)
+{
+    if (!m_isBot)
+    {
+        TC_LOG_ERROR("network", "BotLogin called on a non-bot session (account %u).", GetAccountId());
+        return;
+    }
+
+    if (PlayerLoading() || GetPlayer() != nullptr)
+    {
+        TC_LOG_ERROR("network", "BotLogin: session (account %u) is already loading or in world.", GetAccountId());
+        return;
+    }
+
+    m_playerLoading = guid;
+
+    LoginQueryHolder* holder = new LoginQueryHolder(GetAccountId(), m_playerLoading);
+    if (!holder->Initialize())
+    {
+        delete holder;                                      // delete all unprocessed queries
+        m_playerLoading.Clear();
+        TC_LOG_ERROR("network", "BotLogin: LoginQueryHolder::Initialize failed for account %u guid %s.",
+            GetAccountId(), guid.ToString().c_str());
+        return;
+    }
+
+    // Drive the same async callback path the real login uses; HandlePlayerLogin
+    // will fire from ProcessQueryCallbacks() on a subsequent Update tick.
+    _charLoginCallback = CharacterDatabase.DelayQueryHolder(holder);
+}
+
 void WorldSession::AbortLogin(WorldPackets::Character::LoginFailureReason reason)
 {
     if (!PlayerLoading() || GetPlayer())

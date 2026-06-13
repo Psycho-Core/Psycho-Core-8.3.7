@@ -20,6 +20,7 @@
 #include "SpellAuras.h"
 #include "SpellScript.h"
 #include "MotionMaster.h"
+#include "InstanceScript.h"
 
 
 enum Says

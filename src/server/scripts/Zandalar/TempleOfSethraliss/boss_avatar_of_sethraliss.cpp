@@ -1,4 +1,5 @@
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "temple_of_sethraliss.h"
 #include "ScriptedGossip.h"
 

@@ -25,6 +25,7 @@
 #include "Optional.h"
 #include "PacketUtilities.h"
 #include "Position.h"
+#include "Timer.h"
 #include <array>
 
 namespace WorldPackets

@@ -18,6 +18,7 @@
 #include "ScriptedCreature.h"
 #include "heart_of_fear.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedGossip.h"
 #include "ScriptedEscortAI.h"
 #include "CreatureAI.h"

@@ -17,6 +17,7 @@
 
 #include "ScriptMgr.h"
 #include "PhasingHandler.h"
+#include "TemporarySummon.h"
 
 enum Spells
 {

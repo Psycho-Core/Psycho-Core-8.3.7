@@ -3,6 +3,7 @@
 #include "SpellAuras.h"
 #include "SpellAuraDefines.h"
 #include "SpellAuraEffects.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

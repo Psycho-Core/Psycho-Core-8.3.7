@@ -1,4 +1,5 @@
 #include "siege_of_orgrimmar.hpp"
+#include "InstanceScript.h"
 
 // TODO:
 // script some spells for NPC_GATECRUSHER_SAVAH 73670

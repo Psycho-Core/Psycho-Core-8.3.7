@@ -23,6 +23,7 @@ SDCategory: Magister's Terrace
 EndScriptData */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "InstanceScript.h"
 #include "magisters_terrace.h"
 #include "ObjectAccessor.h"

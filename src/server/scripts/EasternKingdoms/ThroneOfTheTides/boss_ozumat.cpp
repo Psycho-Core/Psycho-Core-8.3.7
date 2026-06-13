@@ -16,6 +16,8 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
+#include "InstanceScript.h"
 #include "throne_of_the_tides.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"

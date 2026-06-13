@@ -287,6 +287,13 @@ class TC_GAME_API Group
         bool HasFreeSlotSubGroup(uint8 subgroup) const;
 
         MemberSlotList const& GetMemberSlots() const { return m_memberSlots; }
+        uint8 GetMemberFlags(ObjectGuid guid) const
+        {
+            for (MemberSlot const& slot : m_memberSlots)
+                if (slot.guid == guid)
+                    return slot.flags;
+            return 0;
+        }
         GroupReference* GetFirstMember() { return m_memberMgr.getFirst(); }
         GroupReference const* GetFirstMember() const { return m_memberMgr.getFirst(); }
         uint32 GetMembersCount() const { return uint32(m_memberSlots.size()); }

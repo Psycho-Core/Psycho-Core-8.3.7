@@ -19,6 +19,7 @@
 #include "AreaTriggerAI.h"
 #include "AreaTrigger.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "neltharions_lair.h"
 #include "CreatureTextMgr.h"

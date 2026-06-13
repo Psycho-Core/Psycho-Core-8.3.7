@@ -1,6 +1,7 @@
 #include "SpellAuraEffects.h"
 #include "SpellAuraDefines.h"
 #include "throne_of_thunder.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

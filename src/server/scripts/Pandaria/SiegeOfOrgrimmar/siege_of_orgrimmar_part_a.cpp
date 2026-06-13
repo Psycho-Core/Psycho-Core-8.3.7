@@ -1,5 +1,6 @@
 #include "siege_of_orgrimmar.hpp"
 #include "GameObjectAI.h"
+#include "InstanceScript.h"
 // 143948
 // 149189
 // 140708

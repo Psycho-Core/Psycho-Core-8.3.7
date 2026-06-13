@@ -1,5 +1,6 @@
 #include "iron_docks.hpp"
 #include "GameObject.h"
+#include "InstanceScript.h"
 
 class instance_iron_docks : public InstanceMapScript
 {

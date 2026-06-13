@@ -26,6 +26,7 @@
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "SpellAuraEffects.h"
 #include "SpellScript.h"
 

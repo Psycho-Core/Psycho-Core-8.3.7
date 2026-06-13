@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "court_of_stars.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"

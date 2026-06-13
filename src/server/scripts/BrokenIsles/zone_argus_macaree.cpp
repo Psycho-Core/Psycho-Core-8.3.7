@@ -23,6 +23,7 @@
 #include "Player.h"
 #include "SceneMgr.h"
 #include "ScriptMgr.h"
+#include "ZoneScript.h"
 #include "ScriptedCreature.h"
 #include "SpellScript.h"
 #include "SpellMgr.h"

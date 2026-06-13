@@ -17,6 +17,10 @@
 
 #include "ScriptMgr.h"
 #include "PhasingHandler.h"
+#include "MotionMaster.h"
+#include "UnitDefines.h"
+#include "SpellScript.h"
+#include "ScriptedCreature.h"
 
 enum Spells
 {

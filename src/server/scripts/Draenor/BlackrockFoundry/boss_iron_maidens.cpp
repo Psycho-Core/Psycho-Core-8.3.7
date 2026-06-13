@@ -1,4 +1,5 @@
 #include "boss_iron_maidens.h"
+#include "InstanceScript.h"
 
 /// Admiral Gar'an - 77557
 class boss_admiral_garan : public CreatureScript

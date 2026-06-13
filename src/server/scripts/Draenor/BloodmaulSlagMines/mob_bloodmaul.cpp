@@ -1,3 +1,9 @@
+#include "ScriptMgr.h"
+#include "ScriptedCreature.h"
+#include "SpellScript.h"
+#include "Unit.h"
+#include "Containers.h"
+#include <list>
 /*
  * Copyright (C) 2022 BfaCore Reforged
  *

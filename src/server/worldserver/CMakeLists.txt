@@ -48,6 +48,7 @@ target_link_libraries(worldserver
     trinity-core-interface
   PUBLIC
     scripts
+    modules
     game
     readline)
 
@@ -71,6 +72,11 @@ set_target_properties(worldserver
 # Add all dynamic projects as dependency to the worldserver
 if (WORLDSERVER_DYNAMIC_SCRIPT_MODULES_DEPENDENCIES)
   add_dependencies(worldserver ${WORLDSERVER_DYNAMIC_SCRIPT_MODULES_DEPENDENCIES})
+endif()
+
+# Add all dynamic MODULE projects as dependency to the worldserver
+if (WORLDSERVER_DYNAMIC_MODULES_DEPENDENCIES)
+  add_dependencies(worldserver ${WORLDSERVER_DYNAMIC_MODULES_DEPENDENCIES})
 endif()
 
 if( WIN32 )

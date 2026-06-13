@@ -3,6 +3,7 @@
 #include "GossipDef.h"
 #include "ScriptedCreature.h"
 #include "SceneHelper.h"
+#include "InstanceScript.h"
 
 enum ScriptedTextJaina
 {

@@ -17,6 +17,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "MoveSplineInit.h"
 #include "AchievementMgr.h"
 #include "ObjectMgr.h"
@@ -2316,7 +2317,7 @@ public:
             if (!GetHitUnit()->IsAlive() || !GetCaster())
                 return;
 
-            uint32 dmg = GetHitDamage() * 2; //This is beacuse don´t exist one spell for this, and this spell is use in other side
+            uint32 dmg = GetHitDamage() * 2; //This is beacuse dont exist one spell for this, and this spell is use in other side
             SetHitDamage(dmg);
         }
 

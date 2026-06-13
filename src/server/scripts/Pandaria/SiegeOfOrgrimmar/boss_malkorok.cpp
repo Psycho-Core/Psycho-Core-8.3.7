@@ -1,5 +1,6 @@
 #include "siege_of_orgrimmar.hpp"
 #include "SpellAuraEffects.h"
+#include "InstanceScript.h"
 
 #define MALKOROK_POWER_TYPE POWER_ENERGY
 #define MALKOROK_POWER_MAX 100

@@ -18,6 +18,7 @@
 #include "firelands.h"
 #include "GameObject.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 
 // areatrigger
 // 6929 - quest1

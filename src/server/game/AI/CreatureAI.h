@@ -28,6 +28,7 @@ class AreaTrigger;
 class Creature;
 class DynamicObject;
 class GameObject;
+class InstanceScript;
 class PlayerAI;
 class Spell;
 class WorldObject;

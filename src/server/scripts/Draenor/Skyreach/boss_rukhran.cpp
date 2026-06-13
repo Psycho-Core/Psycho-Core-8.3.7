@@ -1,6 +1,7 @@
 #include "instance_skyreach.h"
 #include "ScriptedCreature.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "GameObject.h"
 
 static const Position k_Waypoints[12] =

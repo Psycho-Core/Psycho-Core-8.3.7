@@ -18,6 +18,7 @@
 #include "Scenario.h"
 #include "GameObject.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Spell.h"
 #include "WorldStatePackets.h"
 #include "ScriptedGossip.h"

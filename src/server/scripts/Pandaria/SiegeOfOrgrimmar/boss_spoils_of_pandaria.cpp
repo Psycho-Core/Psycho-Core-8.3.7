@@ -5,6 +5,7 @@
 #include "Player.h"
 
 #include "ScriptedGossip.h"
+#include "InstanceScript.h"
 
 // There are 36+36 lightweight crates (18 per room),
 // 12+12 stout crates (6 per room),

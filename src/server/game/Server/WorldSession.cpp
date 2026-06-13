@@ -159,6 +159,13 @@ WorldSession::WorldSession(uint32 id, std::string&& name, uint32 battlenetAccoun
     _instanceConnectKey.Raw = UI64LIT(0);
 }
 
+WorldSession::WorldSession(uint32 id, std::string&& name, uint32 battlenetAccountId, std::shared_ptr<WorldSocket> sock, AccountTypes sec, uint8 expansion, time_t mute_time,
+    std::string os, LocaleConstant locale, uint32 recruiter, bool isARecruiter) :
+    WorldSession(id, std::move(name), battlenetAccountId, std::move(sock), sec, expansion, mute_time,
+        std::move(os), locale, recruiter, isARecruiter, AuthFlags(0), std::string())
+{
+}
+
 /// WorldSession destructor
 WorldSession::~WorldSession()
 {
@@ -252,7 +259,11 @@ void WorldSession::SendPacket(WorldPacket const* packet, bool forced /*= false*/
 
     if (!m_Socket[conIdx])
     {
-        TC_LOG_DEBUG("network.opcode", "Prevented sending of %s to non existent socket %u to %s", GetOpcodeNameForLogging(static_cast<OpcodeServer>(packet->GetOpcode())).c_str(), uint32(conIdx), GetPlayerInfo().c_str());
+        // [Psychobot S28] Bot sessions legitimately have no socket; silently
+        // drop outbound packets without flooding the log (HandlePlayerLogin and
+        // the AI generate many SMSG_* sends that have nowhere to go).
+        if (!m_isBot)
+            TC_LOG_DEBUG("network.opcode", "Prevented sending of %s to non existent socket %u to %s", GetOpcodeNameForLogging(static_cast<OpcodeServer>(packet->GetOpcode())).c_str(), uint32(conIdx), GetPlayerInfo().c_str());
         return;
     }
 
@@ -337,7 +348,9 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
 
     ///- Before we process anything:
     /// If necessary, kick the player from the character select screen
-    if (IsConnectionIdle())
+    // [Psychobot S28] Guard the socket deref: IsConnectionIdle() returns false
+    // for bots, and this null-check hardens transient null-socket paths.
+    if (IsConnectionIdle() && m_Socket[CONNECTION_TYPE_REALM])
         m_Socket[CONNECTION_TYPE_REALM]->CloseSocket();
 
     ///- Retrieve packets from the receive queue and call the appropriate handlers
@@ -493,6 +506,16 @@ bool WorldSession::Update(uint32 diff, PacketFilter& updater)
                     m_Socket[CONNECTION_TYPE_INSTANCE].reset();
                 }
             }
+        }
+
+        // [Psychobot S28] A bot session has no realm socket by design; returning
+        // false here would erase it from the world session map every tick. Keep
+        // bot sessions alive unless the module requested teardown.
+        if (m_isBot)
+        {
+            if (m_botRemove)
+                return false;                                   // Bot logout requested: allow removal
+            return true;                                        // Keep the socketless bot session alive
         }
 
         if (!m_Socket[CONNECTION_TYPE_REALM])
@@ -657,6 +680,11 @@ void WorldSession::LogoutPlayer(bool save)
 /// Kick a player out of the World
 void WorldSession::KickPlayer()
 {
+    // [Psychobot S28] Bots have no socket to close and must not be kicked by
+    // idle/GM/anti-cheat paths; removal goes through module teardown.
+    if (m_isBot)
+        return;
+
     for (uint8 i = 0; i < 2; ++i)
     {
         if (m_Socket[i])

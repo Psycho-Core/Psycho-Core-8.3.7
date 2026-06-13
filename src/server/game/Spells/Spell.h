@@ -19,6 +19,8 @@
 #define __SPELL_H
 
 #include "ConditionMgr.h"
+#include "Optional.h"
+#include "Common.h"
 #include "DBCEnums.h"
 #include "ObjectGuid.h"
 #include "Position.h"

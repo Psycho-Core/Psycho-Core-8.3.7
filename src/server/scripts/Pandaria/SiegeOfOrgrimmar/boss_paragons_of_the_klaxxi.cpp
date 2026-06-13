@@ -1,6 +1,7 @@
 #include "siege_of_orgrimmar.hpp"
 #include "SpellAuraEffects.h"
 #include "Player.h"
+#include "InstanceScript.h"
 
 // Information:
 // 1. There are many spells that have triggers after 'jump' effects.

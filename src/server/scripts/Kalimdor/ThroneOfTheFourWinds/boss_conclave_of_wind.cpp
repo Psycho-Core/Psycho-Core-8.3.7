@@ -16,6 +16,8 @@
  */
 
 #include "throne_of_the_four_winds.h"
+#include "InstanceScript.h"
+#include "CreatureAIImpl.h"
 
 enum Spells
 {

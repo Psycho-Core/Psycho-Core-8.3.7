@@ -1,5 +1,6 @@
 #include "siege_of_orgrimmar.hpp"
 #include "GameObjectAI.h"
+#include "InstanceScript.h"
 
 enum Adds
 {

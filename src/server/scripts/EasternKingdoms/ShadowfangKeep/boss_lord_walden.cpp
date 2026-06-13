@@ -21,6 +21,8 @@
 */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
+#include "InstanceScript.h"
 #include "SpellAuraEffects.h"
 #include "shadowfang_keep.h"
 

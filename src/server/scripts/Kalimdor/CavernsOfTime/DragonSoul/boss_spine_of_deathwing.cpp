@@ -18,6 +18,7 @@
 
 #include "AchievementMgr.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ObjectMgr.h"
 #include "dragon_soul.h"
 #include "SpellMgr.h"

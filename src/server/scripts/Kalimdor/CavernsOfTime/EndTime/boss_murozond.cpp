@@ -25,6 +25,7 @@ EndScriptData */
 #include "GameObject.h"
 #include "PhasingHandler.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"

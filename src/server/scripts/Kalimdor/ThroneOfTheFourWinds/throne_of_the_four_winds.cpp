@@ -18,6 +18,7 @@
 #include "GameObject.h"
 #include "PhasingHandler.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "throne_of_the_four_winds.h"
 
 enum SlipstreamEnums

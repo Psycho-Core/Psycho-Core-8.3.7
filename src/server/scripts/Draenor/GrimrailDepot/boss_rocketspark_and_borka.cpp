@@ -1,5 +1,6 @@
 #include "grimrail_depot.h"
 #include "GameObject.h"
+#include "InstanceScript.h"
 
 enum eRocketsparkAndBorkaTalks
 {

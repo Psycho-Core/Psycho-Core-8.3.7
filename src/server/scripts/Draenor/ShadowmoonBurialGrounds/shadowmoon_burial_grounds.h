@@ -19,6 +19,7 @@
 #define DEF_SHADOWMOON_BURIAL_GROUNDS_H
 
 #define CoSScriptName "instance_shadowmoon_burial_grounds"
+#include "Common.h"
 
 uint32 const EncounterCount = 4;
 

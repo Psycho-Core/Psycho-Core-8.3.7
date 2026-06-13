@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "AreaBoundary.h"
 #include "CellImpl.h"
 #include "GridNotifiersImpl.h"

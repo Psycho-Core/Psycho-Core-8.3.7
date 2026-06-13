@@ -25,6 +25,7 @@
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
 #include "ScriptMgr.h"
+#include "CreatureAIImpl.h"
 #include "Battleground.h"
 #include "CellImpl.h"
 #include "DB2Stores.h"

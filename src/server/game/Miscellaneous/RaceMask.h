@@ -63,6 +63,11 @@ enum Races
     RACE_MECHAGNOME             = 37  // RaceMask bit 14
 };
 
+// Psycho_Core compatibility aliases used by modules and older Trinity-style code.
+static constexpr uint8 RACE_NIGHT_ELF = RACE_NIGHTELF;
+static constexpr uint8 RACE_UNDEAD = RACE_UNDEAD_PLAYER;
+static constexpr uint8 RACE_BLOOD_ELF = RACE_BLOODELF;
+
 // max+1 for player race
 #define MAX_RACES         38
 

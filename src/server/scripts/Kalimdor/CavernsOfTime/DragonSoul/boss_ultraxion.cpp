@@ -17,6 +17,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "Containers.h"
 #include "dragon_soul.h"
 #include "GameObject.h"

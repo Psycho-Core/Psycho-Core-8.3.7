@@ -20,6 +20,7 @@
 #include "MoveSplineInit.h"
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellAuras.h"
 
 enum ScriptTexts
@@ -817,7 +818,7 @@ class boss_alysrazor : public CreatureScript
             }
 
         private:
-            bool _isEventRunning;//si l'event et le combat qui s'ensuit est lancé
+            bool _isEventRunning;//si l'event et le combat qui s'ensuit est lanc
             void RemoveEncounterAuras()
             {
                 instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_BLAZING_POWER_AURA);

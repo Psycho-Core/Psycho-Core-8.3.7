@@ -16,6 +16,7 @@
  */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "waycrest_manor.h"
 #include "SpellAuras.h"
 #include "SpellScript.h"

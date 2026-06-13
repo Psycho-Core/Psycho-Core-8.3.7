@@ -21,6 +21,7 @@
 #include "AreaTriggerAI.h"
 #include "AreaTrigger.h"
 #include "AreaTriggerTemplate.h"
+#include "InstanceScript.h"
 
 enum Spells
 {

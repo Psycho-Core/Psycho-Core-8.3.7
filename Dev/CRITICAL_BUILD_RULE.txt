@@ -1,0 +1,20 @@
+================================================================================
+ CRITICAL BUILD RULE (added 2026-06-09)
+================================================================================
+
+When the user asks to BUILD something:
+
+1. ONLY RUN THE BUILD ONCE per user instruction.
+2. If an error occurs:
+   a) FIX the error (code patch, cmake edit, etc.)
+   b) REPORT the error + fix to the user in detail
+   c) WAIT for the user to explicitly say "TRY AGAIN" before running again.
+3. DO NOT auto-retry, loop, or run ahead.
+4. Build directory: /home/user/Psycho-Core-8.3.7/build (inside repo, never outside).
+5. Target OS for the user: Windows (Linux sandbox is for compile-test only).
+6. OpenSSL Windows target: 3.5.6 (slproweb.com offers 3.5.6 as the latest 3.5.x;
+   3.5.5 is not available as a Windows binary. The P-02 patch accepts 3.5.x).
+
+This rule is ABSOLUTE and overrides any prior workflow instructions.
+
+================================================================================

@@ -39,6 +39,7 @@
 #include "GameObject.h"
 
 #include <G3D/Quat.h>
+#include "CreatureAIImpl.h"
 
 uint32 const EncounterCount = 5;
 

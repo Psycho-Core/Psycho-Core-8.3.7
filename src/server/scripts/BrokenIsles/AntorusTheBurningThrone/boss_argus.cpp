@@ -20,6 +20,7 @@
 #include "AreaTriggerAI.h"
 #include "ScriptedCreature.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellAuras.h"
 #include "SpellScript.h"
 #include "PhasingHandler.h"

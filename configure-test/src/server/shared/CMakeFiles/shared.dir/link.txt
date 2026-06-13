@@ -1,0 +1,2 @@
+/usr/bin/ar qc libshared.a CMakeFiles/shared.dir/DataStores/DB2DatabaseLoader.cpp.o CMakeFiles/shared.dir/DataStores/DB2Store.cpp.o CMakeFiles/shared.dir/JSON/ProtobufJSON.cpp.o CMakeFiles/shared.dir/Packets/ByteBuffer.cpp.o CMakeFiles/shared.dir/Realm/Realm.cpp.o CMakeFiles/shared.dir/Realm/RealmList.cpp.o
+/usr/bin/ranlib libshared.a

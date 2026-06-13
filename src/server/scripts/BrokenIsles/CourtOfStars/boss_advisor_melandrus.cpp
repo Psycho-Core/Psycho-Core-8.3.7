@@ -16,6 +16,7 @@
 */
 
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellHistory.h"
 #include "AreaTriggerTemplate.h"
 #include "AreaTriggerAI.h"

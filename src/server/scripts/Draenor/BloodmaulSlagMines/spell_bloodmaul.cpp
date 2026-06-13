@@ -16,6 +16,7 @@
  */
 
 #include "instance_bloodmaul.h"
+#include "InstanceScript.h"
 
 namespace Instances
 {

@@ -22,6 +22,7 @@
 #include "PhasingHandler.h"
 #include "Player.h"
 #include "ScriptMgr.h"
+#include "ZoneScript.h"
 #include "SpellMgr.h"
 #include "ScriptedCreature.h"
 #include "SpellScript.h"
@@ -394,7 +395,7 @@ public:
     //    OnCheckPhase(player);
     }
 /*
-    void OnCheckPhase(Player* player) AÑADIR FUNCIONES
+    void OnCheckPhase(Player* player) AADIR FUNCIONES
     { 
         if (player->GetMapId() == 1220)
         {

@@ -16,6 +16,7 @@
  */
 
 #include "WowTime.h"
+#include <ctime>
 
 // #include <my_getopt.h>
 
