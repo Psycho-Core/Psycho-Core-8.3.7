@@ -1,0 +1,151 @@
+================================================================================
+  GHGET COMMAND REFERENCE — BFA CORE CONTENT MERGE
+  Copy-paste these commands to download specific content from each repo
+================================================================================
+
+--- INSTALL GHGET (ONE TIME) ---
+cp ghget /usr/local/bin/ghget       # System-wide install (requires sudo)
+# OR
+chmod +x ghget && ./ghget --help   # Run from workspace
+
+--- TIER 1: CRITICAL MISSING CONTENT (from devovh/Shadowlands_Dekk-Core) ---
+
+# 1. CRUCIBLE OF STORMS (only public source in existence)
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/CrucibleOfStorms ./CrucibleOfStorms
+
+# 2. ASHRAN (missing WoD battleground)
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Draenor/Ashran ./Ashran
+
+# 3. ALL BFA DUNGEONS/RAIDS (from DekkCore — compare with Titans for improvements)
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/AtalDazar ./AtalDazar
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/BattleOfDazarAlor ./BattleOfDazarAlor
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/FreeHold ./FreeHold
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/Nyalotha ./Nyalotha
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/ShrineOfTheStorm ./ShrineOfTheStorm
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/SiegeOfBoralus ./SiegeOfBoralus
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/TempleOfSethraliss ./TempleOfSethraliss
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/TheEternalPalace ./TheEternalPalace
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/TheMotherlode ./TheMotherlode
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/TheUnderrot ./TheUnderrot
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/TolDagor ./TolDagor
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/Uldir ./Uldir
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/WaycrestManor ./WaycrestManor
+
+# 4. ALL BFA WORLD BOSSES
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/WorldBosses ./WorldBosses
+
+# 5. BRAWLERS GUILD (compare with Titans version)
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BrawlersGuild ./BrawlersGuild
+
+# 6. ADDITIONAL SCENARIOS (many more than Titans)
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/ABrewingStorm ./ABrewingStorm
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/ArenaOfAnnihiliation ./ArenaOfAnnihiliation
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/TrovesOfTheThunderKing ./TrovesOfTheThunderKing
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/BrokenIslands ./BrokenIslands
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/DraenorShadowmoonValley ./DraenorShadowmoonValley
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/FrostfireFinale ./FrostfireFinale
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/ScenarioGorgrondFinale ./ScenarioGorgrondFinale
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/ScenarioGrommashar ./ScenarioGrommashar
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/ScenarioSnowblossomVillage ./ScenarioSnowblossomVillage
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/ScenarioUngolRuins ./ScenarioUngolRuins
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/ScenarioVerdantWilds ./ScenarioVerdantWilds
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/ScenarioZuldazar ./ScenarioZuldazar
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/TaladorIronHordeFinale ./TaladorIronHordeFinale
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Scenarios/TheStormwindExtraction ./TheStormwindExtraction
+
+# 7. LEGION CONTENT (compare for improvements)
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Legion/AntorusTheBurningThrone ./Antorus
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Legion/TheNighthold ./TheNighthold
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Legion/WorldBosses ./LegionWorldBosses
+
+# 8. PANDARIA CONTENT (compare for improvements)
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Pandaria ./Pandaria
+
+# 9. CUSTOM/FLUXROOM (unique custom content)
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Custom ./Custom
+
+--- TIER 2: SQL FIXES (from freadblangks/AzgathCore-1) ---
+
+# Download ALL SQL updates from freadblangks BFA branch
+ghget freadblangks/AzgathCore-1 sql/updates ./sql-updates AzgathCoreBFA
+
+# Or download specific categories:
+ghget freadblangks/AzgathCore-1 sql/updates/world ./sql-world-fixes AzgathCoreBFA
+ghget freadblangks/AzgathCore-1 sql/updates/hotfixes ./sql-hotfixes AzgathCoreBFA
+ghget freadblangks/AzgathCore-1 sql/updates/auth ./sql-auth-fixes AzgathCoreBFA
+ghget freadblangks/AzgathCore-1 sql/updates/characters ./sql-char-fixes AzgathCoreBFA
+
+--- TIER 3: WORLD DATABASE (from boom8866/BoralusCore-8.3.7) ---
+
+# NOTE: These are .rar and .7z archives, not git-tracked files.
+# ghget cannot download large binary archives via sparse-checkout.
+# Use curl/wget instead:
+
+# curl -L -o LTDB_world_83.03.rar https://github.com/boom8866/BoralusCore-8.3.7/raw/master/LTDB_world_83.03.rar
+# curl -L -o LTDB_hotfixes_83.04.7z https://github.com/boom8866/BoralusCore-8.3.7/raw/master/LTDB_hotfixes_83.04.7z
+
+--- TIER 4: VERIFY / COMPARE EXISTING TITANS CONTENT ---
+
+# Download Titans content for side-by-side comparison with DekkCore
+ghget Titans-Project/BfaCore-Reforged src/server/scripts/Nyalotha ./Titans-Nyalotha
+ghget Titans-Project/BfaCore-Reforged src/server/scripts/KulTiras ./Titans-KulTiras
+ghget Titans-Project/BfaCore-Reforged src/server/scripts/Zandalar ./Titans-Zandalar
+ghget Titans-Project/BfaCore-Reforged src/server/scripts/Nazjatar ./Titans-Nazjatar
+ghget Titans-Project/BfaCore-Reforged src/server/scripts/Spells ./Titans-Spells
+
+--- TIER 5: SINGLE FILE DOWNLOADS ---
+
+# Download a specific CMakeLists.txt for reference
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/CMakeLists.txt ./DekkCMakeLists.txt
+
+# Download a specific boss script for inspection
+ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/CrucibleOfStorms/boss_restless_cabal.cpp ./boss_restless_cabal.cpp
+
+# Download Titans CMakeLists for comparison
+ghget Titans-Project/BfaCore-Reforged src/server/scripts/CMakeLists.txt ./TitansCMakeLists.txt
+
+================================================================================
+  MERGE WORKFLOW (RECOMMENDED)
+================================================================================
+
+1. Create a merge workspace:
+   mkdir -p /merge/source && cd /merge/source
+
+2. Download all DekkCore content you want:
+   ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/BattleforAzeroth/CrucibleOfStorms ./CrucibleOfStorms
+   ghget devovh/Shadowlands_Dekk-Core src/server/scripts/DekkCore/Draenor/Ashran ./Ashran
+   (etc.)
+
+3. Adapt to Titans structure:
+   - Copy CrucibleOfStorms -> Titans/src/server/scripts/CrucibleOfStorms
+   - Copy Ashran -> Titans/src/server/scripts/Draenor/Ashran
+   - Update Titans/src/server/scripts/CMakeLists.txt to register new script dirs
+   - Update script names in DB if they differ from Titans naming convention
+
+4. Download SQL fixes:
+   ghget freadblangks/AzgathCore-1 sql/updates/world ./sql-world
+   # Apply all .sql files in order to your world database
+
+5. Compile and test:
+   cd Titans && mkdir build && cd build && cmake .. && make -j$(nproc)
+
+================================================================================
+  IMPORTANT NOTES
+================================================================================
+
+- DekkCore uses a different subfolder structure (`src/server/scripts/DekkCore/`)
+  You MUST adapt the CMakeLists.txt and script registration when merging into
+  Titans (which uses `src/server/scripts/` directly).
+
+- Script names in DekkCore may use different CreatureScript/SpellScript names.
+  Search and replace may be needed to match Titans' naming conventions.
+
+- The Dekk-Shadowlands repository is a Shadowlands (9.0+) emulator. Its BFA
+  scripts are compatible with Titans' API because both are TrinityCore-derived.
+  However, some spell IDs or creature entries may differ if DekkCore uses
+  Shadowlands-era DB values. Always test after merge.
+
+- Binary files (.rar, .7z, .zip) cannot be downloaded via ghget. Use curl/wget
+  for the boom8866 database archives.
+
+================================================================================

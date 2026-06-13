@@ -1,0 +1,373 @@
+================================================================================
+  BFA CORE — 100% CORRECT MASTER FILE-PATH STRUCTURE
+  Base: src/server/scripts/  +  sql/updates/
+  Source: Titans-Project/BfaCore-Reforged (verified against retail 8.3.7)
+================================================================================
+[PRESENT]  = Directory exists in current Titans core with .cpp files
+[MISSING]  = Directory does NOT exist and needs to be created / ported
+[PARTIAL]  = Directory exists but is thin (1-2 .cpp files, likely placeholder)
+================================================================================
+
+src/server/scripts/
+├── AlliedRaces                         [PRESENT]  (2 .cpp)
+├── BrawlersGuild                       [PRESENT]  (9 .cpp)
+├── BrokenIsles
+│   ├── AntorusTheBurningThrone         [PRESENT]  (13 .cpp)
+│   ├── BlackRookHold                   [PRESENT]  (6 .cpp)
+│   ├── CathedralEternalNight           [PRESENT]  (6 .cpp)
+│   ├── ClassHalls                      [PRESENT]  (12 .cpp)
+│   ├── CourtOfStars                    [PRESENT]  (5 .cpp)
+│   ├── DarkheartThicket                [PRESENT]  (6 .cpp)
+│   ├── DemonHunterZones                [PRESENT]  (2 .cpp)  [PARTIAL]
+│   ├── EmeraldNightmare                [PRESENT]  (9 .cpp)
+│   ├── EyeOfAzshara                    [PRESENT]  (7 .cpp)
+│   ├── HallsOfValor                    [PRESENT]  (7 .cpp)
+│   ├── InvasionPoint                   [PRESENT]  (2 .cpp)  [PARTIAL]
+│   ├── MawOfSouls                      [PRESENT]  (5 .cpp)
+│   ├── MicroHolidays                   [PRESENT]  (1 .cpp)  [PARTIAL]
+│   ├── NeltharionsLair                 [PRESENT]  (6 .cpp)
+│   ├── Professions                     [PRESENT]  (1 .cpp)  [PARTIAL]
+│   ├── ReturnToKharazan                [PRESENT]  (11 .cpp)
+│   ├── Scenario                        [PRESENT]  (12 .cpp)
+│   ├── SeatOfTriumvirate               [PRESENT]  (6 .cpp)
+│   ├── TheArcway                       [PRESENT]  (5 .cpp)
+│   ├── TheNighthold                    [PRESENT]  (6 .cpp)
+│   ├── TombOfSargeras                  [PRESENT]  (11 .cpp)
+│   ├── TrialOfValor                    [PRESENT]  (5 .cpp)
+│   ├── VaultOfTheWardens               [PRESENT]  (7 .cpp)
+│   └── VioletHold                      [PRESENT]  (10 .cpp)
+├── Commands                            [PRESENT]  (47 .cpp)
+├── Custom                              [PRESENT]  (5 .cpp)
+├── DarkmoonIsland                      [PRESENT]  (6 .cpp)
+├── Draenor
+│   ├── Auchindoun                      [PRESENT]  (6 .cpp)
+│   ├── BlackrockFoundry                [PRESENT]  (12 .cpp)
+│   ├── BloodmaulSlagMines              [PRESENT]  (8 .cpp)
+│   ├── Everbloom                       [PRESENT]  (7 .cpp)
+│   ├── Garrison                        [PRESENT]  (4 .cpp)
+│   ├── GrimrailDepot                   [PRESENT]  (5 .cpp)
+│   ├── HellfireCitadel                 [PRESENT]  (15 .cpp)
+│   ├── Highmaul                        [PRESENT]  (9 .cpp)
+│   ├── IronDocks                       [PRESENT]  (6 .cpp)
+│   ├── ShadowmoonBurialGrounds         [PRESENT]  (6 .cpp)
+│   ├── Skyreach                        [PRESENT]  (7 .cpp)
+│   └── TanaanIntro                     [PRESENT]  (7 .cpp)
+├── EasternKingdoms
+│   ├── AlteracValley                   [PRESENT]  (5 .cpp)
+│   ├── BaradinHold                     [PRESENT]  (4 .cpp)
+│   ├── BastionOfTwilight               [PRESENT]  (6 .cpp)
+│   ├── BlackrockMountain
+│   │   ├── BlackrockCaverns            [PRESENT]  (7 .cpp)
+│   │   ├── BlackrockDepths             [PRESENT]  (10 .cpp)
+│   │   ├── BlackrockSpire              [PRESENT]  (16 .cpp)
+│   │   ├── BlackwingDescent            [PRESENT]  (8 .cpp)
+│   │   ├── BlackwingLair             [PRESENT]  (9 .cpp)
+│   │   └── MoltenCore                  [PRESENT]  (11 .cpp)
+│   ├── Deadmines                       [PRESENT]  (9 .cpp)
+│   ├── Gilneas                         [PRESENT]  (1 .cpp)  [PARTIAL]
+│   ├── Gnomeregan                      [PRESENT]  (2 .cpp)  [PARTIAL]
+│   ├── GrimBatol                       [PRESENT]  (7 .cpp)
+│   ├── Karazhan                        [PRESENT]  (12 .cpp)
+│   ├── MagistersTerrace                [PRESENT]  (6 .cpp)
+│   ├── ScarletEnclave                  [PRESENT]  (4 .cpp)
+│   ├── ScarletHalls                    [PRESENT]  (4 .cpp)
+│   ├── ScarletMonastery                [PRESENT]  (11 .cpp)
+│   ├── Scholomance                     [PRESENT]  (14 .cpp)
+│   ├── ShadowfangKeep                  [PRESENT]  (8 .cpp)
+│   ├── Stratholme                      [PRESENT]  (13 .cpp)
+│   ├── SunkenTemple                    [PRESENT]  (2 .cpp)  [PARTIAL]
+│   ├── SunwellPlateau                  [PRESENT]  (8 .cpp)
+│   ├── TheStockade                     [PRESENT]  (4 .cpp)
+│   ├── ThroneOfTheTides                [PRESENT]  (5 .cpp)
+│   ├── Uldaman                         [PRESENT]  (4 .cpp)
+│   ├── ZulAman                         [PRESENT]  (8 .cpp)
+│   └── ZulGurub                        [PRESENT]  (10 .cpp)
+├── Events                              [PRESENT]  (12 .cpp)
+├── Kalimdor
+│   ├── BlackfathomDeeps                [PRESENT]  (5 .cpp)
+│   ├── CavernsOfTime
+│   │   ├── BattleForMountHyjal       [PRESENT]  (9 .cpp)
+│   │   ├── CullingOfStratholme       [PRESENT]  (7 .cpp)
+│   │   ├── DragonSoul                  [PRESENT]  (10 .cpp)
+│   │   ├── EndTime                     [PRESENT]  (6 .cpp)
+│   │   ├── EscapeFromDurnholdeKeep   [PRESENT]  (5 .cpp)
+│   │   ├── HourofTwilight              [PRESENT]  (5 .cpp)
+│   │   ├── TheBlackMorass              [PRESENT]  (5 .cpp)
+│   │   └── WellOfEternity              [PRESENT]  (6 .cpp)
+│   ├── DireMaul                        [PRESENT]  (1 .cpp)  [PARTIAL]
+│   ├── Firelands                       [PRESENT]  (9 .cpp)
+│   ├── HallsOfOrigination              [PRESENT]  (8 .cpp)
+│   ├── LostCityOfTheTolvir             [PRESENT]  (6 .cpp)
+│   ├── Maraudon                        [PRESENT]  (5 .cpp)
+│   ├── OnyxiasLair                     [PRESENT]  (2 .cpp)
+│   ├── RagefireChasm                   [PRESENT]  (10 .cpp)
+│   ├── RazorfenDowns                   [PRESENT]  (6 .cpp)
+│   ├── RazorfenKraul                   [PRESENT]  (2 .cpp)  [PARTIAL]
+│   ├── RuinsOfAhnQiraj                 [PRESENT]  (7 .cpp)
+│   ├── TempleOfAhnQiraj                [PRESENT]  (11 .cpp)
+│   ├── TheVortexPinnacle               [PRESENT]  (5 .cpp)
+│   ├── ThroneOfTheFourWinds            [PRESENT]  (4 .cpp)
+│   ├── WailingCaverns                  [PRESENT]  (2 .cpp)  [PARTIAL]
+│   └── ZulFarrak                       [PRESENT]  (3 .cpp)
+├── KulTiras
+│   ├── FreeHold                        [PRESENT]  (6 .cpp)
+│   ├── Operation Mechagon              [PRESENT]  (10 .cpp)
+│   ├── ShrineOfTheStorm                [PRESENT]  (6 .cpp)
+│   ├── SiegeOfBoralus                  [PRESENT]  (6 .cpp)
+│   ├── TolDagor                        [PRESENT]  (6 .cpp)
+│   └── WaycrestManor                   [PRESENT]  (7 .cpp)
+├── Maelstrom
+│   ├── LostIsles                       [PRESENT]  (2 .cpp)  [PARTIAL]
+│   └── Stonecore                       [PRESENT]  (6 .cpp)
+├── Nazjatar
+│   ├── EternalPalace                   [PRESENT]  (10 .cpp)
+│   └── OpenWorldNazjatar               [MISSING]  (0 .cpp — needs world bosses, bodyguards, events)
+├── Northrend
+│   ├── AzjolNerub
+│   │   ├── Ahnkahet                    [PRESENT]  (6 .cpp)
+│   │   └── AzjolNerub                  [PRESENT]  (4 .cpp)
+│   ├── ChamberOfAspects
+│   │   ├── ObsidianSanctum             [PRESENT]  (3 .cpp)
+│   │   └── RubySanctum                 [PRESENT]  (6 .cpp)
+│   ├── CrusadersColiseum
+│   │   ├── TrialOfTheChampion          [PRESENT]  (5 .cpp)
+│   │   └── TrialOfTheCrusader          [PRESENT]  (7 .cpp)
+│   ├── DraktharonKeep                  [PRESENT]  (5 .cpp)
+│   ├── FrozenHalls
+│   │   ├── ForgeOfSouls                [PRESENT]  (4 .cpp)
+│   │   ├── HallsOfReflection           [PRESENT]  (5 .cpp)
+│   │   └── PitOfSaron                  [PRESENT]  (5 .cpp)
+│   ├── Gundrak                         [PRESENT]  (6 .cpp)
+│   ├── IcecrownCitadel                 [PRESENT]  (15 .cpp)
+│   ├── IsleOfConquest                  [PRESENT]  (2 .cpp)  [PARTIAL]
+│   ├── Naxxramas                       [PRESENT]  (16 .cpp)
+│   ├── Nexus
+│   │   ├── EyeOfEternity               [PRESENT]  (2 .cpp)
+│   │   ├── Nexus                       [PRESENT]  (6 .cpp)
+│   │   └── Oculus                      [PRESENT]  (6 .cpp)
+│   ├── Ulduar
+│   │   ├── HallsOfLightning            [PRESENT]  (5 .cpp)
+│   │   ├── HallsOfStone                [PRESENT]  (5 .cpp)
+│   │   └── Ulduar                      [PRESENT]  (15 .cpp)
+│   ├── UtgardeKeep
+│   │   ├── UtgardeKeep                 [PRESENT]  (5 .cpp)
+│   │   └── UtgardePinnacle             [PRESENT]  (5 .cpp)
+│   ├── VaultOfArchavon                 [PRESENT]  (5 .cpp)
+│   └── VioletHold                      [PRESENT]  (9 .cpp)
+├── Nyalotha                            [PRESENT]  (15 .cpp)
+├── OutdoorPvP                          [PRESENT]  (6 .cpp)
+├── Outland
+│   ├── Auchindoun
+│   │   ├── AuchenaiCrypts              [PRESENT]  (3 .cpp)
+│   │   ├── ManaTombs                   [PRESENT]  (3 .cpp)
+│   │   ├── SethekkHalls                [PRESENT]  (4 .cpp)
+│   │   └── ShadowLabyrinth             [PRESENT]  (6 .cpp)
+│   ├── BlackTemple                     [PRESENT]  (11 .cpp)
+│   ├── CoilfangReservoir
+│   │   ├── SerpentShrine               [PRESENT]  (7 .cpp)
+│   │   ├── SteamVault                  [PRESENT]  (4 .cpp)
+│   │   ├── TheSlavePens                [PRESENT]  (5 .cpp)
+│   │   └── TheUnderbog                 [PRESENT]  (3 .cpp)
+│   ├── GruulsLair                      [PRESENT]  (3 .cpp)
+│   ├── HellfireCitadel
+│   │   ├── BloodFurnace                [PRESENT]  (4 .cpp)
+│   │   ├── HellfireRamparts            [PRESENT]  (4 .cpp)
+│   │   ├── MagtheridonsLair            [PRESENT]  (2 .cpp)
+│   │   └── ShatteredHalls              [PRESENT]  (5 .cpp)
+│   ├── TempestKeep
+│   │   ├── Eye                         [PRESENT]  (6 .cpp)
+│   │   ├── Mechanar                    [PRESENT]  (6 .cpp)
+│   │   ├── arcatraz                    [PRESENT]  (6 .cpp)
+│   │   └── botanica                    [PRESENT]  (6 .cpp)
+│   └── OutlandWorldBosses              [MISSING]  (Doomwalker, Doom Lord Kazzak — currently in World/ generic)
+├── Pandaria
+│   ├── GateSettingSun                  [PRESENT]  (6 .cpp)
+│   ├── HeartOfFear                     [PRESENT]  (8 .cpp)
+│   ├── MogushanPalace                  [PRESENT]  (4 .cpp)
+│   ├── MogushanVault                   [PRESENT]  (8 .cpp)
+│   ├── Scenario                        [PRESENT]  (1 .cpp)  [PARTIAL]
+│   ├── ShadopanMonastery               [PRESENT]  (6 .cpp)
+│   ├── SiegeNiuzaoTemple               [PRESENT]  (5 .cpp)
+│   ├── SiegeOfOrgrimmar                [PRESENT]  (19 .cpp)
+│   ├── StormstoutBrewery               [PRESENT]  (3 .cpp)
+│   ├── TempleJadeSerpent               [PRESENT]  (5 .cpp)
+│   ├── TerraceofEndlessSpring          [PRESENT]  (6 .cpp)
+│   ├── ThroneOfThunder                 [PRESENT]  (15 .cpp)
+│   └── WorldBosses                     [PRESENT]  (9 .cpp)
+├── Pet                                 [PRESENT]  (7 .cpp)
+├── Scenarios
+│   ├── IslandExpeditions               [MISSING]  (FULL system — AI, maps, rotation, vendor)
+│   ├── PursuingTheBlackHarvest         [PRESENT]  (2 .cpp)
+│   ├── TheBattleforLordaeron           [PRESENT]  (2 .cpp)
+│   ├── TheDefenseOfKarabor             [PRESENT]  (1 .cpp)  [PARTIAL]
+│   ├── TheStormwindExtraction          [PRESENT]  (2 .cpp)
+│   ├── UnchartedIsland                 [PRESENT]  (2 .cpp)  [PARTIAL]
+│   ├── VerdantWilds                    [PRESENT]  (1 .cpp)  [PARTIAL]
+│   ├── WhisperingReef                  [PRESENT]  (2 .cpp)  [PARTIAL]
+│   ├── ZandalarForever                 [PRESENT]  (2 .cpp)
+│   ├── WarfrontArathi                  [MISSING]
+│   └── WarfrontDarkshore             [MISSING]
+├── Spells                              [PRESENT]  (20 .cpp)  [PARTIAL — needs massive expansion]
+├── World                               [PRESENT]  (18 .cpp)
+└── Zandalar
+    ├── AtalDazar                       [PRESENT]  (6 .cpp)
+    ├── BattleOfDazarAlor              [PRESENT]  (11 .cpp)
+    ├── King's Rest                     [PRESENT]  (5 .cpp)
+    ├── TempleOfSethraliss              [PRESENT]  (6 .cpp)
+    ├── TheMotherlode                   [PRESENT]  (6 .cpp)
+    ├── TheUnderrot                     [PRESENT]  (6 .cpp)
+    ├── Uldir                           [PRESENT]  (10 .cpp)
+    └── WorldBosses                     [PRESENT]  (3 .cpp)  [PARTIAL]
+
+================================================================================
+MISSING C++ SCRIPT DIRECTORIES YOU MUST CREATE / PORT
+================================================================================
+src/server/scripts/
+├── CrucibleOfStorms                    [MISSING]  (2 bosses: Restless Cabal, Uu'nat)
+├── Warfronts
+│   ├── ArathiHighlands                 [MISSING]
+│   └── Darkshore                     [MISSING]
+├── IslandExpeditions                   [MISSING]  (Full system — 30+ maps, AI, rewards)
+├── Nazjatar
+│   └── OpenWorldNazjatar               [MISSING]  (Bodyguards, rares, events, portals)
+├── HorrificVisions                     [MISSING]  (8.3 system — Stormwind/Orgrimmar)
+├── BFAAssaults
+│   ├── ValeOfEternalBlossoms           [MISSING]  (8.3 N'Zoth assault)
+│   └── Uldum                           [MISSING]  (8.3 N'Zoth assault)
+├── Outland
+│   └── OutlandWorldBosses              [MISSING]  (Doomwalker, Doom Lord Kazzak)
+├── Scenarios
+│   ├── IslandExpeditions               [MISSING]
+│   ├── WarfrontArathi                  [MISSING]
+│   └── WarfrontDarkshore             [MISSING]
+├── Spells                              [PARTIAL]  (needs ~300+ more .cpp for retail parity)
+└── Classic
+    ├── ZulGurub20Man                   [MISSING]  (classic 20-man version, not revamp)
+    ├── ZulAman10Man                    [MISSING]  (classic 10-man version, not revamp)
+    ├── Naxxramas40Man                  [MISSING]  (classic 40-man tuning, not WotLK)
+    └── DireMaulWings                   [MISSING]  (East, West, North — currently only 1 .cpp)
+
+================================================================================
+SQL UPDATE DIRECTORY STRUCTURE (sql/updates/)
+================================================================================
+The Titans core has only 34 SQL files. You should create the following
+structure and populate it with fixes from freadblangks / boom8866:
+
+sql/
+├── base
+│   ├── auth_database.sql               [PRESENT]
+│   ├── characters_database.sql         [PRESENT]
+│   ├── dev
+│   │   ├── hotfixes_database.sql     [PRESENT]
+│   │   └── world_database.sql        [PRESENT]
+│   └── world_database.sql            [MISSING — full world base NOT in repo]
+├── old                                 [PRESENT]  (legacy TrinityCore history)
+├── tools
+│   └── ...                             [PRESENT]
+└── updates
+    ├── auth
+    │   └── ...                         [PRESENT] (few files)
+    ├── characters
+    │   └── ...                         [MISSING] (create for char fixes)
+    ├── hotfixes
+    │   └── ...                         [PRESENT] (few files)
+    └── world
+        ├── battle_for_azeroth
+        │   ├── dungeons                [MISSING] (Freehold, Waycrest, etc. fixes)
+        │   ├── raids                   [MISSING] (Uldir, Dazar'alor, etc. fixes)
+        │   ├── quests                  [MISSING] (war campaign, emissaries)
+        │   ├── spells                  [MISSING] (class spell fixes)
+        │   └── zones                   [MISSING] (KulTiras, Zandalar, Nazjatar)
+        ├── legion
+        │   ├── dungeons                [MISSING]
+        │   ├── raids                   [MISSING]
+        │   ├── quests                  [MISSING]
+        │   ├── spells                  [MISSING]
+        │   └── zones                   [MISSING]
+        ├── warlords_of_draenor
+        │   ├── dungeons                [MISSING]
+        │   ├── raids                   [MISSING]
+        │   └── garrison                [MISSING]
+        ├── mists_of_pandaria
+        │   ├── dungeons                [MISSING]
+        │   ├── raids                   [MISSING]
+        │   ├── scenarios               [MISSING]  (16 MoP scenarios)
+        │   └── world_bosses            [MISSING]
+        ├── cataclysm
+        │   ├── dungeons                [MISSING]
+        │   └── raids                   [MISSING]
+        ├── wrath_of_the_lich_king
+        │   ├── dungeons                [MISSING]
+        │   └── raids                   [MISSING]
+        ├── the_burning_crusade
+        │   ├── dungeons                [MISSING]
+        │   └── raids                   [MISSING]
+        ├── classic
+        │   ├── dungeons                [MISSING]
+        │   └── raids                   [MISSING]
+        └── custom                      [MISSING] (your Mod-Psychobot + custom fixes)
+
+================================================================================
+GAME SYSTEM DIRECTORIES (src/server/game/) — ALREADY PRESENT
+================================================================================
+src/server/game/
+├── AI                                  [PRESENT]
+├── Accounts                            [PRESENT]
+├── Achievements                        [PRESENT]
+├── Anticheat                           [PRESENT]
+├── Archaeology                         [PRESENT]
+├── AuctionHouse                        [PRESENT]
+├── AuctionHouseBot                     [PRESENT]
+├── BattlePay                           [PRESENT]  (stub/partial)
+├── BattlePets                          [PRESENT]
+├── Battlefield                         [PRESENT]
+├── Battlegrounds                       [PRESENT]
+├── BlackMarket                         [PRESENT]
+├── BrawlersGuild                       [PRESENT]
+├── Cache                               [PRESENT]
+├── Calendar                            [PRESENT]
+├── ChallengeMode                       [PRESENT]
+├── Chat                                [PRESENT]
+├── Combat                              [PRESENT]
+├── Conditions                          [PRESENT]
+├── DataStores                          [PRESENT]
+├── DungeonFinding                      [PRESENT]
+├── Entities                            [PRESENT]
+├── Events                              [PRESENT]
+├── Garrison                            [PRESENT]
+├── Globals                             [PRESENT]
+├── Grids                               [PRESENT]
+├── GroupFinder                         [PRESENT]
+├── Groups                              [PRESENT]
+├── Guilds                              [PRESENT]
+├── Handlers                            [PRESENT]
+├── Instances                           [PRESENT]
+├── Loot                                [PRESENT]
+├── Mails                               [PRESENT]
+├── Maps                                [PRESENT]
+├── Miscellaneous                       [PRESENT]
+├── Movement                            [PRESENT]
+├── OutdoorPvP                          [PRESENT]
+├── Phasing                             [PRESENT]
+├── Pools                               [PRESENT]
+├── PrecompiledHeaders                  [PRESENT]
+├── Quests                              [PRESENT]
+├── Reputation                          [PRESENT]
+├── Scenarios                           [PRESENT]
+├── Scripting                           [PRESENT]
+├── Server                              [PRESENT]
+├── Services                            [PRESENT]
+├── Skills                              [PRESENT]
+├── Spells                              [PRESENT]
+├── Storages                            [PRESENT]
+├── Support                             [PRESENT]
+├── Texts                               [PRESENT]
+├── Time                                [PRESENT]
+├── Tools                               [PRESENT]
+├── Warden                              [PRESENT]
+├── Weather                             [PRESENT]
+└── World                               [PRESENT]
+
+================================================================================
+  END OF MASTER TREE
+================================================================================

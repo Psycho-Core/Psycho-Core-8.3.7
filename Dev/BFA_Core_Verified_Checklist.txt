@@ -1,0 +1,511 @@
+================================================================================
+  BFA CORE — COMPLETE RETAIL CONTENT CHECKLIST (Levels 1-120)
+  Verified against Wowpedia / Warcraft Wiki retail catalogues
+  Base Core: Titans-Project/BfaCore-Reforged (build 35662)
+  Date: 2026-06-14
+================================================================================
+LEGEND:  [ ] = Missing / Not Present    [X] = Present (C++ scripts exist)
+         [P] = Partial / Thin scripts   [D] = DB-only (no C++ needed)
+         [N] = Not Applicable to 8.3.7
+================================================================================
+
+--------------------------------------------------------------------------------
+BATTLE FOR AZEROTH  (Levels 110-120)  Patch 8.0 - 8.3.7
+--------------------------------------------------------------------------------
+
+MAJOR SYSTEMS
+[ ] Heart of Azeroth & Artifact Power system
+[ ] Azerite Armor & Traits (selection UI + mechanics)
+[ ] Warfronts — Arathi Highlands
+[ ] Warfronts — Darkshore
+[ ] Island Expeditions (full AI + rotation + rewards)
+[ ] N'Zoth Assaults (Vale of Eternal Blossoms 8.3)
+[ ] N'Zoth Assaults (Uldum 8.3)
+[ ] Horrific Visions system
+[ ] Corruption system (procs + negative effects)
+[ ] War Mode toggle system
+[ ] PvP Brawls (rotating weekly)
+[ ] Mercenary Mode
+[ ] M+ Seasonal Affixes (BFA seasons: Reaping, Beguiling, Awakened, etc.)
+[ ] Mission Table (BfA version)
+[ ] Chromie Time / Level scaling
+[ ] Scenarios (BFA full rotation — 30+ island maps)
+[X] Brawler's Guild
+[X] Black Market Auction House
+[P] World Quests (core logic partial; emissary tables incomplete)
+[P] Emissary Quests (DB + partial Lua)
+
+BFA DUNGEONS  (11 total)
+[X] Freehold                        (src/server/scripts/KulTiras/FreeHold)
+[X] Waycrest Manor                  (src/server/scripts/KulTiras/WaycrestManor)
+[X] Shrine of the Storm             (src/server/scripts/KulTiras/ShrineOfTheStorm)
+[X] Atal'Dazar                      (src/server/scripts/Zandalar/AtalDazar)
+[X] The Underrot                    (src/server/scripts/Zandalar/TheUnderrot)
+[X] Temple of Sethraliss            (src/server/scripts/Zandalar/TempleOfSethraliss)
+[X] Tol Dagor                       (src/server/scripts/KulTiras/TolDagor)
+[X] The MOTHERLODE!!                (src/server/scripts/Zandalar/TheMotherlode)
+[X] Siege of Boralus                (src/server/scripts/KulTiras/SiegeOfBoralus)
+[X] King's Rest                     (src/server/scripts/Zandalar/King's Rest)
+[X] Operation: Mechagon             (src/server/scripts/KulTiras/Operation Mechagon)
+
+BFA RAIDS  (5 total)
+[X] Uldir                           (src/server/scripts/Zandalar/Uldir)
+[X] Battle of Dazar'alor            (src/server/scripts/Zandalar/BattleOfDazarAlor)
+[ ] Crucible of Storms              (NOT PRESENT — 2 bosses: Restless Cabal, Uu'nat)
+[X] The Eternal Palace              (src/server/scripts/Nazjatar/EternalPalace)
+[X] Ny'alotha, the Waking City      (src/server/scripts/Nyalotha)
+
+BFA ZONES (Open World)
+[D] Zuldazar
+[D] Nazmir
+[D] Vol'dun
+[D] Tiragarde Sound
+[D] Drustvar
+[D] Stormsong Valley
+[P] Nazjatar (Eternal Palace only; open world bare — 2 cpp)
+[D] Mechagon Island
+[D] Vale of Eternal Blossoms (8.3 assault spawns)
+[D] Uldum (8.3 assault spawns)
+
+BFA WORLD BOSSES
+[P] Zandalar World Bosses (T'zane, Warbringer, etc.) — only 3 cpp in Zandalar/WorldBosses
+[ ] Kul Tiras World Bosses (Azurethos, Kraulok, etc.) — no dedicated dir
+[ ] Nazjatar World Bosses (Ulmath, Wekemara) — not present
+[ ] Ny'alotha minor vision bosses — not present
+
+BFA SCENARIOS
+[P] Uncharted Island (tutorial only)  (src/server/scripts/Scenarios/UnchartedIsland)
+[X] The Stormwind Extraction          (src/server/scripts/Scenarios/TheStormwindExtraction)
+[X] Zandalar Forever                  (src/server/scripts/Scenarios/ZandalarForever)
+[X] The Battle for Lordaeron          (src/server/scripts/Scenarios/TheBattleforLordaeron)
+[P] The Defense of Karabor            (src/server/scripts/Scenarios/TheDefenseOfKarabor)
+[X] Pursuing the Black Harvest        (src/server/scripts/Scenarios/PursuingTheBlackHarvest)
+[P] Verdant Wilds                     (src/server/scripts/Scenarios/VerdantWilds)
+[P] Whispering Reef                   (src/server/scripts/Scenarios/WhisperingReef)
+[ ] Full Island Expedition rotation (30+ maps) — system missing
+[ ] Warfront Scenarios (Arathi / Darkshore) — system missing
+
+BFA BATTLEGROUNDS / PvP
+[ ] Seething Shore
+[ ] Deepwind Gorge (updated version)
+[ ] Temple of Kotmogu
+[ ] Silvershard Mines
+[ ] Rated PvP seasonal rewards (full)
+[ ] PvP Brawls
+[ ] Mercenary Mode
+[ ] War Mode
+[D] Battle for Gilneas (legacy BG, DB/generic)
+[D] Twin Peaks (legacy BG, DB/generic)
+[D] Eye of the Storm (legacy BG, DB/generic)
+[P] Arena system (core exists; rated matchmaking incomplete)
+
+--------------------------------------------------------------------------------
+LEGION  (Levels 100-110)  Patch 7.0 - 7.3.5
+--------------------------------------------------------------------------------
+
+MAJOR SYSTEMS
+[ ] Artifact Weapons (36 spec talent trees + appearance unlocks)
+[ ] Artifact Challenges (Mage Tower)
+[ ] Netherlight Crucible
+[ ] Class Hall missions / champions (full system)
+[ ] Legion Invasions / Demon Assaults (world events)
+[ ] Artifact Knowledge / Research
+[ ] Invasion Point scenarios (Argus)
+[ ] Chromie Scenario (Deaths of Chromie)
+[ ] Timeless? No — that's MoP
+[P] Order Halls / Class Halls (12 cpp — intro zones only)
+[P] World Quests (core partial; emissary tables incomplete)
+[P] Legendary Items (DB + some procs in Spells)
+[ ] Suramar mana system / disguise system
+[ ] Withered Army Training scenario
+[P] Mythic+ affixes (ChallengeMode core exists; Legion affixes partial)
+
+LEGION DUNGEONS  (13 total)
+[X] Eye of Azshara                  (src/server/scripts/BrokenIsles/EyeOfAzshara)
+[X] Darkheart Thicket               (src/server/scripts/BrokenIsles/DarkheartThicket)
+[X] Neltharion's Lair               (src/server/scripts/BrokenIsles/NeltharionsLair)
+[X] Halls of Valor                  (src/server/scripts/BrokenIsles/HallsOfValor)
+[X] Assault on Violet Hold            (src/server/scripts/BrokenIsles/VioletHold)
+[X] Vault of the Wardens            (src/server/scripts/BrokenIsles/VaultOfTheWardens)
+[X] Black Rook Hold                 (src/server/scripts/BrokenIsles/BlackRookHold)
+[X] Maw of Souls                    (src/server/scripts/BrokenIsles/MawOfSouls)
+[X] The Arcway                      (src/server/scripts/BrokenIsles/TheArcway)
+[X] Court of Stars                  (src/server/scripts/BrokenIsles/CourtOfStars)
+[X] Return to Karazhan              (src/server/scripts/BrokenIsles/ReturnToKharazan)
+[X] Cathedral of Eternal Night      (src/server/scripts/BrokenIsles/CathedralEternalNight)
+[X] Seat of the Triumvirate         (src/server/scripts/BrokenIsles/SeatOfTriumvirate)
+
+LEGION RAIDS  (5 total)
+[X] Emerald Nightmare               (src/server/scripts/BrokenIsles/EmeraldNightmare)
+[X] The Nighthold                   (src/server/scripts/BrokenIsles/TheNighthold)
+[X] Trial of Valor                  (src/server/scripts/BrokenIsles/TrialOfValor)
+[X] Tomb of Sargeras                (src/server/scripts/BrokenIsles/TombOfSargeras)
+[X] Antorus, the Burning Throne     (src/server/scripts/BrokenIsles/AntorusTheBurningThrone)
+
+LEGION ZONES (Open World)
+[D] Broken Shore
+[D] Azsuna
+[D] Val'sharah
+[D] Highmountain
+[D] Stormheim
+[D] Suramar
+[P] Argus (Krokuun / Mac'Aree / Antoran Wastes) — InvasionPoint (2 cpp) only
+
+LEGION CLASS HALLS (12 classes)
+[P] All 12 class halls              (src/server/scripts/BrokenIsles/ClassHalls — 12 cpp total)
+[ ] Class Hall missions / followers
+[ ] Class Hall campaigns (full questlines)
+[ ] Artifact questlines (36 spec trees)
+
+--------------------------------------------------------------------------------
+WARLORDS OF DRAENOR  (Levels 90-100)  Patch 6.0 - 6.2.4
+--------------------------------------------------------------------------------
+
+MAJOR SYSTEMS
+[P] Garrison (Level 1-3)            (src/server/scripts/Draenor/Garrison — 4 cpp)
+[ ] Garrison Followers / Missions (full tables + success formulas)
+[ ] Garrison Invasions
+[ ] Shipyard (Level 3 Garrison naval)
+[X] Tanaan Jungle Intro             (src/server/scripts/Draenor/TanaanIntro)
+[ ] Apexis Crystals / Dailies (full system)
+[ ] Legendary Ring questline (full)
+[ ] Selfie Camera (toy)
+[ ] Timewalker events (WoD)
+
+WOD DUNGEONS  (8 total)
+[X] Bloodmaul Slag Mines            (src/server/scripts/Draenor/BloodmaulSlagMines)
+[X] Iron Docks                      (src/server/scripts/Draenor/IronDocks)
+[X] Auchindoun                      (src/server/scripts/Draenor/Auchindoun)
+[X] Skyreach                        (src/server/scripts/Draenor/Skyreach)
+[X] Grimrail Depot                  (src/server/scripts/Draenor/GrimrailDepot)
+[X] Shadowmoon Burial Grounds       (src/server/scripts/Draenor/ShadowmoonBurialGrounds)
+[X] The Everbloom                   (src/server/scripts/Draenor/Everbloom)
+[X] Upper Blackrock Spire           (src/server/scripts/EasternKingdoms/BlackrockMountain/BlackrockSpire)
+
+WOD RAIDS  (3 total)
+[X] Highmaul                        (src/server/scripts/Draenor/Highmaul)
+[X] Blackrock Foundry               (src/server/scripts/Draenor/BlackrockFoundry)
+[X] Hellfire Citadel                (src/server/scripts/Draenor/HellfireCitadel)
+
+--------------------------------------------------------------------------------
+MISTS OF PANDARIA  (Levels 85-90)  Patch 5.0 - 5.4.8
+--------------------------------------------------------------------------------
+
+MAJOR SYSTEMS
+[P] Pet Battle System               (game/BattlePets + Pet — 7 cpp)
+[ ] Proving Grounds (full system)
+[ ] Legendary Cloak questline (full)
+[ ] Farm (Halfhill)
+[ ] Timeless Isle events (rare spawn C++ scripts)
+[P] World Bosses (Sha, Galleon, Nalak, Oondasta, Celestials, Ordos)
+                    (src/server/scripts/Pandaria/WorldBosses — 9 cpp)
+[P] Challenge Mode Dungeons (core exists; timers/leaderboards partial)
+[ ] Scenario system (MoP full rotation — 16 scenarios)
+[P] Brawler's Guild (shared with BfA)
+[P] LFR / Flexible Raid scaling
+
+MOP DUNGEONS  (9 total)
+[X] Temple of the Jade Serpent      (src/server/scripts/Pandaria/TempleJadeSerpent)
+[X] Stormstout Brewery              (src/server/scripts/Pandaria/StormstoutBrewery)
+[X] Shado-Pan Monastery             (src/server/scripts/Pandaria/ShadopanMonastery)
+[X] Gate of the Setting Sun         (src/server/scripts/Pandaria/GateSettingSun)
+[X] Mogu'shan Palace                (src/server/scripts/Pandaria/MogushanPalace)
+[X] Siege of Niuzao Temple          (src/server/scripts/Pandaria/SiegeNiuzaoTemple)
+[X] Scarlet Halls                   (src/server/scripts/EasternKingdoms/ScarletHalls)
+[X] Scarlet Monastery               (src/server/scripts/EasternKingdoms/ScarletMonastery)
+[X] Scholomance                     (src/server/scripts/EasternKingdoms/Scholomance)
+
+MOP RAIDS  (5 total)
+[X] Mogu'shan Vaults                (src/server/scripts/Pandaria/MogushanVault)
+[X] Heart of Fear                   (src/server/scripts/Pandaria/HeartOfFear)
+[X] Terrace of Endless Spring       (src/server/scripts/Pandaria/TerraceofEndlessSpring)
+[X] Throne of Thunder               (src/server/scripts/Pandaria/ThroneOfThunder)
+[X] Siege of Orgrimmar              (src/server/scripts/Pandaria/SiegeOfOrgrimmar)
+
+MOP SCENARIOS  (16 total — retail had these)
+[ ] Greenstone Village
+[ ] A Brewing Storm
+[ ] Theramore's Fall
+[ ] Unga Ingoo
+[ ] Domination Point
+[ ] Lion's Landing
+[ ] A Little Patience
+[ ] Dagger in the Dark
+[ ] Arena of Annihilation
+[ ] Brewmoon Festival
+[ ] Crypt of Forgotten Kings
+[ ] Assault on Zan'vess
+[ ] Battle on the High Seas
+[ ] Blood in the Snow
+[ ] Dark Heart of Pandaria
+[ ] Secrets of Ragefire
+[P] 1 generic placeholder in Pandaria/Scenario
+
+--------------------------------------------------------------------------------
+CATACLYSM  (Levels 80-85)  Patch 4.0 - 4.3.4
+--------------------------------------------------------------------------------
+
+MAJOR SYSTEMS
+[P] Darkmoon Faire (revamp)         (src/server/scripts/DarkmoonIsland — 6 cpp)
+[X] Archaeology                     (src/server/game/Archaeology)
+[ ] Transmogrification (dedicated UI + collection)
+[ ] Reforging (dedicated UI)
+[P] Tol Barad (PvP / World Zone) — may be in OutdoorPvP (6 cpp)
+[ ] Rated Battlegrounds (full rated logic)
+
+CATACLYSM DUNGEONS  (14 total)
+[X] Blackrock Caverns               (src/server/scripts/EasternKingdoms/BlackrockMountain/BlackrockCaverns)
+[X] Throne of the Tides             (src/server/scripts/EasternKingdoms/ThroneOfTheTides)
+[X] Stonecore                       (src/server/scripts/Maelstrom/Stonecore)
+[X] Vortex Pinnacle                 (src/server/scripts/Kalimdor/TheVortexPinnacle)
+[X] Lost City of the Tol'vir        (src/server/scripts/Kalimdor/LostCityOfTheTolvir)
+[X] Halls of Origination            (src/server/scripts/Kalimdor/HallsOfOrigination)
+[X] Grim Batol                      (src/server/scripts/EasternKingdoms/GrimBatol)
+[X] Deadmines (revamp)              (src/server/scripts/EasternKingdoms/Deadmines)
+[X] Shadowfang Keep (revamp)        (src/server/scripts/EasternKingdoms/ShadowfangKeep)
+[X] Zul'Aman (revamp)               (src/server/scripts/EasternKingdoms/ZulAman)
+[X] Zul'Gurub (revamp)              (src/server/scripts/EasternKingdoms/ZulGurub)
+[X] End Time                        (src/server/scripts/Kalimdor/CavernsOfTime/EndTime)
+[X] Well of Eternity                (src/server/scripts/Kalimdor/CavernsOfTime/WellOfEternity)
+[X] Hour of Twilight                (src/server/scripts/Kalimdor/CavernsOfTime/HourofTwilight)
+
+CATACLYSM RAIDS  (6 total)
+[X] Baradin Hold                    (src/server/scripts/EasternKingdoms/BaradinHold)
+[X] Bastion of Twilight             (src/server/scripts/EasternKingdoms/BastionOfTwilight)
+[X] Blackwing Descent               (src/server/scripts/EasternKingdoms/BlackrockMountain/BlackwingDescent)
+[X] Throne of the Four Winds        (src/server/scripts/Kalimdor/ThroneOfTheFourWinds)
+[X] Firelands                       (src/server/scripts/Kalimdor/Firelands)
+[X] Dragon Soul                     (src/server/scripts/Kalimdor/CavernsOfTime/DragonSoul)
+
+--------------------------------------------------------------------------------
+WRATH OF THE LICH KING  (Levels 60-80 / 70-80)  Patch 3.0 - 3.3.5
+--------------------------------------------------------------------------------
+
+MAJOR SYSTEMS
+[X] Death Knight Starting Zone      (src/server/scripts/EasternKingdoms/ScarletEnclave + world events)
+[ ] Wintergrasp (full world PvP system)
+[ ] Argent Tournament (full quest/event system)
+[X] Dungeon Finder (LFG)            (src/server/game/DungeonFinding)
+[X] Achievement System              (src/server/game/Achievements)
+[X] Vehicle System                  (src/server/game/Entities/Vehicle)
+[X] Phasing System                  (src/server/game/Phasing)
+[ ] Heirlooms (full collection UI)
+
+WOTLK DUNGEONS  (16 total)
+[X] Utgarde Keep                    (src/server/scripts/Northrend/UtgardeKeep/UtgardeKeep)
+[X] Utgarde Pinnacle                (src/server/scripts/Northrend/UtgardeKeep/UtgardePinnacle)
+[X] The Nexus                       (src/server/scripts/Northrend/Nexus/Nexus)
+[X] The Oculus                      (src/server/scripts/Northrend/Nexus/Oculus)
+[X] Azjol-Nerub                     (src/server/scripts/Northrend/AzjolNerub/AzjolNerub)
+[X] Ahn'kahet: The Old Kingdom      (src/server/scripts/Northrend/AzjolNerub/Ahnkahet)
+[X] Drak'Tharon Keep                (src/server/scripts/Northrend/DraktharonKeep)
+[X] Violet Hold                     (src/server/scripts/Northrend/VioletHold)
+[X] Gundrak                         (src/server/scripts/Northrend/Gundrak)
+[X] Halls of Stone                  (src/server/scripts/Northrend/Ulduar/HallsOfStone)
+[X] Halls of Lightning              (src/server/scripts/Northrend/Ulduar/HallsOfLightning)
+[X] Pit of Saron                    (src/server/scripts/Northrend/FrozenHalls/PitOfSaron)
+[X] Forge of Souls                  (src/server/scripts/Northrend/FrozenHalls/ForgeOfSouls)
+[X] Halls of Reflection             (src/server/scripts/Northrend/FrozenHalls/HallsOfReflection)
+[X] Trial of the Champion           (src/server/scripts/Northrend/CrusadersColiseum/TrialOfTheChampion)
+[X] Culling of Stratholme           (src/server/scripts/Kalimdor/CavernsOfTime/CullingOfStratholme)
+
+WOTLK RAIDS  (9 total)
+[X] Naxxramas                       (src/server/scripts/Northrend/Naxxramas)
+[X] The Obsidian Sanctum            (src/server/scripts/Northrend/ChamberOfAspects/ObsidianSanctum)
+[X] Eye of Eternity                 (src/server/scripts/Northrend/Nexus/EyeOfEternity)
+[X] Vault of Archavon               (src/server/scripts/Northrend/VaultOfArchavon)
+[X] Ulduar                          (src/server/scripts/Northrend/Ulduar/Ulduar)
+[X] Trial of the Crusader           (src/server/scripts/Northrend/CrusadersColiseum/TrialOfTheCrusader)
+[X] Onyxia's Lair (revamp)          (src/server/scripts/Kalimdor/OnyxiasLair)
+[X] Icecrown Citadel                (src/server/scripts/Northrend/IcecrownCitadel)
+[X] The Ruby Sanctum                (src/server/scripts/Northrend/ChamberOfAspects/RubySanctum)
+
+WOTLK BATTLEGROUNDS / PvP
+[ ] Strand of the Ancients (may be generic BG)
+[P] Isle of Conquest              (src/server/scripts/Northrend/IsleOfConquest — 2 cpp)
+[ ] Wintergrasp (world PvP)
+
+--------------------------------------------------------------------------------
+THE BURNING CRUSADE  (Levels 58-70)  Patch 2.0 - 2.4.3
+--------------------------------------------------------------------------------
+
+MAJOR SYSTEMS
+[X] Arena System (2v2/3v3/5v5)     (src/server/game/Battlegrounds)
+[X] Flying Mounts                   (core movement)
+[ ] Daily Quests (full system)
+[ ] Shattered Sun Offensive (full event)
+[ ] Badge of Justice system
+
+TBC DUNGEONS  (16 total)
+[X] Hellfire Ramparts               (src/server/scripts/Outland/HellfireCitadel/HellfireRamparts)
+[X] Blood Furnace                   (src/server/scripts/Outland/HellfireCitadel/BloodFurnace)
+[X] Shattered Halls                 (src/server/scripts/Outland/HellfireCitadel/ShatteredHalls)
+[X] Slave Pens                      (src/server/scripts/Outland/CoilfangReservoir/TheSlavePens)
+[X] Underbog                        (src/server/scripts/Outland/CoilfangReservoir/TheUnderbog)
+[X] Steamvault                      (src/server/scripts/Outland/CoilfangReservoir/SteamVault)
+[X] Mana-Tombs                      (src/server/scripts/Outland/Auchindoun/ManaTombs)
+[X] Auchenai Crypts                 (src/server/scripts/Outland/Auchindoun/AuchenaiCrypts)
+[X] Sethekk Halls                   (src/server/scripts/Outland/Auchindoun/SethekkHalls)
+[X] Shadow Labyrinth                (src/server/scripts/Outland/Auchindoun/ShadowLabyrinth)
+[X] The Mechanar                    (src/server/scripts/Outland/TempestKeep/Mechanar)
+[X] The Botanica                    (src/server/scripts/Outland/TempestKeep/botanica)
+[X] The Arcatraz                    (src/server/scripts/Outland/TempestKeep/arcatraz)
+[X] Magisters' Terrace              (src/server/scripts/EasternKingdoms/MagistersTerrace)
+[X] Escape from Durnholde           (src/server/scripts/Kalimdor/CavernsOfTime/EscapeFromDurnholdeKeep)
+[X] Opening of the Dark Portal      (src/server/scripts/Kalimdor/CavernsOfTime/TheBlackMorass)
+
+TBC RAIDS  (8 total)
+[X] Karazhan                        (src/server/scripts/EasternKingdoms/Karazhan)
+[X] Gruul's Lair                    (src/server/scripts/Outland/GruulsLair)
+[X] Magtheridon's Lair              (src/server/scripts/Outland/HellfireCitadel/MagtheridonsLair)
+[X] Serpentshrine Cavern            (src/server/scripts/Outland/CoilfangReservoir/SerpentShrine)
+[X] Tempest Keep (The Eye)          (src/server/scripts/Outland/TempestKeep/Eye)
+[X] Battle for Mount Hyjal          (src/server/scripts/Kalimdor/CavernsOfTime/BattleForMountHyjal)
+[X] Black Temple                    (src/server/scripts/Outland/BlackTemple)
+[X] Sunwell Plateau                 (src/server/scripts/EasternKingdoms/SunwellPlateau)
+
+--------------------------------------------------------------------------------
+CLASSIC / VANILLA  (Levels 1-60)  Patch 1.0 - 1.12.1
+--------------------------------------------------------------------------------
+
+MAJOR SYSTEMS
+[ ] Classic World PvP (Silithus, EPL towers)
+[ ] AQ War Effort (server-wide event)
+[P] Battlegrounds (WSG/AB/AV) — AV has 5 cpp; WSG/AB likely in core BG system
+[ ] Raid Lockouts (40-man tuning)
+[ ] Attunements (Onyxia, MC, BWL, Naxx — quest chains)
+[P] Naxxramas 40-man (16 cpp likely WotLK version; classic tuning absent)
+[ ] Classic Zul'Gurub 20-man (revamp dominates)
+[ ] Classic Zul'Aman 10-man (revamp dominates)
+[ ] World Bosses (Azuregos, Kazzak, Dragons) — generic World scripts only
+
+CLASSIC DUNGEONS  (19+ total)
+[P] Ragefire Chasm                 (src/server/scripts/Kalimdor/RagefireChasm — 10 cpp, likely revamp)
+[P] Wailing Caverns                (src/server/scripts/Kalimdor/WailingCaverns — 2 cpp, thin)
+[P] Deadmines                      (src/server/scripts/EasternKingdoms/Deadmines — 9 cpp, likely revamp)
+[P] Shadowfang Keep                (src/server/scripts/EasternKingdoms/ShadowfangKeep — 8 cpp, likely revamp)
+[X] Blackfathom Deeps              (src/server/scripts/Kalimdor/BlackfathomDeeps)
+[X] The Stockade                   (src/server/scripts/EasternKingdoms/TheStockade)
+[P] Gnomeregan                     (src/server/scripts/EasternKingdoms/Gnomeregan — 2 cpp, thin)
+[P] Razorfen Kraul                 (src/server/scripts/Kalimdor/RazorfenKraul — 2 cpp, thin)
+[X] Scarlet Monastery              (src/server/scripts/EasternKingdoms/ScarletMonastery — 11 cpp, revamp)
+[X] Razorfen Downs                 (src/server/scripts/Kalimdor/RazorfenDowns)
+[X] Uldaman                        (src/server/scripts/EasternKingdoms/Uldaman)
+[X] Zul'Farrak                     (src/server/scripts/Kalimdor/ZulFarrak)
+[X] Maraudon                       (src/server/scripts/Kalimdor/Maraudon)
+[P] Sunken Temple                  (src/server/scripts/EasternKingdoms/SunkenTemple — 2 cpp, thin)
+[X] Blackrock Depths               (src/server/scripts/EasternKingdoms/BlackrockMountain/BlackrockDepths)
+[X] Lower Blackrock Spire          (src/server/scripts/EasternKingdoms/BlackrockMountain/BlackrockSpire — shared with UBRS)
+[X] Scholomance                    (src/server/scripts/EasternKingdoms/Scholomance — 14 cpp, revamp)
+[X] Stratholme                     (src/server/scripts/EasternKingdoms/Stratholme)
+[P] Dire Maul                      (src/server/scripts/Kalimdor/DireMaul — 1 cpp, very thin)
+
+CLASSIC RAIDS  (8 total)
+[X] Molten Core                    (src/server/scripts/EasternKingdoms/BlackrockMountain/MoltenCore)
+[X] Blackwing Lair                 (src/server/scripts/EasternKingdoms/BlackrockMountain/BlackwingLair)
+[X] Ruins of Ahn'Qiraj             (src/server/scripts/Kalimdor/RuinsOfAhnQiraj)
+[X] Temple of Ahn'Qiraj            (src/server/scripts/Kalimdor/TempleOfAhnQiraj)
+[P] Naxxramas 40-man               (src/server/scripts/Northrend/Naxxramas — 16 cpp, likely WotLK iteration)
+[X] Onyxia's Lair                  (src/server/scripts/Kalimdor/OnyxiasLair)
+[P] Zul'Gurub 20-man               (src/server/scripts/EasternKingdoms/ZulGurub — 10 cpp, revamp dominates)
+[P] Zul'Aman 10-man                (src/server/scripts/EasternKingdoms/ZulAman — 8 cpp, revamp dominates)
+
+--------------------------------------------------------------------------------
+PROFESSIONS & CRAFTING (All Expansions)
+--------------------------------------------------------------------------------
+[X] Classic Professions (1-300)    (core Skills + DB recipes)
+[X] Outland Professions (300-375)  (core Skills + DB recipes)
+[X] Northrend Professions (350-450) (core Skills + DB recipes)
+[X] Cataclysm Professions (425-525) (core Skills + DB recipes)
+[X] Pandaria Professions (500-600) (core Skills + DB recipes)
+[P] Draenor Professions (600-700)  (Garrison buildings partial)
+[P] Legion Professions (700-800)   (BrokenIsles/Professions — 1 cpp, very thin)
+[P] BFA Professions (800-175)      (core handles 800 cap; recipes DB)
+[X] Archaeology                    (src/server/game/Archaeology)
+[ ] Fishing / Cooking Dailies (full daily rotation)
+[ ] First Aid (legacy skill removed in BFA)
+[P] Inscription / Glyphs           (core item system; glyph effects may be dummy)
+[P] Jewelcrafting                  (core item system; socket bonuses may be dummy)
+[X] Enchanting                     (core spell/item system)
+
+--------------------------------------------------------------------------------
+PvP SYSTEMS (All Expansions)
+--------------------------------------------------------------------------------
+[X] Arena System (2v2/3v3/5v5)     (src/server/game/Battlegrounds)
+[P] Rated Battlegrounds            (core exists; rated matchmaking logic incomplete)
+[P] Arena Rating / Titles / Rewards (core + DB; seasonal rewards may be incomplete)
+[X] Honor System (Classic-BC)      (core honor/arena point system)
+[P] Honor System (Legion-BfA)      (Honor levels exist; prestige system may be missing)
+[P] World PvP Objectives           (OutdoorPvP — 6 cpp, likely only Halaa/WG/TB)
+[ ] Ashran                           (not present)
+[P] Battlegrounds (All Expansions) (core system supports WSG/AB/AV/EOTS/Strand/IoC/SotA)
+[ ] Seething Shore
+[ ] Deepwind Gorge (updated)
+[ ] Temple of Kotmogu
+[ ] Silvershard Mines
+[ ] Mercenary Mode
+[ ] PvP Brawls
+[ ] War Mode
+[X] Dueling                          (core combat system)
+[P] Arena Spectator / War Games    (core system partial)
+
+--------------------------------------------------------------------------------
+CLASSES & SPELLS (All Expansions)
+--------------------------------------------------------------------------------
+[X] Death Knight                   (core + Scenarios/PursuingTheBlackHarvest)
+[P] Demon Hunter                   (DemonHunterZones — 2 cpp; Vengeance/Havoc spells partial)
+[X] Druid                          (core spell system + DB)
+[X] Hunter                         (core + Pet — 7 cpp)
+[X] Mage                           (core spell system + DB)
+[X] Monk                           (core spell system + DB)
+[X] Paladin                        (core spell system + DB)
+[X] Priest                         (core spell system + DB)
+[X] Rogue                          (core spell system + DB)
+[X] Shaman                         (core spell system + DB)
+[X] Warlock                        (core spell system + DB)
+[X] Warrior                        (core spell system + DB)
+[P] Class Spells (1-120)           (src/server/scripts/Spells — 20 cpp ONLY for ALL classes
+                                     across ALL expansions. Most are auto-cast/dummy.)
+[P] Talents (All Expansions)       (core talent system; many rows non-functional/dummy)
+[ ] Artifact Traits                (no functional trait system)
+[ ] Azerite Traits                 (no functional trait system)
+[ ] Legendary Effects              (some procs in Spells; most are dummy)
+
+--------------------------------------------------------------------------------
+MISCELLANEOUS SYSTEMS
+--------------------------------------------------------------------------------
+[X] Auction House                  (src/server/game/AuctionHouse + AuctionHouseBot)
+[X] Bank / Guild Bank              (core)
+[ ] Barber Shop                    (core appearance may be partial)
+[ ] Transmogrification             (core item handlers; no dedicated UI/dir)
+[ ] Void Storage
+[ ] Toy Box
+[ ] Mount Collection / Journal     (mounts work; journal UI may be missing)
+[X] Pet Journal                    (src/server/game/BattlePets)
+[X] Achievement System             (src/server/game/Achievements)
+[X] Reputation System              (src/server/game/Reputation)
+[X] Guild System                   (src/server/game/Guilds)
+[X] Calendar                       (src/server/game/Calendar)
+[X] Mail System                    (src/server/game/Mails)
+[X] Chat Channels / LFG Channel    (src/server/game/Chat)
+[X] Ticket / Support System        (src/server/game/Support)
+[X] Warden (Anti-Cheat)            (src/server/game/Warden)
+[X] Phasing                        (src/server/game/Phasing)
+[X] Weather                        (src/server/game/Weather)
+[X] Time / Event Manager           (src/server/game/Time + Events)
+[X] Scripting Engine (SmartAI)     (src/server/game/Scripting)
+[ ] Timewalking (All Expansions)   (old dungeons exist; no TW scaling/loot system)
+[P] Boost / Character Level Boost  (Scenarios have tutorial-like boost instances)
+[ ] Recruit-A-Friend
+[ ] In-Game Shop                   (BattlePay is stub/partial)
+[P] Group Finder (Premade Groups)  (GroupFinder exists; cross-realm premade partial)
+[P] Looking For Raid (LFR)         (DungeonFinding exists; LFR wing logic partial)
+[P] Mythic+ Keystone & Affixes     (ChallengeMode exists; BFA seasonal affixes partial)
+[ ] Scoreboard / Leaderboards
+[X] Mythic Raid Lockouts           (core instance system)
+[ ] Cross-Realm Zones (CRZ)
+[P] Sharding / Phasing (BFA)     (Phasing exists; BFA zone sharding not implemented)
+
+================================================================================
+  END OF CHECKLIST
+================================================================================
