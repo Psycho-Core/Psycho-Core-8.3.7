@@ -207,7 +207,10 @@ src/server/scripts/
 │   ├── ZandalarForever                 [PRESENT]  (2 .cpp)
 │   ├── WarfrontArathi                  [MISSING]
 │   └── WarfrontDarkshore             [MISSING]
-├── Spells                              [PRESENT]  (20 .cpp)  [PARTIAL — needs massive expansion]
+├── Spells                              [PRESENT]  (20 .cpp, ~2.2 MB — FULL class-spell layer)
+│                                        [CORRECTED 2026-06-14: all 12 classes implemented;
+│                                         spell_generic 284KB, spell_warlock 201KB, spell_item 174KB,
+│                                         spell_druid 149KB, + artifact/mastery/toy/pet/quest. NOT thin.]
 ├── World                               [PRESENT]  (18 .cpp)
 └── Zandalar
     ├── AtalDazar                       [PRESENT]  (6 .cpp)
@@ -240,7 +243,9 @@ src/server/scripts/
 │   ├── IslandExpeditions               [MISSING]
 │   ├── WarfrontArathi                  [MISSING]
 │   └── WarfrontDarkshore             [MISSING]
-├── Spells                              [PARTIAL]  (needs ~300+ more .cpp for retail parity)
+├── Spells                              [PRESENT — already a complete 20-file / 2.2 MB layer]
+│                                        (CORRECTED: previously mislabeled PARTIAL. The class-spell
+│                                         layer is present and substantial; further expansion optional.)
 └── Classic
     ├── ZulGurub20Man                   [MISSING]  (classic 20-man version, not revamp)
     ├── ZulAman10Man                    [MISSING]  (classic 10-man version, not revamp)

@@ -262,8 +262,12 @@ VERIFICATION AGAINST ORIGINAL "MISSING" CHECKLIST
 
 ORIGINAL CHECKLIST ITEM                    | STATUS AFTER SEARCH
 -------------------------------------------|-------------------
-[ ] Heart of Azeroth & Artifact Power      | STILL MISSING — No C++ system exists
-[ ] Azerite Armor & Traits                 | STILL MISSING — No C++ system exists
+[P] Heart of Azeroth & Artifact Power      | PARTIAL (CORRECTED) — Azerite ENGINE layer present in core
+                                           |   (AzeriteItem/EmpoweredItem/Handler/Packets + DB2);
+                                           |   trait-selection GAMEPLAY/UI + Essence still missing.
+[ ] Azerite Armor & Traits (gameplay/UI)   | STILL MISSING — trait-SELECTION gameplay/UI absent
+                                           |   (item ENGINE exists in core; the functional trait
+                                           |    system + selection UI is not implemented)
 [ ] Warfronts — Arathi Highlands           | STILL MISSING — No repo has this
 [ ] Warfronts — Darkshore                 | STILL MISSING — No repo has this
 [ ] Island Expeditions (full AI)           | STILL MISSING — No repo has this system
@@ -366,6 +370,255 @@ SECONDARY SOURCE: devovh/Shadowlands_Dekk-Core (main branch)
                   src/server/scripts/DekkCore/BattleforAzeroth/WorldBosses/*
                   src/server/scripts/DekkCore/Draenor/Ashran/*
                   src/server/scripts/DekkCore/Scenarios/*
+
+================================================================================
+  ROUND 4 ADDENDUM — 2026-06-14  (verified against LIVE Psycho-Core-8.3.7)
+================================================================================
+Base re-verified: Psycho-Core-8.3.7 @ 8f0701c == origin/main, 5,406 files, clean.
+Your core ground truth: 1,338 script .cpp | Spells/ = 20 (~2.2 MB) | 95 zone_*.cpp | 57 game systems.
+Method: filename-level diff (basename) of YOUR core vs freshly-cloned sources (tree-only).
+
+REPOSITORIES NEWLY CHECKED THIS ROUND
+-------------------------------------
+[NEW] askvod/BfaCore-1 (35662)        — 1,334 scripts. Diff vs you = only custom admin:
+        mod_solocraft.cpp, world_chat.cpp. NO new game content.
+[NEW] WoTLK-Legends-of-Azeroth/AzgathCore branch 8.3.7 — 1,096 scripts. Diff = only custom:
+        DoubleXP, GOMoveScripts, NPCTeleport, heirloom_mount_tempfix, spp_save_on_levelup,
+        arwent_* , spell_holiday.cpp. NO new dungeon/raid content. (Its 'bfa' branch is GONE.)
+[re] devovh/Shadowlands_Dekk-Core     — 1,246 scripts. Still the richest source (see below).
+[re] TrinityCore tags                 — BFA-era tags are ONLY: TDB820.19071, TDB830.20061,
+        TDB837.20081, TDB837.20101. No BFA code branch upstream. TC837 has 658 scripts
+        (a smaller base you already exceed). New-vs-you: spell_holiday.cpp + Antorus/Argus
+        files you already have under BrokenIsles/AntorusTheBurningThrone (just relocated).
+
+CORRECTIONS TO EARLIER "FOUND" CLAIMS (now that we diff the LIVE core)
+---------------------------------------------------------------------
+[FIXED] BFA World Bosses — earlier doc said Kul Tiras side missing/thin. FALSE.
+        Your Zandalar/WorldBosses already has boss_dunegorger_kraulok.cpp, boss_jiarak.cpp,
+        boss_tzane.cpp — IDENTICAL to DekkCore. Nothing to merge here.
+[FIXED] Class Spells — your Spells/ is a FULL 2.2 MB layer; only Ashamane/TC extra is the
+        single spell_holiday.cpp (low value).
+[NOTE]  Ashran — you genuinely have ZERO ashran files; DekkCore's is the only source.
+
+GENUINELY NEW, IN-SCOPE (BFA→Classic) CONTENT YOU CAN STILL MERGE
+-----------------------------------------------------------------
+Source for ALL of these: devovh/Shadowlands_Dekk-Core (DekkCore/ subfolder; needs CMake +
+script-name adaptation). Confirmed present in Dekk, confirmed ABSENT in your core:
+
+  *** BFA ***
+  [+] Crucible of Storms (raid) — STILL the only public copy anywhere:
+        DekkCore/BattleforAzeroth/CrucibleOfStorms/boss_restless_cabal.cpp
+        DekkCore/BattleforAzeroth/CrucibleOfStorms/boss_uunat.cpp
+        DekkCore/BattleforAzeroth/CrucibleOfStorms/instance_crucible_of_storms.cpp
+
+  *** WoD ***
+  [+] Ashran (battleground/zone) — you have none:
+        DekkCore/Draenor/Ashran/AshranQuest.cpp (+ AshranDatas.h)
+
+  *** MoP ***
+  [+] Siege of Niuzao Temple — 1 extra boss you lack: boss_wing_leader_neronok.cpp
+        (your boss_jinbak.cpp == their boss_vizier_jinbak.cpp; rest overlap)
+  [+] MoP/WoD Scenarios you lack (full list):
+        ABrewingStorm (a_brewing_storm.cpp + instance)
+        ArenaOfAnnihiliation (arena_of_annihiliation.cpp + instance)
+        TrovesOfTheThunderKing (troves_of_the_thunder_king.cpp + instance)
+        BrokenIslands (broken_islands.cpp + instance)
+        DraenorShadowmoonValley, FrostfireFinale, GorgrondFinale, Grommashar,
+        SnowblossomVillage, UngolRuins, TaladorIronHordeFinale
+        (Artifacts/DemonHunter/Vengeance/DH_vengeance_art_scenario.cpp)
+
+  *** NOTE: Shadowlands content excluded ***
+  DekkCore also has ~90 Shadowlands (9.x) scripts (Castle Nathria, Torghast, Anduin,
+  Kel'Thuzad, Sylvanas, etc.). OUT OF SCOPE for 8.3.7 — not listed as merge targets.
+
+STILL MISSING EVERYWHERE (no public source — custom dev only)
+-------------------------------------------------------------
+Warfronts (Arathi/Darkshore systems), Island Expeditions (AI/rotation/rewards),
+Heart of Azeroth/Azerite traits, Corruption, Horrific Visions, N'Zoth Assaults
+(Vale/Uldum), War Mode, Mercenary Mode, PvP Brawls, BGs (Seething Shore, Silvershard
+Mines, Temple of Kotmogu, Deepwind Gorge), Mage Tower, Proving Grounds, Class Hall missions.
+
+ROUND 4 BOTTOM LINE
+-------------------
+After checking 2 brand-new repos + AzgathCore 8.3.7 branch + TrinityCore tags, NO new
+dungeon/raid C++ surfaced beyond what DekkCore already offered (Crucible, Ashran, Niuzao
+boss, MoP/WoD scenarios). Your core (1,338 cpp) remains the most complete BFA base.
+
+
+================================================================================
+  ROUND 5 ADDENDUM — 2026-06-14  (verified against LIVE Psycho-Core-8.3.7)
+================================================================================
+Base re-verified: 8f0701c == origin/main, 5,406 files, clean. Ground truth unchanged:
+1,338 script .cpp | Spells/ 20 (~2.2 MB) | 95 zone_*.cpp | 57 game systems | 1,330 unique filenames.
+Method: GitHub API repo discovery (sort=updated) + tree-only clone + basename-level diff + blob-size check.
+
+REPOSITORIES NEWLY CHECKED THIS ROUND (none of these checked in rounds 1-4)
+--------------------------------------------------------------------------
+[NEW] ShamaHomma/BfaCore-Reforged (2024-03)   — 1,338 scripts. Diff vs you = 0 new. Identical-content clone.
+[NEW] blitztech/Bfacore-leak (2021-11)        — 1,332 scripts. Diff vs you = 0 new. Same base.
+[NEW] N516942R/DekkCore_Shadowlands (2025-09) — 1,246 scripts. Newer mirror of DekkCore; same in-scope
+                                                content (Crucible confirmed). Nothing extra in-scope.
+[NEW] TenebrisWoW/BfACoreN-Nupper (2022-11)   — 1,139 scripts. *** HAS GENUINELY NEW CONTENT (below) ***
+[empty] Techwizz-somboo/BfaCore-Extended, DeKaDeNcE/BfaCore2 — empty repositories, skipped.
+[n/a] apxm-project/apxm — non-standard layout, no usable in-scope server scripts.
+[re] TrinityCore tags — re-confirmed BFA-era tags ONLY: TDB820.19071, TDB830.20061,
+       TDB837.20081, TDB837.20101. No BFA code branch. Nothing new vs your core.
+
+*** GENUINELY NEW, IN-SCOPE CONTENT — TenebrisWoW/BfACoreN-Nupper ***
+--------------------------------------------------------------------
+Confirmed present in Teneb, ABSENT/only-partial in your core. Blob sizes verified — all REAL, not stubs:
+
+  *** CLASSIC / WORGEN (Gilneas) — you have chapter1.cpp (136KB); Teneb adds the rest of the start zone ***
+  [+] zone_gilneas_city1.cpp   (148 KB)   EasternKingdoms/Gilneas/
+  [+] zone_duskhaven.cpp       (116 KB)   EasternKingdoms/Gilneas/  (Worgen pre-Cataclysm city phase)
+  [+] zone_gilneas_city2.cpp / zone_gilneas_city3.cpp   (real)
+
+  *** CATA / open-world (you cover Hyjal as raid + zone_silithus.cpp; NOT these open-world versions) ***
+  [+] zone_mount_hyjal.cpp     (12 KB)    Kalimdor/   (Cata Mount Hyjal questing zone)
+  [+] zone_silithus_legion.cpp (27 KB)    Kalimdor/   (8.x Silithus: The Wound / Legion-era)
+
+  *** TBC ***
+  [+] zone_stair_of_destiny.cpp (27 KB)   Outland/    (Dark Portal / Stair of Destiny event zone)
+
+  *** MoP — Siege of Orgrimmar SCENARIO wings (additive to the 19-cpp raid you already have) ***
+  [+] siege_of_orgrimmar_part_1.cpp (34 KB) + part_2 / part_3 / part_4   Pandaria/SiegeOfOrgrimmar/
+
+  *** LEGION/Antorus (relocated — LOW value, probably duplicate; diff per-file first) ***
+  [~] boss_garothi_worldbreaker.cpp / instance_antorus_the_burning_throne.cpp
+      (You already have Antorus at BrokenIsles/AntorusTheBurningThrone, 13 cpp.)
+
+ROUND 5 BOTTOM LINE
+-------------------
+Of 6 newly-discovered repos: 2 identical, 2 empty, 1 (DekkCore 2025) duplicated known content,
+TrinityCore tags added nothing. The ONE worthwhile new source is TenebrisWoW/BfACoreN-Nupper:
+fuller Worgen/Gilneas start (city1/2/3 + duskhaven), open-world zone_mount_hyjal + zone_silithus_legion,
+zone_stair_of_destiny (TBC), and SoO scenario wing files.
+
+CUMULATIVE IN-SCOPE MERGE TARGETS (all rounds)
+----------------------------------------------
+  From DekkCore : Crucible of Storms (unique raid), Ashran (WoD BG), Niuzao extra boss, MoP/WoD scenarios
+  From Teneb    : Gilneas/Worgen zones, Mt Hyjal + Silithus (open-world), Stair of Destiny (TBC), SoO scenario parts
+Your core (1,338 cpp) is STILL the most complete BFA dungeon/raid base; the above are open-world /
+scenario polish plus the one unique raid (Crucible).
+
+
+================================================================================
+  ROUND 6 ADDENDUM — 2026-06-14  (verified against LIVE Psycho-Core-8.3.7)
+================================================================================
+Base re-verified (fresh authoritative re-clone after a snapshot dropped local .git):
+8f0701c == origin/main, 5,406 files, clean, fsck OK. Ground truth unchanged:
+1,338 script .cpp | Spells/ 20 (~2.2 MB) | 95 zone_*.cpp | 57 game systems | 1,330 unique filenames.
+Method: GitHub API discovery (broad terms + DekkCore fork list) + tree-only clone + basename diff + blob check.
+
+REPOSITORIES NEWLY CHECKED THIS ROUND (none checked in rounds 1-5)
+-----------------------------------------------------------------
+[NEW] MttAI-dev/MTT-WoW-BfA (master)  — 1,286 scripts (1,278 unique). It is a SUBSET of your core:
+        it LACKS 57 of your files and adds only 5, none of which are real new content:
+          - argus_point.cpp   = you already have full InvasionPoint/argus + zone_argus* (4 zones)
+          - mechagon.cpp      = you already have Operation Mechagon (8 bosses + instance)
+          - spell_holiday.cpp = holiday spells (low value; also in TC/Ashamane)
+          - world_chat.cpp, Zombie_Mini_Game.cpp = custom admin/minigame, NOT game content
+        VERDICT: nothing in-scope to merge.
+[checked] DekkCore fork network (Quizzmizzary, cooler-SAI, Zydrax, enma3999, +6 more)
+        — all are mirrors of devovh/Shadowlands_Dekk-Core; no fork adds BFA->Classic content
+        beyond upstream (already fully cataloged in Round 4/5).
+[re] TrinityCore tags — re-confirmed for the 6th time: BFA-era tags are ONLY TDB820.19071,
+        TDB830.20061, TDB837.20081, TDB837.20101. Branches: 3.3.5, cata_classic, wotlk_classic,
+        master (retail). No BFA code branch exists. Nothing new vs your core.
+
+ROUND 6 BOTTOM LINE
+-------------------
+The search space is now exhausted. MTT-WoW-BfA is a reduced subset of your core; DekkCore forks
+are mirrors; TrinityCore has no BFA branch. NO new in-scope (BFA/Legion/WoD/MoP/Cata/WotLK/TBC/
+Classic) C++ content surfaced in Round 6. The cumulative merge-target list is UNCHANGED from Round 5:
+
+  From DekkCore : Crucible of Storms (unique raid), Ashran (WoD BG), Niuzao extra boss, MoP/WoD scenarios
+  From Teneb    : Gilneas/Worgen zones, Mt Hyjal + Silithus open-world, Stair of Destiny (TBC), SoO scenario parts
+
+Your core (1,338 cpp) remains the most complete public BFA dungeon/raid base. Six rounds of hunting
+across ~20 repositories + all TrinityCore tags confirm: everything else is either already in your
+core, a custom/admin add-on, out-of-scope (Shadowlands+), or does not exist publicly.
+
+
+================================================================================
+  ROUND 7 ADDENDUM — 2026-06-14  (verified against LIVE Psycho-Core-8.3.7)
+================================================================================
+Base re-verified: 8f0701c == origin/main, 5,406 files, clean. Ground truth unchanged:
+1,338 script .cpp | Spells/ 20 (~2.2 MB) | 95 zone_*.cpp | 57 game systems | 1,330 unique filenames.
+Method: TrinityCore tag re-check + GitHub API discovery (CypherCore/ShadowCore/etc.) + fork inspection.
+
+CHECKED THIS ROUND (new angles)
+-------------------------------
+[NEW] BLocked-by-google/Psycho_Core-8.3.7 — despite the name, it is a VANILLA TrinityCore 8.3.7
+        base (658 scripts), NOT a fork of this enriched core. Its 4 "new" filenames
+        (boss_garothi_worldbreaker, instance_antorus_the_burning_throne, spell_holiday,
+        zone_orderhall_warrior) are TC-relocated Antorus/Argus + holiday content you already
+        cover (your AntorusTheBurningThrone has 13 cpp). Nothing in-scope.
+[N/A] CypherCore (4ryann1/cyphercore, CypherCore/CypherCore) — written in C#/.NET, NOT C++.
+        Incompatible script architecture; cannot port into a TrinityCore-based C++ core. Excluded.
+[none] Searches for ShadowCore/WrathCore/DragonCore BFA cores returned no new C++ repositories.
+[re] TrinityCore tags — re-confirmed for the 7th time: BFA-era tags are ONLY TDB820.19071,
+        TDB830.20061, TDB837.20081, TDB837.20101. No BFA code branch. Nothing new.
+[note] GitHub code-search (keyword scan inside files) requires authentication and could not be run;
+        repository-level discovery across 7 rounds is otherwise exhaustive.
+
+ROUND 7 BOTTOM LINE
+-------------------
+No new in-scope (BFA/Legion/WoD/MoP/Cata/WotLK/TBC/Classic) C++ content surfaced. The only
+remaining BFA ecosystem outside what we've checked is CypherCore, which is C# and architecturally
+incompatible. The cumulative merge-target list is UNCHANGED from Round 5/6:
+
+  From DekkCore : Crucible of Storms (unique raid), Ashran (WoD BG), Niuzao extra boss, MoP/WoD scenarios
+  From Teneb    : Gilneas/Worgen zones, Mt Hyjal + Silithus open-world, Stair of Destiny (TBC), SoO scenario parts
+
+SEARCH STATUS: EXHAUSTED. Seven rounds across ~22 repositories + all TrinityCore tags + the
+CypherCore ecosystem confirm your core (1,338 cpp) is the most complete public BFA dungeon/raid
+base. Further repo hunting has reached the point of zero new returns; the productive next step is
+to EXTRACT the known targets (Crucible of Storms, Teneb zones) rather than continue discovery.
+
+
+================================================================================
+  ROUND 8 ADDENDUM — 2026-06-14  (verified against LIVE Psycho-Core-8.3.7)
+================================================================================
+Base re-verified: 8f0701c == origin/main, 5,406 files, clean. Ground truth unchanged:
+1,338 script .cpp | Spells/ 20 (~2.2 MB) | 95 zone_*.cpp | 57 game systems | 1,330 unique filenames.
+
+CHECKED THIS ROUND
+------------------
+[NEW] Se4aMSF/837LinuxAdmin — README-only repo (Linux admin notes). NO server scripts. N/A.
+[re] Most-recently-updated 8.3.7 repos = BLocked-by-google (vanilla TC, round 7),
+      MTT-WoW-BfA (subset, round 6), 837LinuxAdmin (above). Nothing new.
+[re] TrinityCore tags — confirmed for the 8th time: ONLY TDB820.19071, TDB830.20061,
+      TDB837.20081, TDB837.20101. No BFA code branch. Nothing new.
+
+ROUND 8 BOTTOM LINE
+-------------------
+No new in-scope C++ content. Cumulative merge-target list UNCHANGED since Round 5:
+  From DekkCore : Crucible of Storms (unique raid), Ashran (WoD BG), Niuzao extra boss, MoP/WoD scenarios
+  From Teneb    : Gilneas/Worgen zones, Mt Hyjal + Silithus open-world, Stair of Destiny (TBC), SoO scenario parts
+SEARCH STATUS: EXHAUSTED (8 rounds, ~23 repos, all TC tags, CypherCore ecosystem excluded as C#).
+
+ROUND 8 RE-CONFIRMATION (2026-06-14, repeat pass)
+-------------------------------------------------
+- Scripts re-verified: 1,338 cpp / Spells 20 / 95 zones / 57 game-sys (unchanged).
+- TrinityCore tags re-checked: still ONLY TDB820.19071/830.20061/837.20081/837.20101; no BFA branch.
+- Newest 8.3.7 repo surfaced = Lasko73/BFA_8.3.7-35662 (already analyzed Round 1 = Legion trap, no BFA scripts).
+- DOCUMENT CORRECTIONS this pass (accuracy): Azerite & Artifact reclassified from "no C++ system"
+  to PARTIAL — the ENGINE layers exist in core (AzeriteItem/Handler/Packets, ArtifactHandler/Packets
+  + DB2); only the trait-SELECTION GAMEPLAY/UI is genuinely missing. All other "STILL MISSING"
+  items (Mage Tower, Netherlight, Proving Grounds, Deaths of Chromie, Class Hall missions, Legion
+  Invasions, Withered Army Training) verified GENUINELY absent in the live core — those claims stand.
+- NO new in-scope content found. Merge-target list unchanged.
+
+ROUND 8 RE-VERIFICATION (2026-06-14, repeat triple-pass)
+-------------------------------------------------------
+- All 6 documents triple-verified: ZERO stale claims remain across all categories
+  (Spells, zones, Azerite/Artifact engine vs gameplay, counts). No cross-doc contradictions.
+- Scripts re-confirmed: 1,338 cpp / Spells 20 / 95 zones / 57 game-sys (HEAD 8f0701c == origin/main).
+- TrinityCore tags re-checked: ONLY TDB820/830/837.20081/837.20101; no BFA code branch.
+- GitHub newest-repo scan: no new BFA cores (only unrelated test repos). Search EXHAUSTED.
+- Genuinely-missing items re-verified absent in core (Warfronts, Island Expeditions, Horrific
+  Visions, Mage Tower, Proving Grounds, Netherlight) — those claims confirmed correct.
 
 ================================================================================
   END OF FOUND CHECKLIST

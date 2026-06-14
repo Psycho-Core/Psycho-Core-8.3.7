@@ -60,15 +60,21 @@
 | Ny'alotha, the Waking City | ✅ | 15 | |
 
 ### BFA Zones (Open World)
+> **CORRECTED 2026-06-14:** This core has **95 `zone_*.cpp` scripts** (83 substantial >2KB,
+> 12 genuine sub-2KB stubs). Earlier "no C++ scripts / open world bare" notes were inaccurate.
+> Substantial BFA zone scripts include zone_tiragarde_sound.cpp (44KB), zone_zuldazar.cpp (26KB),
+> zone_nazjatar.cpp (26KB), zone_nazmir.cpp (6KB), zone_arathi_highlands.cpp (6KB).
+> Genuine stubs (<2KB): zone_drustvar, zone_stormsong_valley, zone_voldun, zone_darkshore.
+
 | Zone | C++ Status | Notes |
 |------|------------|-------|
-| Zuldazar | ❓ | Zone exists; quests/spawns DB; no unique C++ scripts |
-| Nazmir | ❓ | Zone exists; quests/spawns DB |
-| Vol'dun | ❓ | Zone exists; quests/spawns DB |
-| Tiragarde Sound | ❓ | Zone exists; quests/spawns DB |
-| Drustvar | ❓ | Zone exists; quests/spawns DB |
-| Stormsong Valley | ❓ | Zone exists; quests/spawns DB |
-| Nazjatar | ⚠️ | `Nazjatar` (2 cpp) + `EternalPalace` (10 cpp). Open world likely bare |
+| Zuldazar | ✅ | `zone_zuldazar.cpp` (26KB) — substantial |
+| Nazmir | ✅ | `zone_nazmir.cpp` (6KB) |
+| Vol'dun | ⚠️ | `zone_voldun.cpp` (1.8KB stub) |
+| Tiragarde Sound | ✅ | `zone_tiragarde_sound.cpp` (44KB) — substantial |
+| Drustvar | ⚠️ | `zone_drustvar.cpp` (745B stub) |
+| Stormsong Valley | ⚠️ | `zone_stormsong_valley.cpp` (753B stub) |
+| Nazjatar | ✅ | `zone_nazjatar.cpp` (26KB) + `EternalPalace` (10 cpp). Open world IS scripted. |
 | Mechagon Island | ⚠️ | Part of `Operation Mechagon` (10 cpp). Open world NPCs DB-only |
 | Vale of Eternal Blossoms (8.3) | ❓ | Pandaria zone; 8.3 assault spawns are DB + event scripts |
 | Uldum (8.3) | ❓ | Cataclysm zone; 8.3 assault spawns are DB |
@@ -518,7 +524,7 @@
 | Shaman | ✅ | Core spell system |
 | Warlock | ✅ | Core spell system + Green Fire scenario |
 | Warrior | ✅ | Core spell system |
-| **Class Spells (1-120)** | ⚠️ | `Spells` (20 cpp) is extremely thin for 12 classes × 3 specs × 8 expansions. Most spells are auto-cast or dummy. |
+| **Class Spells (1-120)** | ✅ | **CORRECTED 2026-06-14:** `Spells/` is a FULL layer — 20 cpp totaling ~2.2 MB, all 12 classes implemented (spell_warlock 201KB, spell_druid 149KB, spell_shaman 141KB, spell_dh 140KB, spell_hunter 128KB, spell_dk 115KB, spell_warrior 105KB, spell_priest 103KB, spell_mage 94KB, spell_rogue 79KB, spell_paladin 76KB, spell_monk 140KB) + spell_artifact, spell_mastery, spell_pet, spell_quest, spell_generic 284KB, spell_item 174KB. Not thin/dummy. |
 | **Talents (All Expansions)** | ❓ | Talent system in core; many rows may be non-functional or auto-cast |
 | **Artifact / Azerite Traits** | ❌ | No functional trait system; traits are passive or dummy |
 | **Legendary Effects** | ⚠️ | Some legendary procs may be in `Spells` (20 cpp); most are dummy |
@@ -593,7 +599,7 @@ If your goal is a **retail-like 1-120 experience**, this is what you MUST build 
 - [ ] **Corruption System** (procs and negative effects missing)
 - [ ] **N'Zoth Assaults + Vale/Uldum 8.3 events** (event system missing)
 - [ ] **Nazjatar open world** (only Eternal Palace is scripted; open world is empty)
-- [ ] **Class Spells (all 12 classes)** — `Spells` (20 cpp) is far too thin for retail parity
+- [x] **Class Spells (all 12 classes)** — CORRECTED: `Spells/` (20 cpp / ~2.2 MB) is a complete layer covering all 12 classes; no longer a critical gap (optional further expansion only)
 
 ### 🟡 High Impact (Dungeon/Raid Gaps)
 - [ ] **Dire Maul** (only 1 cpp — classic version is broken/incomplete)
@@ -641,7 +647,7 @@ If you merge the **boom8866 world DB** + **freadblangks 855 SQL updates** + **Ti
 - ✅ **Garrison (WoD)** — basic functional
 - ✅ **Pet Battles** — core system exists
 - ✅ **Dungeon Finder / LFG** — core system exists
-- ⚠️ **Class spells** — work for leveling but many are dummy/passive
+- ✅ **Class spells** — CORRECTED 2026-06-14: full `Spells/` layer (20 cpp / ~2.2 MB, all 12 classes); not thin/dummy
 - ❌ **Warfronts, Island Expeditions, Heart of Azeroth, Azerite, Corruption, Horrific Visions** — do not exist
 
 **Bottom line:** You can run a very solid ** dungeon/raid server** from 1-120. You **cannot** run a retail-like **BFA endgame experience** (Warfronts, Islands, Azerite, Visions) without massive custom development.

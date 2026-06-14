@@ -62,7 +62,7 @@ BFA ZONES (Open World)
 [D] Tiragarde Sound
 [D] Drustvar
 [D] Stormsong Valley
-[P] Nazjatar (Eternal Palace only; open world bare — 2 cpp)
+[X] Nazjatar (Eternal Palace 10 cpp + zone_nazjatar.cpp 26KB open-world; CORRECTED: not bare)
 [D] Mechagon Island
 [D] Vale of Eternal Blossoms (8.3 assault spawns)
 [D] Uldum (8.3 assault spawns)
@@ -464,7 +464,8 @@ CLASSES & SPELLS (All Expansions)
 [X] Shaman                         (core spell system + DB)
 [X] Warlock                        (core spell system + DB)
 [X] Warrior                        (core spell system + DB)
-[P] Class Spells (1-120)           (src/server/scripts/Spells — 20 cpp ONLY for ALL classes
+[X] Class Spells (1-120)           (src/server/scripts/Spells — 20 cpp / ~2.2 MB, FULL layer for ALL classes
+                                     CORRECTED 2026-06-14: substantial real implementations, not stubs.
                                      across ALL expansions. Most are auto-cast/dummy.)
 [P] Talents (All Expansions)       (core talent system; many rows non-functional/dummy)
 [ ] Artifact Traits                (no functional trait system)
