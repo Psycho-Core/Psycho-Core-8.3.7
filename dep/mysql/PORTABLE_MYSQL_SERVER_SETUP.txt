@@ -1,0 +1,471 @@
+===========================================================================
+ Psycho_Core 8.3.7 - SIMPLE PORTABLE MySQL/MariaDB SETUP
+===========================================================================
+ Purpose : Standalone/portable database setup for a Psycho_Core server.
+ Updated : 2026-06-11 ACST
+ Rule    : Use the .bat files first. Manual commands are fallback only.
+===========================================================================
+
+READ THIS FIRST
+---------------
+This mysql folder is portable. It can work anywhere as long as it is copied to
+the server root as:
+
+  .\mysql
+
+SERVER ROOT means the folder containing:
+
+  .\worldserver.exe
+  .\bnetserver.exe
+  .\worldserver.conf
+  .\bnetserver.conf
+  .\mysql\
+
+Do NOT use hardcoded drive paths. From the server root, use relative commands like:
+
+  mysql\start_mysql.bat
+
+The .bat files automatically go into mysql\bin using %~dp0bin, so they still work
+if the whole server folder is moved somewhere else.
+
+IMPORTANT:
+  - Do not leave only a .zip, .7z, or .msi in mysql.
+  - MariaDB must be extracted first.
+  - mariadb-install-db.exe may create its own mysql\data\my.ini.
+  - The Psycho_Core scripts replace that generated file with our portable config.
+  - Active runtime config is mysql\data\my.ini.
+  - Root mysql\my.ini is the template that gets copied to mysql\data\my.ini.
+  - For the helper .bat files, the easiest/expected layout is:
+
+      .\mysql\bin\mysqld.exe
+      .\mysql\bin\mysql.exe
+      .\mysql\bin\mysqladmin.exe
+      .\mysql\bin\mariadb-install-db.exe
+      .\mysql\include\mysql.h
+      .\mysql\lib\libmariadb.lib
+      .\mysql\my.ini
+      .\mysql\*.bat
+
+If your MariaDB archive extracted as:
+
+  .\mysql\mariadb-11.8.6-winx64\bin\mysqld.exe
+
+copy the CONTENTS of mariadb-11.8.6-winx64 into mysql\ so this exists:
+
+  .\mysql\bin\mysqld.exe
+
+===========================================================================
+ IMPORTANT SETUP - USE THE .BAT FILES
+===========================================================================
+
+STEP 1 - INITIALIZE THE DATABASE
+--------------------------------
+Run this from SERVER ROOT:
+
+  mysql\init_mysql.bat
+
+It asks for a NEW MariaDB root password.
+
+What it does:
+  - goes into mysql\bin automatically
+  - creates mysql\data if needed
+  - runs the working MariaDB command:
+
+      mariadb-install-db.exe --datadir=../data --password=YOUR_PASSWORD
+
+  - then replaces the generated mysql\data\my.ini with the Psycho_Core portable
+    config template from mysql\my.ini.
+
+If it says data is already initialized, that is fine. It will still apply the
+portable data\my.ini. Do not delete data unless you intentionally want to wipe
+the database.
+
+
+STEP 2 - START MYSQL / MARIADB
+------------------------------
+Run this from SERVER ROOT:
+
+  mysql\start_mysql.bat
+
+Leave that window open.
+
+What it does:
+  - goes into mysql\bin automatically
+  - creates logs/tmp if needed
+  - makes sure mysql\data\my.ini is the Psycho_Core portable config
+  - runs the working MariaDB command:
+
+      mysqld.exe --defaults-file=../data/my.ini --console
+
+If the server starts correctly, that window will keep showing MariaDB logs.
+
+
+STEP 3 - CREATE THE PSYCHO_CORE DATABASES AND DB USER
+-----------------------------------------------------
+Open a SECOND Command Prompt in SERVER ROOT.
+
+Run:
+
+  mysql\setup_psycho_databases.bat
+
+It asks for the MariaDB root password from STEP 1.
+
+What it creates:
+  - psycho_auth
+  - psycho_characters
+  - psycho_world
+  - psycho_hotfixes
+
+It also creates the database user used by worldserver/bnetserver:
+
+  user     : psycho
+  password : core
+
+The SQL file used by this script is:
+
+  mysql\create_psycho_databases.sql
+
+
+STEP 4 - TEST MYSQL CONSOLE
+---------------------------
+From SERVER ROOT, run:
+
+  mysql\mysql_console.bat
+
+Enter the root password from STEP 1.
+
+At the MariaDB prompt, test:
+
+  SHOW DATABASES;
+  SELECT User, Host FROM mysql.user WHERE User='psycho';
+  exit
+
+
+STEP 5 - CONFIGURE WORLDSERVER / BNETSERVER DATABASE STRINGS
+------------------------------------------------------------
+In worldserver.conf:
+
+  LoginDatabaseInfo     = "127.0.0.1;3306;psycho;core;psycho_auth"
+  WorldDatabaseInfo     = "127.0.0.1;3306;psycho;core;psycho_world"
+  CharacterDatabaseInfo = "127.0.0.1;3306;psycho;core;psycho_characters"
+  HotfixDatabaseInfo    = "127.0.0.1;3306;psycho;core;psycho_hotfixes"
+
+In bnetserver.conf:
+
+  LoginDatabaseInfo = "127.0.0.1;3306;psycho;core;psycho_auth"
+
+If you change the DB password from core, update every connection string.
+If you change the MySQL port from 3306, update every connection string.
+
+
+STEP 6 - IMPORT PSYCHOBOT SQL
+-----------------------------
+Do this after databases exist.
+
+If you are running commands from SOURCE ROOT, use:
+
+  cmd /c "cd dep\mysql\bin && mysql.exe --defaults-file=../data/my.ini -uroot -p psycho_auth       < ..\..\..\modules\mod-psychobot\sql\auth\psychobot_rbac.sql"
+  cmd /c "cd dep\mysql\bin && mysql.exe --defaults-file=../data/my.ini -uroot -p psycho_characters < ..\..\..\modules\mod-psychobot\sql\characters\psychobot_strategies.sql"
+  cmd /c "cd dep\mysql\bin && mysql.exe --defaults-file=../data/my.ini -uroot -p psycho_world      < ..\..\..\modules\mod-psychobot\sql\world\psychobot_names.sql"
+
+If you are running from a packaged SERVER ROOT and copied modules\mod-psychobot\sql
+there, use:
+
+  cmd /c "cd mysql\bin && mysql.exe --defaults-file=../data/my.ini -uroot -p psycho_auth       < ..\..\modules\mod-psychobot\sql\auth\psychobot_rbac.sql"
+  cmd /c "cd mysql\bin && mysql.exe --defaults-file=../data/my.ini -uroot -p psycho_characters < ..\..\modules\mod-psychobot\sql\characters\psychobot_strategies.sql"
+  cmd /c "cd mysql\bin && mysql.exe --defaults-file=../data/my.ini -uroot -p psycho_world      < ..\..\modules\mod-psychobot\sql\world\psychobot_names.sql"
+
+What these do:
+  - psycho_auth       : adds .psychobot command RBAC permissions
+  - psycho_characters : adds saved strategy table
+  - psycho_world      : adds bot name pool for S30 factory/random bot generation
+
+
+STEP 7 - REALMLIST / PORTS
+--------------------------
+Default important ports:
+
+  MySQL/MariaDB        3306
+  Worldserver game     8085
+  BNet login           1119
+  LoginREST            8081
+  RA                   3443
+  SOAP                 7878
+
+For local-only testing, open mysql:
+
+  mysql\mysql_console.bat
+
+Then paste:
+
+  UPDATE psycho_auth.realmlist
+  SET address='127.0.0.1', localAddress='127.0.0.1', localSubnetMask='255.255.255.0', port=8085
+  WHERE id=1;
+
+For LAN, replace 192.168.1.50 with your LAN IP:
+
+  UPDATE psycho_auth.realmlist
+  SET address='192.168.1.50', localAddress='192.168.1.50', localSubnetMask='255.255.255.0', port=8085
+  WHERE id=1;
+
+For public hosting, replace play.example.com and 192.168.1.50:
+
+  UPDATE psycho_auth.realmlist
+  SET address='play.example.com', localAddress='192.168.1.50', localSubnetMask='255.255.255.0', port=8085
+  WHERE id=1;
+
+
+STEP 8 - CREATE A GAME ACCOUNT
+------------------------------
+Recommended for BfA/Battle.net login:
+
+Start bnetserver and worldserver, then in the WORLDSERVER console run:
+
+  bnetaccount create user@example.com StrongPassword123! true
+
+The final true tells the command to also create a linked game account.
+
+If it does not create a game account automatically, run:
+
+  bnetaccount gameaccountcreate user@example.com
+
+To list linked game accounts:
+
+  bnetaccount listgameaccounts user@example.com
+
+To make the game account GM/admin, use the game account name printed by the
+server, often something like 1#1:
+
+  account set gmlevel 1#1 3 -1
+
+If you only want a classic game account, not a Battle.net account:
+
+  account create USERNAME StrongPassword123! user@example.com
+  account set gmlevel USERNAME 3 -1
+
+BfA clients normally use Battle.net-style login, so bnetaccount is preferred.
+
+
+STEP 9 - STOP MYSQL SAFELY
+--------------------------
+From SERVER ROOT:
+
+  mysql\stop_mysql.bat
+
+Do not just kill the process unless you have to.
+
+
+IF MariaDB CREATED ITS OWN data\my.ini
+--------------------------------------
+This is normal. To replace it with the Psycho_Core portable config, run from
+SERVER ROOT:
+
+  mysql\apply_portable_myini.bat
+
+The init/start scripts already do this automatically, but this command is useful
+if you edited or reset the data folder manually.
+
+===========================================================================
+ IF THE .BAT FILES DO NOT WORK - MANUAL COMMANDS
+===========================================================================
+
+Only use these if the .bat files fail.
+
+Open CMD in SERVER ROOT.
+
+Initialize manually:
+
+  cd mysql\bin
+  mariadb-install-db.exe --datadir=../data --password=YOUR_ROOT_PASSWORD
+  copy /Y ..\my.ini ..\data\my.ini
+
+Start manually:
+
+  cd mysql\bin
+  mysqld.exe --defaults-file=../data/my.ini --console
+
+Open console manually:
+
+  cd mysql\bin
+  mysql.exe --defaults-file=../data/my.ini -uroot -p
+
+Stop manually:
+
+  cd mysql\bin
+  mysqladmin.exe --defaults-file=../data/my.ini -uroot -p shutdown
+
+===========================================================================
+ BONUS COMMANDS
+===========================================================================
+
+CHANGE MYSQL PORT
+-----------------
+Edit mysql\my.ini:
+
+  [client]
+  port=3307
+
+  [mysqld]
+  port=3307
+
+Then update worldserver.conf and bnetserver.conf database strings from 3306 to
+3307, for example:
+
+  LoginDatabaseInfo = "127.0.0.1;3307;psycho;core;psycho_auth"
+
+Restart MySQL and the servers.
+
+
+CHANGE MYSQL ROOT PASSWORD
+--------------------------
+From SERVER ROOT:
+
+  mysql\mysql_console.bat
+
+Run:
+
+  ALTER USER 'root'@'localhost' IDENTIFIED BY 'NewRootPassword123!';
+  FLUSH PRIVILEGES;
+
+
+CHANGE PSYCHO DB USER PASSWORD
+-------------------------------
+From SERVER ROOT:
+
+  mysql\mysql_console.bat
+
+Run:
+
+  ALTER USER 'psycho'@'localhost' IDENTIFIED BY 'NewPsychoPassword123!';
+  ALTER USER 'psycho'@'127.0.0.1' IDENTIFIED BY 'NewPsychoPassword123!';
+  FLUSH PRIVILEGES;
+
+Then update all database strings in worldserver.conf and bnetserver.conf.
+
+
+BACKUP ALL DATABASES
+--------------------
+From SERVER ROOT:
+
+  cmd /c "cd mysql\bin && mysqldump.exe --defaults-file=../data/my.ini -uroot -p --databases psycho_auth psycho_characters psycho_world psycho_hotfixes" > psycho_backup.sql
+
+
+RESTORE ALL DATABASES FROM BACKUP
+---------------------------------
+From SERVER ROOT:
+
+  cmd /c "cd mysql\bin && mysql.exe --defaults-file=../data/my.ini -uroot -p" < psycho_backup.sql
+
+
+BACKUP ONLY CHARACTERS
+----------------------
+From SERVER ROOT:
+
+  cmd /c "cd mysql\bin && mysqldump.exe --defaults-file=../data/my.ini -uroot -p psycho_characters" > characters_backup.sql
+
+
+RESTORE ONLY CHARACTERS
+-----------------------
+From SERVER ROOT:
+
+  cmd /c "cd mysql\bin && mysql.exe --defaults-file=../data/my.ini -uroot -p psycho_characters" < characters_backup.sql
+
+
+SHOW DATABASES / USERS
+----------------------
+From SERVER ROOT:
+
+  mysql\mysql_console.bat
+
+Then paste:
+
+  SHOW DATABASES;
+  SELECT User, Host FROM mysql.user;
+  exit
+
+
+CHECK SERVER IS LISTENING ON PORT 3306
+--------------------------------------
+
+  netstat -ano | findstr :3306
+
+
+OPEN WINDOWS FIREWALL PORTS - LAN/PUBLIC HOSTING ONLY
+-----------------------------------------------------
+Run Command Prompt as Administrator from anywhere.
+
+Worldserver game port:
+
+  netsh advfirewall firewall add rule name="Psycho_Core Worldserver 8085" dir=in action=allow protocol=TCP localport=8085
+
+BNet login port:
+
+  netsh advfirewall firewall add rule name="Psycho_Core BNet 1119" dir=in action=allow protocol=TCP localport=1119
+
+LoginREST, only if needed:
+
+  netsh advfirewall firewall add rule name="Psycho_Core LoginREST 8081" dir=in action=allow protocol=TCP localport=8081
+
+MySQL port, only if deliberately allowing remote DB access. Usually do NOT open this:
+
+  netsh advfirewall firewall add rule name="Psycho_Core MySQL 3306" dir=in action=allow protocol=TCP localport=3306
+
+
+INSTALL MYSQL AS A WINDOWS SERVICE - OPTIONAL, LESS PORTABLE
+------------------------------------------------------------
+Portable/no-service mode is recommended.
+
+A Windows service stores an absolute path. If you move the server later, remove
+and reinstall the service.
+
+From SERVER ROOT, run CMD as Administrator:
+
+  mysql\bin\mysqld.exe --install PsychoCoreMariaDB --defaults-file="%CD%\mysql\data\my.ini"
+  net start PsychoCoreMariaDB
+
+Stop service:
+
+  net stop PsychoCoreMariaDB
+
+Remove service from SERVER ROOT:
+
+  mysql\bin\mysqld.exe --remove PsychoCoreMariaDB
+
+
+RESET ROOT PASSWORD - EMERGENCY ONLY
+------------------------------------
+1. Stop MySQL/MariaDB.
+
+2. From SERVER ROOT, start without grants:
+
+  cmd /c "cd mysql\bin && mysqld.exe --defaults-file=../data/my.ini --skip-grant-tables --console"
+
+3. In another CMD from SERVER ROOT:
+
+  cmd /c "cd mysql\bin && mysql.exe --defaults-file=../data/my.ini -uroot"
+
+4. Run:
+
+  FLUSH PRIVILEGES;
+  ALTER USER 'root'@'localhost' IDENTIFIED BY 'NewRootPassword123!';
+  FLUSH PRIVILEGES;
+
+5. Stop and restart normally.
+
+===========================================================================
+ QUICK START SUMMARY
+===========================================================================
+From SERVER ROOT:
+
+  mysql\init_mysql.bat
+  mysql\start_mysql.bat
+
+Second CMD from SERVER ROOT:
+
+  mysql\setup_psycho_databases.bat
+  mysql\mysql_console.bat
+
+Then configure worldserver.conf / bnetserver.conf database strings.
+===========================================================================
+ END
+===========================================================================

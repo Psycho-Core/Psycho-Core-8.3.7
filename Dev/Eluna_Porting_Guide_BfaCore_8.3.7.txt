@@ -1,0 +1,179 @@
+================================================================================
+THE ELUNA BACKPORTING MASTER DOCUMENT FOR BFACORE-REFORGED
+A Complete Start-to-Finish Guide to Porting `tc-retail` Eluna to BfaCore-Reforged
+Game Version: Battle for Azeroth 8.3.7 (Build 35662)
+================================================================================
+
+This document outlines the complete A-to-Z process required to port and adapt 
+the modern "tc-retail" branch of the Eluna Lua Engine into the specialized 
+BfaCore-Reforged codebase. 
+
+Because BfaCore-Reforged is built upon an 8.3.7 C++ layout, the modern 
+"tc-retail" Eluna branch (which targets newer versions of retail WoW) will 
+require specific backporting adjustments. You will be adapting the modern 
+framework to work seamlessly with your 8.3.7 core structures, hooks, and systems.
+
+--------------------------------------------------------------------------------
+PHASE 1: INTEGRATION AND CMAKE PATH CONFIGURATION
+--------------------------------------------------------------------------------
+BfaCore-Reforged manages its code using CMake. To inject Eluna without breaking 
+core source isolation, it should be integrated through the custom scripts directory.
+
+1. Source Placement:
+   Navigate to your core's source root directory and drop the Eluna repository 
+   into the custom scripts path:
+   Path: `src/server/scripts/Custom/Eluna`
+
+2. CMake Registration:
+   Open the CMake configuration file for scripts:
+   File: `src/server/scripts/CMakeLists.txt`
+   
+   Scroll to the very bottom of this file and add the following line to ensure 
+   the compiler builds the new subfolder:
+   `add_subdirectory(Custom/Eluna)`
+
+3. C++ Standard Validation:
+   Open your root `CMakeLists.txt` (in the very top directory of BfaCore-Reforged).
+   Search for `CMAKE_CXX_STANDARD`. Ensure it specifies at least version 17 
+   (`set(CMAKE_CXX_STANDARD 17)`). Modern Eluna heavily relies on C++17 
+   constructs like `std::optional` and structured bindings; compiling on an 
+   older standard will cause instant syntax breaks across the engine.
+
+--------------------------------------------------------------------------------
+PHASE 2: REGISTERING THE SCRIPT LOADER BOOTSTRAP
+--------------------------------------------------------------------------------
+For BfaCore-Reforged to spin up the Lua virtual environment on startup, its 
+initialization routine must be linked directly to the core's Script Loader loop.
+
+1. Open the script management initialization file:
+   File: `src/server/game/Scripting/ScriptLoader.cpp`
+
+2. Near the top of the file, alongside the other external declarations, add 
+   the Eluna engine instantiation hook declaration:
+   `void AddSC_Eluna();`
+
+3. Scroll to the bottom of the file inside the `void AddScripts()` function block.
+   Append the call to the very bottom of the execution chain to guarantee it loads 
+   after all standard database systems are ready:
+   
+   void AddScripts()
+   {
+       // ... existing core scripts ...
+
+       AddSC_Eluna(); // Loads the Eluna Lua Engine
+   }
+
+--------------------------------------------------------------------------------
+PHASE 3: FIXING OBJECTGUID IMPLEMENTATION CONFLICTS
+--------------------------------------------------------------------------------
+This phase is where your first major compilation errors will surface. BfaCore-Reforged 
+uses an 8.3.7 class-based implementation of `ObjectGuid`. Modern `tc-retail` Eluna 
+uses a completely rewritten retail variant from newer expansions.
+
+When the compiler prints errors saying `class ObjectGuid has no member named '...'`, 
+you must map those functions manually inside Eluna's engine wrapper layer.
+
+1. Open your core's GUID header to view available accessors:
+   File: `src/server/game/Entities/Object/ObjectGuid.h`
+
+2. Modify Eluna's data extraction layout inside `Eluna/src/LuaEngine/` wrappers:
+   
+   - If Eluna calls: `guid.HasEntry()`
+     Change it to:  `guid.IsCreatureOrVehicle()` (or check your HighGuid definitions)
+
+   - If Eluna calls: `guid.GetEntry()`
+     Verify your core's method. It is usually `guid.GetEntry()`, but verify if it 
+     expects an explicit cast or specific return layout for 8.3.7.
+
+   - If Eluna calls: `guid.GetCounter()`
+     Verify if your core uses `guid.GetCounter()` or an internal counter index.
+
+--------------------------------------------------------------------------------
+PHASE 4: ALIGNING ENGINE EVENT HOOKS (SCRIPT PAYLOADS)
+--------------------------------------------------------------------------------
+Modern retail TrinityCore bundles hook parameters inside centralized structures 
+(e.g., passing a single `OnLoginInfo` structure payload). Your BfaCore-Reforged 
+uses the classic, explicit multi-parameter function signatures.
+
+You must rewrite Eluna's hook receivers to accept your core's exact variables.
+
+1. Open your core's script management framework file for reference:
+   File: `src/server/game/Scripting/ScriptMgr.h`
+
+2. Navigate to Eluna's hook bindings folder:
+   Path: `Eluna/src/Hooks/`
+
+3. Re-code mismatched functions. For instance, in `ElunaPlayerScript.cpp`:
+
+   // RETAIL LUA ENGINE FORMAT (Will fail to compile):
+   void OnLogin(Player* player, OnLoginInfo const& info) override
+   {
+       sEluna->OnLogin(player);
+   }
+
+   // REWRITTEN BFACORE-REFORGED FORMAT (Required):
+   void OnLogin(Player* player, bool firstLogin) override
+   {
+       sEluna->OnLogin(player);
+   }
+
+Go through `ElunaPlayerScript.cpp`, `ElunaCreatureScript.cpp`, and `ElunaGuildScript.cpp` 
+and line up every single overriden signature with your core's `ScriptMgr.h`.
+
+--------------------------------------------------------------------------------
+PHASE 5: REFACTORING BROKEN LUA API WRAPPERS
+--------------------------------------------------------------------------------
+Eluna registers internal C++ calls to allow Lua developers to write scripts. 
+Because method signatures for specific spells, custom menus, and items changed 
+substantially between BFA 8.3.7 and modern retail, you must repair these files.
+
+Files located in: `Eluna/src/LuaEngine/Methods/`
+
+1. Aura Management (`UnitMethods.h`):
+   Modern retail Eluna relies on an `AuraCreateInfo` payload pattern to track buffs. 
+   BfaCore-Reforged utilizes direct, explicit function arguments. Revert the 
+   wrapper call to match your core's signature: 
+   `unit->AddAura(spellId, target);`
+
+2. Gossip Interaction Framework (`PlayerMethods.h`):
+   The gossip UI handling structure was modified heavily post-BFA. If you get 
+   errors on `AddGossipMenuItemData`, adjust the wrapper block to talk directly 
+   to your core's gossip manager system:
+   `player->PlayerTalkClass->GetGossipMenu()->AddMenuItem(...)`
+
+3. Database Pipeline (`GlobalMethods.h`):
+   Verify how asynchronous SQL executions are processed in your core's 
+   `DatabaseEnv.h`. Adjust Eluna's query executions to map seamlessly into 
+   BfaCore-Reforged's database execution pools.
+
+--------------------------------------------------------------------------------
+PHASE 6: RE-LINKING THE WORLD UPDATE LOOP & RUNTIME STABILITY
+--------------------------------------------------------------------------------
+To achieve runtime stability and prevent deep memory resource allocation issues 
+or unexpected thread deadlocks, you must connect Eluna's background system update 
+handler.
+
+1. Open your world loop engine configuration:
+   File: `src/server/game/World/World.cpp`
+
+2. Inside the main update tracking routine `void World::Update(uint32 diff)`, 
+   find the custom script logic blocks or append to the end of the step chain:
+   `sEluna->Update(diff);`
+   
+   CRITICAL NOTE: Skipping this step means Lua's inner Garbage Collector (GC) 
+   will never cycle execution steps. This will lead to a rapid memory build-up, 
+   eventually resulting in a heap overflow and an instant crash.
+
+--------------------------------------------------------------------------------
+PHASE 7: RUNTIME CONFIGURATION AND DEPLOYMENT
+--------------------------------------------------------------------------------
+1. Configuration Mapping:
+   Take `eluna.conf.dist` from your cloned repository, rename it to `eluna.conf`, 
+   and copy it into your compiled server runtime execution directory (alongside 
+   `worldserver.conf`).
+
+2. Script Folder Setup:
+   Create a brand new empty folder called `lua_scripts` right next to your 
+   `worldserver` binary execution application file. Drop your custom `.lua` files 
+   directly inside this path; the server will ingest them on execution boot.
+================================================================================
