@@ -187,8 +187,9 @@ foreach(SOURCE_MODULE ${MODULES_MODULE_LIST})
   include("${CMAKE_SOURCE_DIR}/modules/${SOURCE_MODULE}/${SOURCE_MODULE}.cmake" OPTIONAL)
 endforeach()
 
-# Copy each enabled module's conf/*.conf.dist next to the server + to install.
-message(STATUS "* Module config files:")
+# Copy each enabled module's conf/*.conf.dist to <server root>/conf-backup/ (restore
+# reference only; live module keys are merged into worldserver.conf for this core).
+message(STATUS "* Module config files (-> conf-backup):")
 foreach(SOURCE_MODULE ${MODULES_MODULE_LIST})
   ModuleNameToVariable(${SOURCE_MODULE} MODULE_MODULE_VARIABLE)
   if (NOT (${MODULE_MODULE_VARIABLE} STREQUAL "disabled"))

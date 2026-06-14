@@ -222,7 +222,7 @@ IPLocationFile = ""
 #                                                                           Unix/Linux)
 #        Default:     "127.0.0.1;3306;trinity;trinity;auth"
 
-LoginDatabaseInfo = "127.0.0.1;3306;root;admin;bfa_auth"
+LoginDatabaseInfo = "127.0.0.1;3306;Psycho;Psycho;Psycho_auth"
 
 #
 #    LoginDatabase.WorkerThreads

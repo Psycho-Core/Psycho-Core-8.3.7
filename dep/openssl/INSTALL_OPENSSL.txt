@@ -1,0 +1,68 @@
+================================================================================
+  OPENSSL INSTALL INSTRUCTIONS  —  dep/openssl/
+  Psycho_Core / BfaCore-Reforged 8.3.7.35662
+================================================================================
+
+REQUIRED VERSION:  OpenSSL 3.5.x   (target 3.5.6 — the P-02 patch accepts any 3.5.x)
+WHY HERE:          cmake/macros/FindOpenSSL.cmake now searches this folder FIRST
+                   (${CMAKE_SOURCE_DIR}/dep/openssl, and dep/openssl/OpenSSL-Win64)
+                   before the C:/Program Files path, so the source tree is portable
+                   (no drive labels required).
+
+--------------------------------------------------------------------------------
+EXACT DOWNLOAD (in case OpenSSL is NOT shipped as a zip in this folder)
+--------------------------------------------------------------------------------
+Windows (recommended — prebuilt installer/binaries):
+   slproweb "Win32/Win64 OpenSSL" page (latest 3.5.x):
+   https://slproweb.com/products/Win32OpenSSL.html
+     - Win64 OpenSSL v3.5.6  ->  Win64 OpenSSL v3.5.6 (full, NOT "Light")
+       file name like:  Win64OpenSSL-3_5_6.exe   (or .msi)
+   (Use the FULL package — the "Light" package omits the headers/libs you need.)
+
+Official source (any OS, if you compile yourself):
+   https://www.openssl.org/source/        (openssl-3.5.6.tar.gz)
+   https://github.com/openssl/openssl/releases/tag/openssl-3.5.6
+
+--------------------------------------------------------------------------------
+WHAT TO UNZIP / WHERE (portable layout this folder expects)
+--------------------------------------------------------------------------------
+Goal: dep/openssl becomes a valid OPENSSL_ROOT_DIR, i.e. it must contain:
+   dep/openssl/include/openssl/ssl.h     <- headers
+   dep/openssl/lib/                      <- libssl / libcrypto import libs
+        (the macro also checks lib/VC, lib/VC/x64, lib/VC/x64/MD, lib/VC/x64/MT)
+   dep/openssl/bin/                      <- libssl-3-x64.dll / libcrypto-3-x64.dll (runtime)
+
+Option A — Windows installer (recommended):
+   1. Run Win64OpenSSL-3_5_6.exe and install (e.g. to its default
+      C:\Program Files\OpenSSL-Win64) — OR install anywhere.
+   2. EITHER copy the installed "include", "lib", "bin" folders INTO dep/openssl/
+      (giving dep/openssl/include, dep/openssl/lib, dep/openssl/bin)
+      OR copy the whole install folder in as dep/openssl/OpenSSL-Win64
+      (the macro searches that sub-path too).
+   3. (If you'd rather not copy, the macro still finds the default
+      C:/Program Files/OpenSSL-3_5_6-Win64 install — but copying into dep/ keeps it portable.)
+
+Option B — already have a zip of the build:
+   Extract so that dep/openssl/include/openssl/ssl.h and dep/openssl/lib/*.lib exist.
+
+--------------------------------------------------------------------------------
+LINUX shortcut (no dep/openssl needed)
+--------------------------------------------------------------------------------
+   Debian/Ubuntu:  sudo apt install libssl-dev
+   The Find macro falls back to /usr if dep/openssl is empty.
+
+--------------------------------------------------------------------------------
+RUNTIME REMINDER (Windows)
+--------------------------------------------------------------------------------
+At launch the worldserver/bnetserver need the OpenSSL DLLs next to the .exe:
+   libssl-3-x64.dll  and  libcrypto-3-x64.dll
+Copy them from dep/openssl/bin (or the OpenSSL install) into your SERVER ROOT.
+
+--------------------------------------------------------------------------------
+HOW TO CONFIRM CMAKE FOUND IT
+--------------------------------------------------------------------------------
+During `cmake ..` you should see OpenSSL detected as version 3.5.x. If it fails:
+   - Make sure dep/openssl/include/openssl/ssl.h EXISTS.
+   - Make sure the .lib files are present under dep/openssl/lib (or lib/VC/x64/...).
+   - Or pass a hint:  -DOPENSSL_ROOT_DIR=dep/openssl   (relative path = portable)
+================================================================================

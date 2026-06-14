@@ -193,3 +193,93 @@ CRITICAL NOTE: Must record any changes to code with date and time stamps. NO LOC
 - `modules` builds successfully, including `mod-psychobot`.
 - `scripts` progressed significantly but is currently blocked by a non-PCH include issue in `EasternKingdoms/BastionOfTwilight/bastion_of_twilight.h` where `Position` is used without including `Position.h`.
 - Current blocker: `static const Position Positions[2]` in `bastion_of_twilight.h`.
+
+## 2026-06-14
+
+### Config: database default credentials (research session)
+- Edited `src/server/worldserver/worldserver.conf.dist`: changed the 4 DB connection
+  defaults from `root;admin;bfa_*` to `Psycho;Psycho;Psycho_*`:
+  - LoginDatabaseInfo     = "127.0.0.1;3306;Psycho;Psycho;Psycho_auth"
+  - WorldDatabaseInfo     = "127.0.0.1;3306;Psycho;Psycho;Psycho_world"
+  - CharacterDatabaseInfo = "127.0.0.1;3306;Psycho;Psycho;Psycho_characters"
+  - HotfixDatabaseInfo    = "127.0.0.1;3306;Psycho;Psycho;Psycho_hotfixes"
+- Edited `src/server/bnetserver/bnetserver.conf.dist`: LoginDatabaseInfo ->
+  "127.0.0.1;3306;Psycho;Psycho;Psycho_auth".
+- NOTE: user wrote "Pscyho_auth" (typo); used "Psycho_auth" for consistency.
+
+### CMake: OpenSSL portability
+- Edited `cmake/macros/FindOpenSSL.cmake`: added bundled portable search roots FIRST in
+  `_OPENSSL_ROOT_PATHS` (both 64/32-bit): `${CMAKE_SOURCE_DIR}/dep/openssl` and
+  `${CMAKE_SOURCE_DIR}/dep/openssl/OpenSSL-Win64` (Win32 variant for 32-bit), keeping the
+  existing `C:/Program Files/OpenSSL-3_5_6-Win64` etc. fallbacks. Makes source tree portable.
+- (Boost FindBoost.cmake + MySQL FindMySQL.cmake already searched dep/ — no edit needed.)
+
+### dep/ install instruction files added (no core code change)
+- Added `dep/boost/INSTALL_BOOST.txt` — exact Boost 1.83.0 version, what to unzip into
+  dep/boost, and download/compile-from-source fallback instructions.
+- Added `dep/openssl/INSTALL_OPENSSL.txt` — exact OpenSSL 3.5.x (3.5.6) Win64 package, what to
+  unzip into dep/openssl, and download/install fallback instructions.
+
+### Documentation (Dev/) added this session (no core code change)
+- PREFLIGHT_AUDIT_AND_CONFIG_REPORT.md, PORTABLE_SERVER_SETUP_GUIDE.md,
+  BUILD_GUIDE_WINDOWS.md, BUILD_GUIDE_LINUX.md, SERVER_QUICKSTART_CHECKLIST.md,
+  DEEP_DIVE_Eluna_SD3_Modules_Report.md.
+
+### Research-only items (NO core code changed)
+- Downloaded Eluna `tc-retail` branch to `Dev/Eluna-tc-retail/` (204 files, reference only).
+- Verified: modules/ left at top-level (move evaluated, declined as risky/no-benefit).
+- Verified: ScriptDev3 (MaNGOS, <=MoP) is incompatible with this TrinityCore-based core.
+
+### Code-change scope this session
+- ONLY 3 core files edited (all config/cmake): worldserver.conf.dist, bnetserver.conf.dist,
+  FindOpenSSL.cmake. No .cpp/.h/scripts/modules source touched. No build run.
+
+### Config: mod-psychobot conf approach (revised per user)
+- User wanted module conf at <server root>/conf/. Investigated: this core's ConfigMgr
+  (src/common/Configuration/Config.cpp) loads ONLY worldserver.conf (LoadInitial); there is NO
+  module-config directory scanner. So a standalone conf/ file would NOT be read.
+- Per user decision: MERGED all mod-psychobot keys into worldserver.conf.dist (27 keys) so they
+  load natively; repurposed the build's module-conf drop as a RESTORE BACKUP.
+- Edited `src/server/worldserver/worldserver.conf.dist`: appended a MOD-PSYCHOBOT block with all
+  27 Psychobot.* keys (Enable, FollowDistance, RandomBots.*, ActiveAlone*, SmartScale*,
+  DisabledWithoutRealPlayer/LoginDelay/LogoutDelay, Gear*, AhBot.*).
+- Edited `cmake/macros/ConfigureModules.cmake`: CopyModuleConfig now drops module *.conf.dist to
+  <server root>/conf-backup/ (runtime bin/<cfg>/conf-backup + install conf-backup) instead of
+  configs/modules/. Reference/restore copy only.
+- Edited `modules/CMakeLists.txt`: updated the conf-copy comment + status message to "-> conf-backup".
+- Edited `modules/mod-psychobot/conf/mod_psychobot.conf.dist`: header note now states keys are
+  merged into worldserver.conf and this file is a conf-backup restore reference.
+- NOTE: during this edit two files were briefly mangled by a sed replace and were RESTORED from a
+  fresh upstream clone, then re-edited cleanly with the file editor. Final state verified clean
+  (modules/CMakeLists.txt 221 lines, conf.dist 86 lines).
+
+### Updated session code-change scope (config/cmake only; no C++ source, no build)
+1. src/server/worldserver/worldserver.conf.dist  (DB defaults + merged psychobot keys)
+2. src/server/bnetserver/bnetserver.conf.dist     (DB default)
+3. cmake/macros/FindOpenSSL.cmake                 (dep/openssl portable search)
+4. cmake/macros/ConfigureModules.cmake            (module conf -> conf-backup)
+5. modules/CMakeLists.txt                          (comment/message wording)
+6. modules/mod-psychobot/conf/mod_psychobot.conf.dist (header note)
+Plus docs: dep/boost/INSTALL_BOOST.txt, dep/openssl/INSTALL_OPENSSL.txt, Dev guides.
+
+### Final verification pass (2026-06-14)
+- Verified all 6 intended config/cmake edits intact and clean (content checks [1]-[9] passed):
+  1. worldserver.conf.dist  : 4 DB lines = Psycho;Psycho;Psycho_* ; 27 Psychobot.* keys merged.
+  2. bnetserver.conf.dist   : LoginDatabaseInfo = Psycho;Psycho;Psycho_auth.
+  3. FindOpenSSL.cmake      : dep/openssl portable roots present (6 refs).
+  4. ConfigureModules.cmake : module conf -> conf-backup (7 refs).
+  5. modules/CMakeLists.txt : conf-backup comment/message (221 lines, clean).
+  6. mod_psychobot.conf.dist: header note (86 lines, clean).
+- Verified dep/boost/INSTALL_BOOST.txt and dep/openssl/INSTALL_OPENSSL.txt present.
+- IMPORTANT CLARIFICATION (diff vs fresh upstream clone):
+  A diff against a freshly-cloned upstream showed 3 script .cpp files differing
+  (TombOfSargeras/tomb_of_sargeras.cpp, VaultOfTheWardens/boss_cordana_felsong.cpp,
+  Pandaria/ThroneOfThunder/boss_jin_rokh_breaker.cpp). These are NOT changes from this session.
+  They are the PRIOR non-PCH build fixes already recorded earlier in this changelog
+  (#include "InstanceScript.h", getVictim()->GetVictim(), GetGUIDLow()->GetGUID().GetCounter(),
+  EMOTE_STATE field access). The upstream repo HEAD has also advanced (8f0701c -> f891117),
+  so the fresh clone is a different commit; the delta reflects upstream movement + prior fixes,
+  not this session's work. This session touched ONLY the 6 config/cmake files above.
+- Snapshot note: Dev/Eluna-tc-retail lost its 4 .github/workflows files to a snapshot drop;
+  re-restored from upstream -> 204/204 files complete again.
+- No build run this session.

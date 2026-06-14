@@ -19,6 +19,7 @@
 #include "AreaTrigger.h"
 #include "AreaTriggerAI.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "ScriptedCreature.h"
 #include "vault_of_the_wardens.h"
 
@@ -425,7 +426,7 @@ public:
                     events.RescheduleEvent(EVENT_KNOCKDOWN_KICK, 16000);
                     break;
                 case EVENT_KNOCKDOWN_KICK_TRIGGER:
-                    if (Unit* vict = me->GetVictim())
+                    if (Unit* vict = me->getVictim())
                         if (vict->HasAura(SPELL_ELUNES_LIGHT_OVERRIDE))
                             DoCast(vict, SPELL_TURN_KICK);
                     break;

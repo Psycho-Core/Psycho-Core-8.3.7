@@ -96,3 +96,57 @@ Action:
 - Built explicit non-worldserver targets only.
 - Fixed multiple core/API/non-PCH issues.
 - Stopped at current scripts blocker and did not build worldserver.
+
+## 2026-06-14
+
+User goal (this session):
+- Pre-build prep + research only; do NOT build (CRITICAL_BUILD_RULE in effect).
+- Research Eluna porting; download recommended Eluna into Dev/.
+- Assess ScriptDev3 (SD3) value; assess moving modules/ into src/server/.
+- Change DB defaults to Psycho creds; verify mod-psychobot conf location.
+- Make MySQL/OpenSSL/Boost point to dep/ AND Windows paths (portable source).
+- Provide portable setup guide + Windows + Linux build guides + helpful docs.
+- Add Boost/OpenSSL install instructions inside dep/ folders with exact versions.
+- Keep changelog.txt + chatlog.txt up to date.
+
+Actions taken:
+- Toolchain pre-flight audit: CMake 4.3.2 / C++11 / Boost 1.83 / OpenSSL 3.5.x / MariaDB 11.8.6.
+- Static pre-build scan: no blocking structural issues (1280 AddSC_, loaders + genrev present,
+  mod-psychobot self-consistent). No compile run.
+- Eluna: confirmed NO official BFA fork (only ElunaTrinityWotlk). Downloaded tc-retail to
+  Dev/Eluna-tc-retail (verified complete 204/204 files vs remote). Fact-checked user's guide
+  (C++17 wrong -> C++11; wrong paths/file names; missing Lua dep).
+- SD3: MaNGOS engine, max client MoP 5.4.8, incompatible API -> NOT worth it. Skip.
+- modules/ move: low-med difficulty, can break CMake ordering/paths, zero functional gain ->
+  recommended leaving at top level. User agreed; left alone.
+- DB defaults changed to Psycho;Psycho;Psycho_* in worldserver + bnetserver conf.dist.
+- mod-psychobot conf: verified it installs to <server root>/configs/modules/ and is read there.
+- MySQL/Boost already portable (dep/ + Windows). OpenSSL FindOpenSSL.cmake edited to add
+  dep/openssl portable roots first, then Windows fallbacks.
+- Added dep/boost/INSTALL_BOOST.txt and dep/openssl/INSTALL_OPENSSL.txt with exact versions +
+  unzip/install/compile fallback instructions.
+- Wrote Dev guides: PREFLIGHT_AUDIT_AND_CONFIG_REPORT, PORTABLE_SERVER_SETUP_GUIDE,
+  BUILD_GUIDE_WINDOWS, BUILD_GUIDE_LINUX, SERVER_QUICKSTART_CHECKLIST, DEEP_DIVE_Eluna_SD3_Modules.
+- Verified core code untouched except the 3 config/cmake files above. No build executed.
+
+Pending / next:
+- Await user's next instruction (build or further prep).
+
+## 2026-06-14 (mod-psychobot conf revision)
+- User clarified: wanted mod_psychobot conf at server root /conf.
+- Found this core reads only worldserver.conf (no module-conf scanner).
+- User chose: merge keys into worldserver.conf; turn the conf drop into conf-backup (restore safety).
+- Done: merged 27 Psychobot.* keys into worldserver.conf.dist; ConfigureModules.cmake now ships the
+  module .conf.dist to <server root>/conf-backup/; updated comments/headers.
+- Two files were sed-mangled mid-edit; restored from upstream + re-edited cleanly. Verified.
+- No build run.
+
+## 2026-06-14 (final verification)
+- User requested final verification + log update.
+- Verified all 6 config/cmake edits intact/clean; dep/ install files present; Eluna restored 204/204.
+- Clarified: a fresh-upstream diff flagged 3 script .cpp files, but those are PRIOR-session non-PCH
+  build fixes (+ upstream advancing 8f0701c->f891117), NOT this session's edits. This session
+  changed ONLY the 6 config/cmake files (DB defaults, OpenSSL dep path, module conf->conf-backup,
+  merged psychobot keys, related comments).
+- No build executed.
+- Awaiting next instruction.

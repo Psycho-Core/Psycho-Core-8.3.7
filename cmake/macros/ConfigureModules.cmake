@@ -88,22 +88,25 @@ function(IsDynamicLinkingModulesRequired variable)
   set(${variable} ${IS_REQUIRED} PARENT_SCOPE)
 endfunction()
 
-# Copies a module's <name>.conf.dist into the runtime/install config locations,
-# mirroring how worldserver.conf.dist is copied.
+# Copies a module's <name>.conf.dist into a BACKUP/restore location.
+# Psycho_Core layout: the live module keys are MERGED into worldserver.conf (this core's
+# ConfigMgr only loads worldserver.conf), so the module's own .conf.dist is shipped to:
+#   <server root>/conf-backup/mod_psychobot.conf.dist
+# as a pristine reference users can restore from if they break their worldserver.conf.
 function(CopyModuleConfig configFilePath)
   if (WIN32)
     add_custom_command(TARGET modules POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/$<CONFIG>/configs/modules
-      COMMAND ${CMAKE_COMMAND} -E copy "${configFilePath}" ${CMAKE_BINARY_DIR}/bin/$<CONFIG>/configs/modules/)
+      COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/$<CONFIG>/conf-backup
+      COMMAND ${CMAKE_COMMAND} -E copy "${configFilePath}" ${CMAKE_BINARY_DIR}/bin/$<CONFIG>/conf-backup/)
   else()
     add_custom_command(TARGET modules POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/configs/modules
-      COMMAND ${CMAKE_COMMAND} -E copy "${configFilePath}" ${CMAKE_BINARY_DIR}/bin/configs/modules/)
+      COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/conf-backup
+      COMMAND ${CMAKE_COMMAND} -E copy "${configFilePath}" ${CMAKE_BINARY_DIR}/bin/conf-backup/)
   endif()
 
   if (UNIX)
-    install(FILES "${configFilePath}" DESTINATION "${CONF_DIR}/modules")
+    install(FILES "${configFilePath}" DESTINATION "${CONF_DIR}/../conf-backup")
   elseif (WIN32)
-    install(FILES "${configFilePath}" DESTINATION "${CMAKE_INSTALL_PREFIX}/configs/modules")
+    install(FILES "${configFilePath}" DESTINATION "${CMAKE_INSTALL_PREFIX}/conf-backup")
   endif()
 endfunction()

@@ -108,10 +108,10 @@ LogsDir = ".\Logs"
 #    Don't open port on firewall to external connections (it belongs to mysql, not to wow server).
 #    The username you choose must have permisions to create/alter/rename tables.
 
-LoginDatabaseInfo     = "127.0.0.1;3306;root;admin;bfa_auth"
-WorldDatabaseInfo     = "127.0.0.1;3306;root;admin;bfa_world"
-CharacterDatabaseInfo = "127.0.0.1;3306;root;admin;bfa_characters"
-HotfixDatabaseInfo    = "127.0.0.1;3306;root;admin;bfa_hotfixes"
+LoginDatabaseInfo     = "127.0.0.1;3306;Psycho;Psycho;Psycho_auth"
+WorldDatabaseInfo     = "127.0.0.1;3306;Psycho;Psycho;Psycho_world"
+CharacterDatabaseInfo = "127.0.0.1;3306;Psycho;Psycho;Psycho_characters"
+HotfixDatabaseInfo    = "127.0.0.1;3306;Psycho;Psycho;Psycho_hotfixes"
 
 #
 #    LoginDatabase.WorkerThreads
@@ -4319,3 +4319,51 @@ Solocraft.Raid40 = 40
 
 #
 ###################################################################################################
+
+###################################################################################################
+# MOD-PSYCHOBOT SETTINGS (merged into worldserver.conf so the keys load natively)
+#
+# These keys are read by mod-psychobot via sConfigMgr from THIS file. A reference copy of the
+# original mod_psychobot.conf.dist is also placed in <server root>/conf-backup/ for restore.
+# (This core's ConfigMgr loads only worldserver.conf, so module keys must live here to take effect.)
+###################################################################################################
+
+# Master on/off switch for the Psychobot system (0 = disabled).
+Psychobot.Enable = 0
+# Yards a bot trails its master.
+Psychobot.FollowDistance = 2.0
+
+# --- Stage 3: world population + scaling ---
+Psychobot.RandomBots.Enable = 0
+Psychobot.RandomBots.Min = 50
+Psychobot.RandomBots.Max = 200
+Psychobot.RandomBots.MinLevel = 1
+Psychobot.RandomBots.MaxLevel = 120
+Psychobot.SyncLevelWithPlayers = 0
+
+# --- BotActiveAlone / SmartScale (CPU scaling) ---
+Psychobot.ActiveAlone = 100
+Psychobot.ActiveAloneDuration = 120
+Psychobot.ActiveAloneRadius = 200.0
+Psychobot.SmartScale = 1
+Psychobot.SmartScaleDiffFloor = 50
+Psychobot.SmartScaleDiffCeiling = 150
+
+# --- DisabledWithoutRealPlayer ---
+Psychobot.DisabledWithoutRealPlayer = 1
+Psychobot.LoginDelay = 0
+Psychobot.LogoutDelay = 0
+
+# --- Gear ---
+Psychobot.GearQualityLimit = 3
+Psychobot.PreferClassArmorType = 1
+Psychobot.EquipmentPersistence = 1
+Psychobot.EquipmentPersistenceLevel = 0
+
+# --- Stage 4: group content + extras ---
+Psychobot.AhBot.Enable = 0
+Psychobot.AhBot.IntervalSeconds = 3600
+Psychobot.AhBot.MaxListingsPerCycle = 20
+Psychobot.AhBot.MinItemLevel = 1
+Psychobot.AhBot.MaxQuality = 4
+Psychobot.AhBot.PriceMultiplier = 1.5

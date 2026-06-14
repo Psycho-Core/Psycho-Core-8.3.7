@@ -7,14 +7,23 @@ SET(_OPENSSL_ROOT_HINTS
   "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\OpenSSL (64-bit)_is1;Inno Setup: App Path]"
 )
 
+# Psycho_Core portable OpenSSL search.
+# Order: (1) BUNDLED dep/openssl (portable, relative to repo root via CMAKE_SOURCE_DIR
+# so it works from any drive/path with no drive label), then (2) common Windows
+# install locations. Drop/extract an OpenSSL 3.5.x build into dep/openssl to make
+# the whole source tree portable.
 IF(PLATFORM EQUAL 64)
   SET(_OPENSSL_ROOT_PATHS
+    "${CMAKE_SOURCE_DIR}/dep/openssl"
+    "${CMAKE_SOURCE_DIR}/dep/openssl/OpenSSL-Win64"
     "C:/Program Files/OpenSSL-3_5_6-Win64"
     "C:/OpenSSL-Win64/"
     "C:/OpenSSL/"
   )
 ELSE()
   SET(_OPENSSL_ROOT_PATHS
+    "${CMAKE_SOURCE_DIR}/dep/openssl"
+    "${CMAKE_SOURCE_DIR}/dep/openssl/OpenSSL-Win32"
     "C:/OpenSSL/"
   )
 ENDIF()

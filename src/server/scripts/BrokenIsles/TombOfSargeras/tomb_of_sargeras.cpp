@@ -19,6 +19,7 @@
 #include "AreaTriggerAI.h"
 #include "ScriptedCreature.h"
 #include "ScriptMgr.h"
+#include "InstanceScript.h"
 #include "SpellAuras.h"
 #include "SpellScript.h"
 #include "tomb_of_sargeras.h"
@@ -157,7 +158,7 @@ struct npc_tos_kadghar_1 : ScriptedAI
 
                     add->CombatStop();
                     add->CastSpell(introPositions[i + 1], SPELL_INTRO_TELEPORT, false);
-                    add->SetEmoteState(EMOTE_STATE_NONE);
+                    add->SetUInt32Value(UNIT_FIELD_EMOTE_STATE, EMOTE_ONESHOT_NONE);
                     add->AddDelayedEvent(1000, [add] {add->SetFacingTo(6.25f); });
                 }
 
@@ -178,10 +179,10 @@ struct npc_tos_kadghar_1 : ScriptedAI
 
             for (auto goid : { GO_INTRODESTROY_1, GO_INTRODESTROY_2, GO_INTRODESTROY_3 })
                 if (GameObject* go = me->GetMap()->GetGameObject(instance->GetGuidData(goid)))
-                    go->SetGoState(GO_STATE_ACTIVE);
+                    go->SetByteValue(GAMEOBJECT_FIELD_BYTES_1, 0, 0);
 
             if (GameObject* go = me->GetMap()->GetGameObject(instance->GetGuidData(GO_GOROTH_GATES)))
-                go->SetGoState(GO_STATE_READY);
+                go->SetByteValue(GAMEOBJECT_FIELD_BYTES_1, 0, 1);
 
 
             me->AddDelayedEvent(2000, [this]() -> void
@@ -202,7 +203,7 @@ struct npc_tos_kadghar_1 : ScriptedAI
 
                         add->CombatStop();
                         add->CastSpell(introPositions[i + 1], SPELL_INTRO_TELEPORT, false);
-                        add->SetEmoteState(EMOTE_STATE_NONE);
+                        add->SetUInt32Value(UNIT_FIELD_EMOTE_STATE, EMOTE_ONESHOT_NONE);
                         add->AddDelayedEvent(1000, [add] {add->SetFacingTo(6.25f); });
                     }
 
@@ -210,9 +211,9 @@ struct npc_tos_kadghar_1 : ScriptedAI
 
                 if (GameObject* go = me->GetMap()->GetGameObject(instance->GetGuidData(GO_INQUISITION_DOOR_INTRO)))
                 {
-                    go->SetGoState(GO_STATE_ACTIVE);
+                    go->SetByteValue(GAMEOBJECT_FIELD_BYTES_1, 0, 0);
                     go->AddDelayedEvent(4000, [go] {
-                        go->SetGoState(GO_STATE_READY);
+                        go->SetByteValue(GAMEOBJECT_FIELD_BYTES_1, 0, 1);
                     });
                 }
 
