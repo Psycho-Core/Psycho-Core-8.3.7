@@ -1,4 +1,4 @@
-# Psycho_Core / BfaCore-Reforged — WINDOWS Build Guide (step-by-step)
+# Psycho-Core 8.3.7.35662 — WINDOWS Build Guide (step-by-step)
 **Target:** Windows x64 · VS 2019/2022 · CMake 4.3.2 · Boost 1.83 · OpenSSL 3.5.x · MariaDB 11.8.6
 **Build:** 8.3.7.35662 · Paths shown relative to the repo root where possible.
 
@@ -9,22 +9,37 @@
 - **CMake ≥ 4.3.2** (cmake.org) — add to PATH.
 - **Git** (for cloning + revision data).
 - **MariaDB 11.8.6** (x64) — either install the server, or just grab the client package.
-- **Boost 1.83** (prebuilt x64 msvc, or build from source).
+- **Boost 1.83** — easiest: use the pre-compiled packs on the repo's **Releases** tab
+  (tag **V1.0-Boost**, "Pre-compiled Boost + EXE"). vc143/x64/1.83. See step 2.
 - **OpenSSL 3.5.x** Win64 (slproweb.com offers 3.5.6 — the P-02 patch accepts 3.5.x).
 
 ## 1. Get the source
 ```
 git clone https://github.com/Psycho-Core/Psycho-Core-8.3.7
 ```
-(or your Titans-Project/BfaCore-Reforged). Clone anywhere — paths are portable.
+Clone anywhere — paths are portable.
 
 ## 2. Provide the dependencies (portable way)
 Drop/extract into the repo's dep/ folders so the source tree stays portable:
 - MariaDB client  -> `dep/mysql/`  (so you get dep/mysql/include, /lib, /bin
   OR dep/mysql/mariadb-11.8.6-winx64/{include,lib,bin})
 - OpenSSL 3.5.x   -> `dep/openssl/` (dep/openssl/include, /lib  OR dep/openssl/OpenSSL-Win64/)
-- Boost 1.83      -> `dep/boost/`  OR set env BOOST_ROOT, OR install to C:/local/boost_1_83_0
+- Boost 1.83      -> `dep/boost/`  (see Boost sub-steps below)
 (If you prefer system installs in C:\Program Files, the Find macros also detect those.)
+
+### 2a. Boost — extract the pack (REQUIRED before CMake; it can't read a zip)
+- **Normal/Release build (recommended):** in `dep/boost\`, right-click
+  **`boost_dep_release.zip`** (~26 MB, shipped in the repo) -> **Extract Here**.
+  You must end up with `dep/boost/boost/version.hpp` and `dep/boost/stage/lib/`.
+- **Debug build:** download **`boost_dep.zip`** (~280 MB) from the **Releases** tab
+  (tag **V1.0-Boost**) and extract it into `dep/boost\` instead -> you get
+  `dep/boost/boost/` + `dep/boost/lib64-msvc-14.3/`.
+- **Trouble / corrupt zip:** download **`boost_1_83_0-msvc-14.3-64.exe`** from the same
+  Releases tab, run it, then copy its `boost\` + `lib64-msvc-14.3\` into `dep/boost\`
+  (or set env `BOOST_ROOT`). Or build from source — see `dep/boost/INSTALL_BOOST.txt`.
+- **Nesting check:** `dep/boost/boost/version.hpp` must exist at THAT path (not
+  `dep/boost/boost_1_83_0/boost/...` — if so, move the inner folders up one level).
+- Full detail: **`dep/boost/INSTALL_BOOST.txt`**.
 
 ## 3. Configure with CMake (out-of-source build dir INSIDE the repo)
 ```
@@ -41,7 +56,9 @@ cmake .. -G "Visual Studio 17 2022" -A x64 -DTOOLS=1 -DSCRIPTS=static -DMODULES=
   (the macros also auto-search dep/ — these are only fallbacks).
 
 ## 4. Build
-Open `build/BfaCore.sln` in Visual Studio → set configuration **RelWithDebInfo** (or Release) →
+Open the generated `.sln` in `build/` in Visual Studio (note: the upstream CMake still names the
+solution `BfaCore.sln` unless the project name is changed in the build system) → set configuration
+**RelWithDebInfo** (or Release) →
 Build Solution. (Or from cmd: `cmake --build . --config RelWithDebInfo`.)
 > First build can take 30-90 min. BUILD ONCE — if it fails, stop, report the error, fix, wait.
 

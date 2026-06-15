@@ -1,4 +1,4 @@
-# Psycho_Core / BfaCore — Pre-Build Audit, Config & Portability Report
+# Psycho-Core 8.3.7.35662 — Pre-Build Audit, Config & Portability Report
 **Date:** 2026-06-14 · Tasks 1-6 results + verification. Code-change log included.
 
 ================================================================================
@@ -7,7 +7,7 @@
 | Component | Required by core | Where it's checked | Status |
 |---|---|---|---|
 | CMake | **4.3.2** (`cmake_minimum_required(VERSION 4.3.2)`) | root CMakeLists.txt | ⚠️ very new — install CMake ≥4.3.2 |
-| Project | `project(BfaCore)` | root | ok |
+| Project | `project(BfaCore)` *(upstream build-system name; left as-is so the build isn't broken)* | root | ok |
 | C++ standard | **C++11** (`-std=c++11`) | ConfigureBaseTargets.cmake | ok (matches Eluna too) |
 | Boost | **1.83** floor (parses BOOST_VERSION) | cmake/macros/FindBoost.cmake | portable: dep/boost + C:/local/boost_1_83_0 |
 | OpenSSL | **3.5.x** (expected str 1.1.1 baseline, accepts 3.5.x) | cmake/macros/FindOpenSSL.cmake | now portable: dep/openssl + Win path |

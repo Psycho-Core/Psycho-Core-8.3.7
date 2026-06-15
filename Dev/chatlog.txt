@@ -150,3 +150,79 @@ Pending / next:
   merged psychobot keys, related comments).
 - No build executed.
 - Awaiting next instruction.
+
+## 2026-06-14 (.build.info guide)
+- User asked for a doc on rebuilding a missing .build.info (tool + manual).
+- Created Dev/REBUILD_BUILD_INFO_GUIDE.md and copied to docs/. No code change, no build.
+
+## 2026-06-15 (client/data source hunt)
+- User asked: is there another way to get the client data, and for a document listing all clients
+  + repacks/torrents that might have the data they need.
+- Searched web (clients, extracted-data packs, torrents, github mirrors). Verified two GitHub repos
+  LIVE: CrimsonDespair/BFA and zTerragor/Legends-of-Azeroth-BFA (same 35662 lineage as Psycho-Core).
+- Breakthrough: CrimsonDespair/BFA README lists a pre-extracted ClientData 3.73GB pack
+  (maps/vmaps/dbc/gt, all locales, build 35662) - bypasses extraction entirely.
+- Created Dev/CLIENT_DATA_SOURCES_REPORT.md with prioritized routes + honest per-link status.
+  No code change, no build.
+
+## 2026-06-15 (torrent/official-server deep sweep)
+- User: find ALL clients incl when current, search torrent websites, find every torrent possible,
+  at least one must be REAL, then update the document and report.
+- Ran torrent/archive/official-server searches. Read pages directly:
+  * WoW Circle OFFICIAL forum (t=1066479): REAL 58.9GB client torrent, 2 mirrors + 44MB conn files. VERIFIED LIVE.
+  * Firestorm official BFA client (news/post/471 + client guide): official full client via torrent. LIVE.
+  * MttAI-dev/MTT-WoW-BfA: live 8.3.7 source repo (16 stars). LIVE.
+  * Current Reddit thread (Dec 2025) of people getting this exact client - 4 endorsed links.
+- Correction made: archive.org "BFA full map file" is a WALLPAPER IMAGE, not server data - flagged as dead end.
+- Updated Dev/CLIENT_DATA_SOURCES_REPORT.md (new 2A, 5B, 6B; rewrote 7 + 8). No code change, no build.
+- Net result: TWO independent verified-live data routes now documented (WoW Circle torrent + pre-extracted pack).
+
+## 2026-06-15 (torrent-index deep dive, 3rd pass)
+- User: focus PRIMARILY on torrent websites, find every torrent possible, at least one must be REAL,
+  update the document, report back.
+- Searched torrent indexes directly (1337x search + Sineater213 profile + a torrent page, archive.org
+  wow_clients + wow_battle-for-azeroth, getMaNGOS torrent directory, Firestorm magnet posts).
+- Verified-real for BFA build: WoW Circle 58.9GB official torrent (best). Firestorm real public magnets
+  (format confirmed via 10.2.7), BFA magnet launcher-gated.
+- Honest negatives: Sineater213 57GB BFA torrent delisted from live profile -> no magnet fabricated;
+  a guessed 1337x ID hit an unrelated TV episode; archive.org torrent collections + getMaNGOS dir are
+  real but max out at MoP/WotLK/Cata (no BFA); 1337x live search shows only BFA soundtracks now.
+- Added section 5C (torrent-website sweep) + update notes to Dev/CLIENT_DATA_SOURCES_REPORT.md.
+  No code change, no build.
+
+## 2026-06-15 (Boost verification)
+- User ran `dir /s /b C:\local\*.lib | findstr boost` and the two header checks.
+- Confirmed Boost is complete & toolchain-correct: 1.83.0 / vc143 / x64 / static / all components
+  Release+Debug. Headers present (version.hpp ok). Nothing missing - no recompile needed.
+- Told user exactly what to zip into dep/boost: boost\ (headers) + lib64-msvc-14.3\ (all libs,
+  Release+Debug = bulletproof). Gave 7-Zip + Explorer commands, target layout, nesting warning.
+- Updated dep/boost/INSTALL_BOOST.txt with the verified pre-built pack details. No code change, no build.
+
+## 2026-06-15 (Boost distribution decision)
+- 7-Zip lived at D:\Blakes_SHIT\Programs\7-Zip\ (user pointed to 7zFM.exe GUI; correct CLI = 7z.exe).
+- Full Release+Debug zip = 280MB (too big for GitHub in-tree 100MB limit). Release-only zip
+  (boost\ + stage\lib\) = 26MB.
+- Plan agreed: include boost_dep_release.zip (26MB) inside dep/boost\; publish boost_dep.zip (280MB)
+  as a GitHub Release asset for Debug builds.
+- Updated dep/boost/INSTALL_BOOST.txt accordingly (two-pack, extract-in-place, nesting check).
+  No code change, no build.
+
+## 2026-06-15 (Boost release tab + docs)
+- User hit "25 MB allowed" uploading 275MB -> that's the COMMENT/description box limit, not the
+  Release ASSET limit (2GB). Told them to use the "Attach binaries" box at the bottom of the
+  Draft-release page; fallback = external host or skip Debug pack.
+- User decided to publish on Releases tag V1.0-Boost, title "Pre-compiled Boost + EXE", with
+  boost_dep_release.zip + boost_dep.zip + boost_1_83_0-msvc-14.3-64.exe.
+- Updated dep/boost/INSTALL_BOOST.txt (3 packs, extract steps, issue-fallbacks, from-source build),
+  Dev/BUILD_GUIDE_WINDOWS.md (new step 2a), and created Dev/RELEASE_V1.0-Boost_description.md with a
+  ready-to-paste release description. No code change, no build.
+
+## 2026-06-15 (rebrand docs to Psycho-Core)
+- User (caps): remove BfaCore-Reforged from documents, want only Psycho-Core 8.3.7.35662.
+- Asked scope: user chose BRANDING-ONLY + leave build system alone.
+- Renamed all doc titles/headers + dep readme headers to "Psycho-Core 8.3.7.35662". Cleaned the
+  clone line, reframed the BfaCore.sln / project(BfaCore) mentions as upstream build-system names.
+- Kept factual external references (download links, real repo names, the two Psycho-vs-BfaCore
+  comparison reports) since renaming them would break links / make docs false.
+- Verified: no "Psycho_Core / BfaCore" or "BfaCore-Reforged" branding remains in the guides/readmes.
+  No code change, no build.

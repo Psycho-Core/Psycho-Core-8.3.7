@@ -334,6 +334,6 @@ Despite having BFA zone directories, **none** of the six repositories fully impl
 - **Heart of Azeroth / Azerite Armor** questlines and systems
 - **Crucible of Storms** raid
 - **Vision of N'Zoth** Horrific Visions mechanics
-- **Full class spell systems** — NOTE (CORRECTED 2026-06-14): the Psycho-Core base actually ships a COMPLETE `scripts/Spells/` layer (20 cpp, ~2.2 MB, all 12 classes + artifact/mastery/pet/quest). This bullet applied to thinner sibling cores; it is NOT a gap in Psycho-Core.
+- **Full class spell systems** (spells are partially implemented; many are placeholder or auto-cast)
 
 These are systemic limitations of the BFA private server ecosystem. Merging between these 4–5 cores will fill SQL/creature/quest gaps, but will NOT add entirely new systems like Warfronts unless you write them yourself.

@@ -1,6 +1,6 @@
 ================================================================================
   OPENSSL INSTALL INSTRUCTIONS  —  dep/openssl/
-  Psycho_Core / BfaCore-Reforged 8.3.7.35662
+  Psycho-Core 8.3.7.35662
 ================================================================================
 
 REQUIRED VERSION:  OpenSSL 3.5.x   (target 3.5.6 — the P-02 patch accepts any 3.5.x)

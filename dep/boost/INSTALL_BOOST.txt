@@ -1,6 +1,6 @@
 ================================================================================
   BOOST INSTALL INSTRUCTIONS  —  dep/boost/
-  Psycho_Core / BfaCore-Reforged 8.3.7.35662
+  Psycho-Core 8.3.7.35662
 ================================================================================
 
 REQUIRED VERSION:  Boost 1.83.0   (the core's CMake floor is 1.83)
@@ -8,53 +8,117 @@ WHY HERE:          cmake/macros/FindBoost.cmake searches this folder FIRST
                    (${CMAKE_SOURCE_DIR}/dep/boost) before any system/Windows path,
                    so the source tree stays portable (no drive labels needed).
 
+--------------------------------------------------------------------------------
+WHAT THIS PACK SHIPS  (verified pre-built Boost — 2026-06-15)
+--------------------------------------------------------------------------------
+Source Boost is VERIFIED pre-compiled:
+   Version    : 1.83.0           (boost/version.hpp dated 2023-08-08, "1_83")
+   Compiler   : vc143            (= Visual Studio 2022 / MSVC 14.3)
+   Arch       : x64              (64-bit)
+   Linkage    : static .lib (mt-x64). Static = baked into the .exe at link time,
+                so NO Boost DLLs need to ship for the server to RUN.
+
+Boost is provided THREE ways. The small one lives here in the repo; the bigger
+ones live on the GitHub RELEASES tab (too big for the repo, but Release assets
+allow up to 2 GB each).
+
+  (1) IN THIS FOLDER  ->  boost_dep_release.zip            (~26 MB)
+        RELEASE-only pack. THIS IS ALL MOST USERS NEED.
+        Contains:
+           boost\        (header tree)
+           stage\lib\    (the 8 Release libs: system, filesystem, thread,
+                          program_options, iostreams, regex, chrono, atomic)
+        Use this for normal Release / RelWithDebInfo builds (the standard way
+        to build and run a server).
+
+  (2) ON THE GITHUB RELEASES TAB  ->  boost_dep.zip         (~280 MB)
+        RELEASE + DEBUG pack (full lib64-msvc-14.3\ with -gd- debug libs +
+        all components). ONLY needed if you build a DEBUG core.
+
+  (3) ON THE GITHUB RELEASES TAB  ->  boost_1_83_0-msvc-14.3-64.exe
+        Official Boost 1.83.0 prebuilt installer for VS2022 (x64). Run it to
+        install Boost anywhere; then copy its boost\ + lib64-msvc-14.3\ into
+        dep/boost\ (or set BOOST_ROOT to the install path). Use this if the
+        zips above give you trouble, or you want the full unmodified upstream.
+
+  >> WHERE: GitHub repo -> "Releases" tab -> tag  V1.0-Boost
+            ("Pre-compiled Boost + EXE"). All three files are attached there.
+
+--------------------------------------------------------------------------------
+HOW TO INSTALL  (do this BEFORE running cmake — CMake CANNOT read inside a zip!)
+--------------------------------------------------------------------------------
+Pick ONE of these. After it's done, dep/boost\ must contain a "boost" header
+folder and a libs folder.
+
+  A) NORMAL / RELEASE build  (recommended — uses the 26 MB zip in this folder):
+        1. Right-click boost_dep_release.zip -> "Extract Here" / "Extract to
+           current folder" so it unpacks RIGHT HERE in dep/boost\.
+        2. Confirm you now have:
+              dep/boost/boost/version.hpp     <- headers
+              dep/boost/stage/lib/            <- the 8 .lib files
+        3. (Optional) delete the .zip afterwards — CMake ignores it either way.
+
+  B) DEBUG build  (uses boost_dep.zip from the Releases tab):
+        1. Releases tab -> tag V1.0-Boost -> download boost_dep.zip (~280 MB).
+        2. Extract it IN PLACE into dep/boost\.
+        3. Confirm:
+              dep/boost/boost/version.hpp
+              dep/boost/lib64-msvc-14.3/      <- release + debug libs
+
+  C) Official installer  (uses the .exe from the Releases tab):
+        1. Releases tab -> tag V1.0-Boost -> download boost_1_83_0-msvc-14.3-64.exe.
+        2. Run it; let it install (e.g. to C:\local\boost_1_83_0).
+        3. EITHER copy its  boost\  and  lib64-msvc-14.3\  folders into dep/boost\,
+           OR leave it installed and set environment variable BOOST_ROOT to the
+           install path (FindBoost.cmake reads BOOST_ROOT too).
+
+>> IF YOU HAVE ISSUES (CMake can't find Boost, or a zip is corrupt/incomplete):
+     - Re-download the file you used from the Releases tab (tag V1.0-Boost) — a
+       half-finished download is the #1 cause of "missing headers/libs".
+     - Or use option C (the official .exe) instead of the zips.
+     - Or build Boost yourself from source (see "BUILD BOOST FROM SOURCE" below).
+
+NESTING CHECK after unzip: dep/boost/boost/version.hpp MUST exist at that EXACT
+path. If instead you see dep/boost/boost_1_83_0/boost/... you unzipped one level
+too deep — move the inner boost\ (and stage\lib\ or lib64-msvc-14.3\) up so they
+sit DIRECTLY inside dep/boost\.
+
+NOTE: never commit the full bin.v2\ build tree — it's multi-GB intermediate junk.
+--------------------------------------------------------------------------------
+
 The core needs these Boost components:
    system, filesystem, thread, program_options, iostreams, regex
 (plus headers). On Windows you need the COMPILED .lib files for your MSVC version.
 
 --------------------------------------------------------------------------------
-EXACT DOWNLOAD (in case Boost is NOT shipped as a zip in this folder)
+BUILD BOOST FROM SOURCE  (fallback — if you don't want the Releases-tab packs,
+                          or you're on a different compiler/OS)
 --------------------------------------------------------------------------------
-Official source archive (any OS):
+Get the official source archive (any OS):
    https://archives.boost.io/release/1.83.0/source/boost_1_83_0.zip
    https://archives.boost.io/release/1.83.0/source/boost_1_83_0.tar.gz
    (mirror: https://www.boost.org/users/history/version_1_83_0.html)
 
-Windows prebuilt binaries (fastest — pick the one matching your Visual Studio):
-   https://sourceforge.net/projects/boost/files/boost-binaries/1.83.0/
-     - VS2022 (MSVC 14.3): boost_1_83_0-msvc-14.3-64.exe
-     - VS2019 (MSVC 14.2): boost_1_83_0-msvc-14.2-64.exe
-   (Run the installer, or extract; then copy/point as below.)
+Then build the 6 required components:
 
---------------------------------------------------------------------------------
-WHAT TO UNZIP / WHERE (portable layout this folder expects)
---------------------------------------------------------------------------------
-Goal: this folder (dep/boost) becomes a valid BOOST_ROOT, i.e. it must contain:
-   dep/boost/boost/            <- the header tree (boost/version.hpp lives here)
-   dep/boost/lib64-msvc-14.3/  <- compiled libs (Windows; name varies by MSVC)
-        (FindBoost.cmake also accepts: stage/lib, lib, lib64-msvc-14.2/14.1/14.0)
+   WINDOWS  (open "Developer Command Prompt for VS 2022", cd into boost_1_83_0\):
+        bootstrap.bat
+        b2 --with-system --with-filesystem --with-thread --with-program_options ^
+           --with-iostreams --with-regex address-model=64 link=static ^
+           runtime-link=shared threading=multi --stagedir=stage
+        -> then copy:
+              boost_1_83_0\boost\       into  dep/boost/boost\
+              boost_1_83_0\stage\lib\   into  dep/boost/stage/lib\
 
-Option A — prebuilt Windows binaries (recommended on Windows):
-   1. Install/extract boost_1_83_0-msvc-14.x-64.
-   2. Copy its "boost" header folder into:      dep/boost/boost
-   3. Copy its "lib64-msvc-14.x" folder into:   dep/boost/lib64-msvc-14.x
-   (Or just set environment variable BOOST_ROOT to the install path — the macro reads it too.)
+   LINUX (or just use the distro package — see LINUX shortcut below):
+        ./bootstrap.sh
+        ./b2 --with-system --with-filesystem --with-thread --with-program_options \
+             --with-iostreams --with-regex link=static stage
+        -> copy boost\ + stage/lib\ into dep/boost/  (or set BOOST_ROOT)
 
-Option B — source zip (any OS), then build:
-   1. Extract boost_1_83_0.zip so headers land at dep/boost/boost/...
-      (i.e. copy the inner "boost" folder from boost_1_83_0/ into dep/boost/)
-   2. Build the libraries from the extracted boost_1_83_0/ folder:
-        WINDOWS (Developer Command Prompt for VS):
-           bootstrap.bat
-           b2 --with-system --with-filesystem --with-thread --with-program_options ^
-              --with-iostreams --with-regex address-model=64 link=static runtime-link=shared ^
-              threading=multi --stagedir=stage
-           -> copy boost_1_83_0\stage\lib  into  dep/boost/stage/lib
-        LINUX (usually just use the distro package instead — see below):
-           ./bootstrap.sh
-           ./b2 --with-system --with-filesystem --with-thread --with-program_options \
-                --with-iostreams --with-regex link=static stage
-           -> headers + stage/lib are picked up from dep/boost/
+Result must match the same layout as the zips: dep/boost/boost/version.hpp plus
+a libs folder (stage/lib or lib64-msvc-14.3). FindBoost.cmake also accepts:
+   stage/lib, lib, lib64-msvc-14.3, lib64-msvc-14.2/14.1/14.0
 
 --------------------------------------------------------------------------------
 LINUX shortcut (no dep/boost needed)

@@ -1,6 +1,6 @@
 # Deep-Dive Research Report — Eluna, ScriptDev3, & Modules-Folder Move
 **Date:** 2026-06-14
-**Core:** BfaCore-Reforged / Psycho_Core 8.3.7.35662 (TrinityCore-derived)
+**Core:** Psycho-Core 8.3.7.35662 (TrinityCore-derived)
 **Covers:** (1) Eluna deep dive, (2) Eluna downloaded to Dev/, (3) SD3 worth-it analysis,
 (4) moving `modules/` into `src/server/`. For future reference.
 

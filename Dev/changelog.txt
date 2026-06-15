@@ -283,3 +283,89 @@ Plus docs: dep/boost/INSTALL_BOOST.txt, dep/openssl/INSTALL_OPENSSL.txt, Dev gui
 - Snapshot note: Dev/Eluna-tc-retail lost its 4 .github/workflows files to a snapshot drop;
   re-restored from upstream -> 204/204 files complete again.
 - No build run this session.
+
+### Documentation added (2026-06-14)
+- Added Dev/REBUILD_BUILD_INFO_GUIDE.md: how to rebuild a missing .build.info for an 8.3.7.35662
+  client (TOOL method via CASCExplorer + MANUAL method reading BuildConfig/CDNConfig hashes from
+  Data/config). Includes the complete-vs-streaming-client check and the .build.info field template.
+  Research/doc only - no core code changed.
+
+### Documentation added (2026-06-15)
+- Added Dev/CLIENT_DATA_SOURCES_REPORT.md: comprehensive hunt for BFA 8.3.7.35662 client + data
+  sources (pre-extracted data packs, full clients, mini clients, repacks, torrents, Discord re-up
+  routes). Key find: pre-extracted ClientData 3.73GB pack referenced on LIVE GitHub repo
+  CrimsonDespair/BFA - sidesteps the streaming-stub extraction failure entirely. Each link tagged
+  with verification status (GitHub repos verified live; file-host links listed but not byte-verified).
+  Research/doc only - no core code changed, no build.
+
+### Documentation updated (2026-06-15) - torrent/official-server pass
+- Updated Dev/CLIENT_DATA_SOURCES_REPORT.md with a dedicated torrent/archive/official-server sweep.
+  Added section 2A (verified-live official-server full client torrents): WoW Circle official BFA
+  forum page (58.9GB client torrent, mirrors sendspace.com/file/xhs5wb + wdfiles.ru/4fbee0, plus
+  44MB connection-files patch) - page read directly, VERIFIED LIVE; Firestorm official full client
+  torrent. Added 5B (live build-matched source repos incl MttAI-dev/MTT-WoW-BfA). Added 6B dead-ends
+  (archive.org "full map file" is a wallpaper IMAGE not server data - verified; cloud.bfacore.com
+  QNAP likely dead; quota-limited Drive links). Rewrote section 7 recommended order to lead with the
+  WoW Circle torrent + pre-extracted pack as two independent verified routes. Refreshed honesty/status
+  summary. No core code changed, no build.
+
+### Documentation updated (2026-06-15) - torrent-INDEX deep dive (3rd pass)
+- Updated Dev/CLIENT_DATA_SOURCES_REPORT.md with a dedicated torrent-website sweep (new section 5C).
+  Searched 1337x, archive.org torrents, getMaNGOS torrent directory, Firestorm magnets directly.
+  Findings (all honesty-tagged): WoW Circle 58.9GB official torrent = REAL + reachable (the one to
+  use); Firestorm uses real public magnets (10.2.7 magnet confirms format) but BFA magnet is launcher-
+  gated; the well-known Sineater213 "BFA + Private Server Emulator" 57GB torrent (16S/47L) appears
+  DELISTED from uploader's live 1337x profile, infohash unverifiable -> NO fabricated magnet given
+  (uploader proven real via still-live WotLK torrent infohash CB9D7227...). getMaNGOS + archive.org
+  (wow_clients 59.7GB) torrent directories are real but contain only Classic/TBC/WotLK/Cata/Turtle -
+  no BFA. 1337x live search now returns only BFA soundtracks. Added 3rd-pass update note at top,
+  expanded section 8 status summary. No core code changed, no build.
+
+### Documentation updated (2026-06-15) - Boost pre-built pack verified
+- Verified user's pre-compiled Boost via `dir`: version 1.83.0 (boost/version.hpp 2023-08-08),
+  vc143 (VS2022), x64, static libs, ALL components present (Release+Debug) incl the 6 required
+  (system, filesystem, thread, program_options, iostreams, regex) + deps (atomic, chrono,
+  date_time, zlib, bzip2). Headers folder confirmed present (version.hpp exists).
+- Updated dep/boost/INSTALL_BOOST.txt: added "WHAT THIS PACK SHIPS" section documenting the
+  verified pre-built Boost specs + exact zip layout (boost\ + lib64-msvc-14.3\), nesting-check
+  warning (dep/boost/boost/version.hpp must exist), leaner Release-only alternative (stage\lib\),
+  and warning not to zip bin.v2\. No core code changed, no build.
+
+### Documentation updated (2026-06-15) - Boost two-pack distribution plan
+- User decided: ship Release-only Boost pack (boost_dep_release.zip, ~26MB: boost\ + stage\lib\,
+  8 release libs) INSIDE dep/boost\ (under GitHub's 100MB in-tree limit); ship the full
+  Release+Debug pack (boost_dep.zip, ~280MB: full lib64-msvc-14.3\) as a GitHub RELEASE ASSET
+  (allows up to 2GB) for the rare Debug-build case.
+- Updated dep/boost/INSTALL_BOOST.txt "WHAT THIS PACK SHIPS" + new "HOW TO INSTALL" section to
+  document both packs, the extract-before-cmake step (CMake can't read inside a zip), exact target
+  layouts (Release -> dep/boost/stage/lib\; Debug -> dep/boost/lib64-msvc-14.3\), and the
+  dep/boost/boost/version.hpp nesting check. No core code changed, no build.
+- ACTION ON USER (outside sandbox): place boost_dep_release.zip into dep/boost\; attach
+  boost_dep.zip to a GitHub Release.
+
+### Documentation updated (2026-06-15) - Boost release-tab distribution finalized
+- User publishing 3 files on GitHub Releases tag V1.0-Boost ("Pre-compiled Boost + EXE"):
+  boost_dep_release.zip (26MB, also in repo dep/boost\), boost_dep.zip (280MB), and
+  boost_1_83_0-msvc-14.3-64.exe (official installer).
+- Rewrote dep/boost/INSTALL_BOOST.txt: documents all 3 packs + the Releases tab (tag V1.0-Boost),
+  step-by-step extract-in-place install (A=release zip, B=debug zip, C=official exe), "if you have
+  issues" guidance (re-download / use exe / build from source), nesting check, and a cleaned-up
+  BUILD BOOST FROM SOURCE fallback (b2 commands for Windows + Linux).
+- Updated Dev/BUILD_GUIDE_WINDOWS.md: prereq Boost line + new step 2a (Boost extract workflow)
+  pointing at the Releases tab and the version.hpp nesting check.
+- Created Dev/RELEASE_V1.0-Boost_description.md: ready-to-paste GitHub release Title/Tag/body +
+  file table + install steps + maintainer upload reminder (use the attach box, not the 25MB comment box).
+- No core code changed, no build.
+
+### Documentation updated (2026-06-15) - rebranded docs to Psycho-Core only
+- Per user request: removed "BfaCore-Reforged" BRANDING from documents; docs now identify as
+  "Psycho-Core 8.3.7.35662" only. Scope chosen by user: branding-only; build system left untouched.
+- Retitled: BUILD_GUIDE_WINDOWS.md, BUILD_GUIDE_LINUX.md, PORTABLE_SERVER_SETUP_GUIDE.md,
+  PREFLIGHT_AUDIT_AND_CONFIG_REPORT.md, REBUILD_BUILD_INFO_GUIDE.md, RELEASE_V1.0-Boost_description.md,
+  DEEP_DIVE_Eluna_SD3_Modules_Report.md, dep/boost/INSTALL_BOOST.txt, dep/openssl/INSTALL_OPENSSL.txt.
+- Build guide: removed "Titans-Project/BfaCore-Reforged" from clone line; reframed BfaCore.sln note +
+  project(BfaCore) preflight row as "upstream build-system name, left as-is so build isn't broken".
+- DELIBERATELY KEPT (factual, would break/falsify if renamed): external project/repo names + download
+  links in CLIENT_DATA_SOURCES_REPORT.md, and the two comparison reports (psycho_core_restart_assessment.md,
+  bfa_sql_assessment.md) which compare Psycho vs the real external BfaCore repos.
+- No core/build-system code changed, no build.

@@ -1,4 +1,4 @@
-# Psycho_Core / BfaCore-Reforged — PORTABLE Server Setup Guide
+# Psycho-Core 8.3.7.35662 — PORTABLE Server Setup Guide
 **Build:** 8.3.7.35662 · **Rule:** every path is RELATIVE to the SERVER ROOT — NO drive letters.
 
 > PORTABILITY PRINCIPLE

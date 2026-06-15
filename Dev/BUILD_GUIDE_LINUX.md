@@ -1,4 +1,4 @@
-# Psycho_Core / BfaCore-Reforged — LINUX Build Guide (step-by-step)
+# Psycho-Core 8.3.7.35662 — LINUX Build Guide (step-by-step)
 **Target:** Linux x64 · GCC 14.2 (tested) · CMake 4.3.2 · Boost 1.83 · OpenSSL 3.5.x · MariaDB 11.8.6
 **Build:** 8.3.7.35662 · Portable paths from server root (no absolute paths required at runtime).
 
