@@ -230,7 +230,52 @@ sql/updates/hotfixes/*
 sql/updates/characters/*
 ```
 
+Missing:
+
+```text
+full world DB base
+full hotfix DB base
+```
+
 Do not assume the public `sql/` folder alone is enough to run a populated BFA world.
+
+---
+
+## Reports
+
+```text
+TOOLCHAIN_UPDATE_NOTES.md
+MODULE_RESEARCH_REPORT.md
+API_DIFFERENCE_REPORT.md
+FILE_COMPLETENESS_REPORT.md
+configure_summary.txt
+changelog.txt
+chatlog.txt
+```
+
+---
+
+## Development rule
+
+Do not run a build unless explicitly approved.
+
+Allowed without further approval:
+
+```text
+static inspection
+file comparison
+CMake configure/generate
+report generation
+```
+
+Not allowed unless explicitly requested:
+
+```text
+worldserver build
+ALL_BUILD
+running server binaries
+importing SQL into a live database
+```
 
 ---
 

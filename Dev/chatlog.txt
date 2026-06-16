@@ -226,3 +226,57 @@ Pending / next:
   comparison reports) since renaming them would break links / make docs false.
 - Verified: no "Psycho_Core / BfaCore" or "BfaCore-Reforged" branding remains in the guides/readmes.
   No code change, no build.
+
+## 2026-06-15 (download custom scripts + SQL)
+- User: download all custom scripts + their SQLs we found, JUST those, nothing else.
+- Confirmed scope via checklist: user picked the 4 RECOMMENDED sources, kept separate per source.
+- Sparse-checkout pulled only Custom/ + custom SQL from DekkCore, AzgathCore(8.3.7),
+  Legion-Pandaria-Preservation-Project/LegionCore-7.3.5V2, Psycho_Core-8.3.7-Modules.
+- Excluded generic core SQL history (took only 1 custom npc_trainer.sql from the Legion repo),
+  removed stray loader/PCH files. Saved to /home/user/custom_harvest/ + README_INVENTORY.md.
+- Not integrated into the core; provenance kept separate per user. No code change, no build.
+
+[2026-06-15] CASCExplorer error screenshot
+- User showed NullReferenceException at get_ArchiveGroup / CDNIndexHandler.Initialize after opening
+  client (Local mode, root folder). Confirmed: .build.info bootstrap succeeded; crash is the known
+  CASCExplorer local-mode CDN-index bug, not a config error.
+- Confirmed from our own core source that mapextractor.exe uses CascLib directly on <client>/Data,
+  ignores .build.info, and won't hit this CDNConfig/ArchiveGroup path. Advised abandoning CASCExplorer
+  for extraction in favour of the core's own extractor tools. No code change, no build.
+
+[2026-06-15] User asked for a doc explaining how the cmd commands gave the info to build .build.info correctly.
+- Created Dev/HOW_BUILD_INFO_WAS_DERIVED.md: command-by-command walkthrough + field-by-field source
+  map + locale caveat + regenerate recipe. Noted .build.info is harmless-but-not-required since our
+  mapextractor uses CascLib directly and ignores it. No code change, no build.
+
+[2026-06-15] User demanded HOW_BUILD_INFO_WAS_DERIVED.md be 100% correct to show users.
+- Verified against wowdev.wiki TACT/CASC + a working TrinityCore 8.3.7(35662) .build.info example.
+- Corrected real errors: Branch=region (not "wow"); build-uid->Product; switched to the verified
+  14-field 8.3.7 layout (Product, no KeyRing); added optional-keys note + locale labelling + Sources list.
+- Honesty note kept (raw config files were pasted in chat, not in workspace). No code change, no build.
+
+[2026-06-15] User pasted vmap4extractor output: casc opened, build 35662 detected, GameObject models
+extracting, with many "Can't open FILE... BAD_FORMAT / Could not open all Group file" lines.
+- Confirmed from our own vmap4_extractor source these warnings are non-fatal (skip WMO, return true,
+  continue). Storage open + build detection = the milestone we were chasing; .build.info not required.
+- Told user to let it finish and then count output in ./Buildings (and vmaps) to decide if the skips
+  are normal noise vs a thin extraction. No code change, no build.
+
+[2026-06-15] User pasted more extractor output (Maps ~1341-1498) + confirmed files pulling into Buildings folder.
+- Reassured: the misses are WoD garrison/transport WMOs and dead test maps = expected absent on 8.3.7
+  retail; real maps showing full progress bars = extracting fine. Healthy run. Told user to let it finish.
+
+[2026-06-15] User asked for best WoW server website on GitHub to use/port. Searched; recommended FusionCMS
+(full, BfA+SRP6) vs WoWSimpleRegistration (light, easy rebrand). User picked FusionCMS + clone.
+- Cloned FusionCMS 9.5.0 to web/FusionCMS, verified trinity_bfa.php uses SRP6+SOAP and BfA=expansion 7.
+- Flagged the real license: repo LICENSE.md is restrictive (no mod/rebrand/redistribute), not AGPL as
+  README claims; LICENSE.MYCODE can't be applied to it. Wrote setup guide wired to Psycho_* DBs + SOAP.
+
+[2026-06-15] User: (1) write own website using FusionCMS as reference, (2) make SURE all conf lines present -
+CHECK ALL SCRIPTS, (3) report back.
+- Audited all 21 scripts: 36 config keys + 21 AddSC entries were ALL already in _LOADER_AND_CONFIG.txt
+  (no missing key NAMES) but it lacked descriptions/commands/NPC list/consolidated block. Wrote
+  Scripts/Psycho_Custom.conf.dist (full annotated, code-exact defaults) + pointer in the loader doc.
+- Wrote from-scratch site web/PsychoSite (original, LICENSE.MYCODE), with correct BfA SRP6 account
+  creation verified byte-for-byte against the core's SRP6.cpp via an installed PHP+gmp self-test.
+- No core code change, no build.

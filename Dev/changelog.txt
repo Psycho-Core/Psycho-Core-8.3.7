@@ -369,3 +369,276 @@ Plus docs: dep/boost/INSTALL_BOOST.txt, dep/openssl/INSTALL_OPENSSL.txt, Dev gui
   links in CLIENT_DATA_SOURCES_REPORT.md, and the two comparison reports (psycho_core_restart_assessment.md,
   bfa_sql_assessment.md) which compare Psycho vs the real external BfaCore repos.
 - No core/build-system code changed, no build.
+
+### Custom scripts + SQL downloaded (2026-06-15)
+- Per user request, downloaded ONLY custom scripts + their SQL (nothing else) from the 4 RECOMMENDED
+  sources in BFA_LEGION_CUSTOM_SCRIPTS_SQL_CHECKLIST.md, kept SEPARATE per source. Saved to
+  /home/user/custom_harvest/ (outside the core tree, not yet integrated).
+  Used sparse-checkout (blob:none, depth 1) to pull only Custom/ folders + custom SQL; .git removed.
+  1) DekkCore (BFA): src/server/scripts/Custom + DekkCore/Custom (incl FluxRoom) - 20 cpp
+  2) AzgathCore (BFA 8.3.7): Custom/ 10 cpp + 27 paired SQL (NPCTeleport + custom/world etc.)
+  3) Legion-Pandaria-Preservation-Project/LegionCore-7.3.5V2: Custom/ 27 cpp + 1 custom SQL
+     (npc_trainer; the other 60 generic core-update SQL were deliberately NOT taken)
+  4) BLocked-by-google/Psycho_Core-8.3.7-Modules: mod-aoeloot/autoloot/ollama/psychobot (81 cpp/11 sql)
+  Stray non-custom files dragged in by cone-mode sparse (ScriptLoader.h/.cpp, ScriptPCH.h,
+  DekkCore_script_loader.cpp) were REMOVED to keep it strictly custom-only.
+  Totals: 139 cpp / 84 h / 39 sql / ~9 MB. Wrote custom_harvest/README_INVENTORY.md.
+  No core code changed, no build, nothing integrated yet.
+
+### Custom scripts rewrite — BATCH 1 (AzgathCore) (2026-06-15)
+- Created custom_harvest/Psycho-Core-Scripts/{Scripts,Sqls}/.
+- Rewrote AzgathCore Batch-1 custom scripts for Psycho-Core (verified each API call against the
+  actual core headers, Psycho-Core copyright header, LF endings):
+  * spp_save_on_levelup.cpp  (OnLevelChanged -> ObjectAccessor::SaveAllPlayers; config-gated)
+  * heirloom_mount_tempfix.cpp (OnUpdate; uses Player::CompletedAchievement(uint32) overload +
+    GetCollectionMgr()->GetAccountHeirlooms())
+  * gift_mount.cpp (was arwent_gift_mount; converted hardcoded enable/spells to config keys)
+  * npc_teleport.cpp (DB-driven teleporter; verified GOLD/SILVER/TEAM_OTHER exist, ModifyMoney int64,
+    icon-based AddGossipItemFor, OnGossipSelect(Player*,Creature*,uint32,uint32))
+  + Sqls/npc_teleport_install.sql + npc_teleport_remove.sql (npc_teleport table + NPC 1001000 Rayze +
+    sample destinations). + Scripts/_loader_additions.txt (loader decls/calls + conf keys).
+- Verified against core: OnLevelChanged/OnUpdate/OnLogin sigs, SaveAllPlayers, HasSpell/LearnSpell,
+  GetCollectionMgr, CompletedAchievement(uint32), GetIntDefault, OnGossipHello/Select, TeleportTo,
+  AddGossipItemFor(icon), GOLD/SILVER/TEAM_OTHER, ModifyMoney(int64). All present & matched.
+- DELIBERATELY NOT ported this batch (reported to user): DoubleXP.cpp (dup of your XpWeekend.cpp),
+  custom_npcs.cpp npc_rate_xp_modifier (needs GetPersonnalXpRate API - verify before porting),
+  arwent_legit_quest_bypass.cpp (needs quest_bypass+quest_report tables, RBAC perm, DB2 deps - bigger),
+  GOMove (depends on external Rochet2 GOMove.h header not in the Custom folder).
+- Nothing copied into the core yet; staged in custom_harvest only. No build run.
+
+### Custom scripts rewrite — BATCH 1 redone FROM SCRATCH + LICENSE.MYCODE (2026-06-15)
+- User wanted their own LICENSE.MYCODE on these. Since the AzgathCore ports were GPL-derived (cannot
+  be relicensed), user chose to have the FEATURES re-implemented 100% from scratch so LICENSE.MYCODE
+  legitimately applies. Deleted the 4 GPL-derived ports + their SQL; wrote original equivalents:
+  * Psycho_SaveOnLevelUp.cpp   (config: Enable/Announce/MinLevel; demotion guard - original)
+  * Psycho_HeirloomReward.cpp  (login+levelup re-check instead of OnUpdate spam; configurable
+    required count/reward spell/achievement - original design)
+  * Psycho_GiftSpells.cpp      (generalised to a comma-separated SPELL LIST w/ own CSV parser)
+  * Psycho_Teleporter.cpp      (own schema `psycho_teleport`, startup-cached via WorldScript::OnStartup,
+    own per-destination minlevel feature, team filter, cost) + Sqls/Psycho_Teleporter_install/remove.sql
+  + Scripts/_LOADER_AND_CONFIG.txt (Psycho_ AddSC decls/calls + conf keys).
+- Headers: LICENSE.MYCODE (Copyright (c) 2026 Psycho-core) + note that TrinityCore framework API
+  remains GPLv2. All names Psycho_-prefixed (class + ctor script-name + AddSC_). LF endings.
+- VERIFIED all 15 API points against core headers (OnStartup, OnLevelChanged, OnLogin, OnGossipHello/
+  Select(Creature), SaveAllPlayers, CompletedAchievement(uint32), LearnSpell, HasSpell,
+  ModifyMoney(int64), TeleportTo, GetCollectionMgr, GetStringDefault, GetIntDefault, GOLD/SILVER) = all OK.
+- Honest note to user: trivial scripts (save-on-levelup, heirloom) necessarily resemble the only
+  sensible API usage; teleporter/giftspells are clearly original designs.
+- Staged in custom_harvest/Psycho-Core-Scripts only; not copied into core, no build run.
+
+### Custom scripts BATCH 1 - completed remaining 5 (2026-06-15)
+- User flagged Batch 1 was incomplete (only 4 of 9 done). Wrote the remaining 5 from scratch
+  (LICENSE.MYCODE, Psycho_ naming, LF), verified all APIs against core headers:
+  5) Psycho_DoubleXP.cpp     (OnGiveXP; configurable multiplier + active days list; own ISO-day calc)
+  6) Psycho_XpRateNpc.cpp    (personal XP-rate gossip NPC; GetPersonnalXpRate/SetPersonnalXpRate;
+     NPC 1001002) + Sqls/Psycho_XpRateNpc_install/remove.sql
+  7) Psycho_RecruiterReward.cpp (RaF reward at max level via account.recruiter + character_shop;
+     configurable tier items; getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
+  8) Psycho_QuestBypass.cpp  (.pbypass command; own psycho_quest_bypass whitelist table;
+     ForceCompleteQuest) + Sqls/Psycho_QuestBypass_install/remove.sql
+  9) Psycho_GoMove.cpp       (.pgomove here|step|ground; ORIGINAL self-contained mover using
+     RelocateStationaryPosition + Map::GameObjectRelocation + SaveToDB; NOT the external Rochet2
+     GOMove lib, whose header was never shipped)
+- Updated Scripts/_LOADER_AND_CONFIG.txt to all 9 scripts + full conf keys.
+- Verified 21/21 API points OK. Batch 1 now complete: 9 scripts, 6 SQL files.
+- Notes: Psycho_DoubleXP coexists with the core's existing XpWeekend (different class/AddSC name,
+  no clash). custom_player_script.cpp's BFA-start half already exists in core -> only the recruiter
+  half was reproduced. Staged in custom_harvest only; not copied into core, no build.
+
+### Batch 1 FULL VERIFICATION pass (2026-06-15)
+- Completeness: 9/9 Azgath sources mapped to 9 Psycho_ rewrites (confirmed 1:1).
+- Correctness: audited EVERY external symbol per file against core headers.
+  * override signatures all match base virtuals (OnGiveXP/OnLogin/OnLevelChanged/OnGossipHello/
+    OnGossipSelect(Creature)/OnStartup/GetCommands const).
+  * ChatCommand ctor confirmed: (char const* name, uint32 perm, bool allowConsole, pHandler, string help)
+    with pHandler = bool(*)(ChatHandler*, char const*) -> both command tables + handlers match exactly.
+  * gossip helpers (icon-based AddGossipItemFor, Clear/Send/CloseGossipMenuFor, GOSSIP_ICON_CHAT,
+    GOSSIP_SENDER_MAIN, DEFAULT_GOSSIP_MESSAGE) all present.
+  * Map::GetHeight(PhaseShift,x,y,z) + Position::GetPosition(4-float) overloads matched.
+  * boost date_time usage matches core's existing XpWeekend.cpp pattern.
+  * All Player/GameObject/CollectionMgr/World/Config calls verified OK (~45 checks total across passes).
+- Result: all 9 scripts judged complete & correctly coded for the core (static verification).
+  Caveat stated to user: this is header/signature verification, NOT a compiler run; the only thing
+  not locally verifiable is the SQL creature_template column set (base TDB not in workspace).
+
+### Custom scripts BATCH 2 (DekkCore) - WAVE 1 + compatibility assessment (2026-06-15)
+- DekkCore = 19 real scripts; verified its APIs against core FIRST. Many DekkCore APIs are MISSING
+  in this core: LFGMgr::IsSoloLFG/ToggleSoloLFG, ResetChallengeKey, GossipOptionNpc enum,
+  ScriptedAI::OnGossipHello(Player*) new-style hook, GameObjectAI::OnReportUse,
+  AddCreditToActualObjectiveForQuest, GetXPForNextLevel. So DekkCore is NOT a clean 1:1 like Azgath.
+- WAVE 1 - wrote 3 fully-verified clean rewrites (from scratch, LICENSE.MYCODE, Psycho_ names):
+  * Psycho_SoloLfgAnnounce.cpp (announce half only; real SoloLFG toggle omitted - core LFGMgr lacks it)
+  * Psycho_PlayedTimeReward.cpp (per-player OnUpdate timer; ModifyMoney+ModifyCurrency; verified)
+  * Psycho_LevelMaster.cpp (level-grant gossip NPC; ADAPTED new-style gossip -> core old-style
+    CreatureScript; uses GiveLevel + CONFIG_MAX_PLAYER_LEVEL cap) + SQL NPC 1001003
+- Verified 9/9 APIs OK for wave 1. Updated _LOADER_AND_CONFIG.txt.
+- HUGE FILE ASSESSMENT (reported to user): custom_spells.cpp = 41 spell scripts (RegisterSpellScript)
+  - large but mechanical; FluxFunctions.cpp = shared helper impl for FluxRoom NPCs (not standalone);
+  Zolocraft.cpp = solocraft scaling, uses new-style gossip (needs adapting).
+- Staged only; not copied to core, no build.
+
+### Custom scripts BATCH 2 (DekkCore) - WAVE 2 + final status note (2026-06-15)
+- Read the remaining DekkCore scripts (custom_commands, custom_npc) and verified APIs.
+- WAVE 2 - wrote 2 more clean, verified rewrites (from scratch, LICENSE.MYCODE, Psycho_):
+  * Psycho_PlaySpellVisualCmd.cpp (.psv/.playspellvisual; ADAPTED to core's SendPlaySpellVisual(
+    ObjectGuid,...) signature - DekkCore passed Unit*, this core needs GUID)
+  * Psycho_TransmogCmd.cpp (.transmog/.tmog; summons transmog NPC; ADAPTED SummonCreature despawn
+    to uint32 ms, not chrono; config NpcEntry/DurationSec)
+  - Verified 12/12 APIs OK (GetSelectedUnit, SendPlaySpellVisual(ObjectGuid), SummonCreature uint32
+    despwtime, GetRandomNearPosition, Unit::Say(string,Language), SetEmoteState(Emote), etc.)
+- Batch 2 total now: 5 scripts done (SoloLfgAnnounce, PlayedTimeReward, LevelMaster, PlaySpellVisualCmd,
+  TransmogCmd) + 1 SQL (LevelMaster NPC 1001003).
+- Added full Batch-2 status note to BFA_LEGION_CUSTOM_SCRIPTS_SQL_CHECKLIST.md: documents the 5 done,
+  the ~11 NOT ported (SL-only APIs / new-style gossip / missing packets), and 3 deferred large files.
+- Updated _LOADER_AND_CONFIG.txt. Staged only; not copied to core, no build.
+
+### FULL verification + BATCH 3 (LegionCore) wave 1 (2026-06-15)
+- VERIFIED all 14 prior scripts: g++ -fsyntax-only clean, 45/45 API checks OK, structure clean,
+  SQL scriptnames match CreatureScript names, NPC entries unique (1001001/1002/1003), AddSC unique.
+- BATCH 3 (LegionCore-7.3.5V2, 27 scripts) - Legion is far closer to 8.3.7 than DekkCore (same
+  old-style gossip). Wave 1 = 5 clean rewrites (from scratch, LICENSE.MYCODE, Psycho_, verified):
+  * Psycho_AnnounceLogin, Psycho_BossAnnouncer, Psycho_WhoLogged,
+  * Psycho_EventApril (fixed original urand(0,14) OOB -> 0,13),
+  * Psycho_DuelReset (own config keys instead of missing CONFIG_DUEL_* enums; DUEL_FINISHED->DUEL_WON
+    after confirming this core's enum is DUEL_INTERRUPTED/DUEL_WON/DUEL_FLED)
+- NOT ported (documented in checklist): RandomEnchants (no item hooks), traffic_log (no opcode
+  instrumentation), teleguy (redundant+old macros), Loskutik (old macros/niche), duel zone/position
+  halves (serverside duel-spectate visibility differs).
+- ~7 gossip-NPC scripts (multi_vendor/trainer/beastmaster/questgiver/profession/darkmoon/tarecgosa)
+  are portable WITH gossip-macro conversion = future wave 2. Large arena/system files deferred.
+- TOTAL staged now: 19 scripts + 8 SQL. Final verification: ALL PASS. Not copied to core, no build.
+
+### Custom scripts BATCH 3 (LegionCore) - WAVE 2 (2026-06-15)
+- Wave 2 = gossip-NPC conversions. Read beastmaster/quest_giver/profession/multi_vendor/custum_trainer.
+- DONE: Psycho_UtilityTrainer.cpp (+SQL NPC 1001004) - distilled the clean, portable core of
+  custum_trainer (learn/unlearn utility spells), converted old ADD_GOSSIP_ITEM/SEND_GOSSIP_MENU
+  macros to AddGossipItemFor/SendGossipMenuFor, learnSpell->LearnSpell/removeSpell->RemoveSpell.
+  Config-free, spell list editable in-file. Verified syntax + all APIs OK.
+- NOT ported (documented): npc_beastmaster (CreateTamedPetFrom/SetEffectiveLevel absent - pet taming
+  not safely reproducible), multi_vendor (2511-line paid-services system, locale-table tied),
+  npc_quest_giver (garrison/reward tables + lambdas), npc_profession (DB2 skillline internals),
+  custum_trainer full (honor/arena/credit shops), darkmoon/event_tarecgosa (deferred).
+- TOTAL staged now: 20 scripts + 10 SQL. Not copied to core, no build.
+
+### FULL COVERAGE + CORRECTNESS AUDIT (2026-06-15)
+- Coverage: re-examined ALL 55 source scripts (Azgath 9, Dekk 19, Legion 27). Confirmed 20 delivered;
+  re-probed every skipped script's BLOCKING api against core to justify each skip:
+  * bracket.cpp -> needs Bracket.h / MS::Battlegrounds::BracketType / JoinBracket (absent) - skip ok
+  * custom_lf.cpp -> hardcoded Legion class-quest phasing + dup boss announcer - skip ok
+  * arena trio (command_arena/custom_arena_1v1/arena_spectator) -> 1v1 queue + spectator absent - skip ok
+  * command_donate/custom_reward -> character_reward table absent - skip ok
+  * multi_vendor/npc_quest_giver/npc_profession -> locale tables / DB2 internals / garrison - skip ok
+  * npc_beastmaster -> CreateTamedPetFrom/SetEffectiveLevel absent - skip ok
+  * GoMove (both) -> external GOMove.h not shipped - skip ok
+  * midsummer/darkmoon/event_tarecgosa/Loskutik -> holiday/quest CONTENT, not features - skip ok
+  * teleguy -> redundant w/ Psycho_Teleporter + old macros - skip ok
+  * RandomEnchants/traffic_log -> item hooks / opcode instrumentation absent - skip ok
+- CORRECTION FOUND DURING AUDIT: Solocraft.cpp IS portable - its key hooks (OnLogin/OnLogout/
+  OnMapChanged/OnGiveXP), stat-modifier API and map player-count API ARE present in this core.
+  It was previously deferred as "too heavy"; audit shows it's a legit candidate. FLAGGED to user
+  as the one remaining genuinely-portable script worth doing (solo dungeon scaling).
+- Correctness: all 20 delivered scripts re-verified - g++ -fsyntax-only clean, braces/AddSC/license/LF
+  clean, ~55 API points all OK, 4 NPC scriptnames match SQL, entries 1001001-1004 unique.
+
+### Custom scripts BATCH 3 - WAVE 3: Solocraft (2026-06-15)
+- Built Psycho_Solocraft.cpp (the portable script the audit flagged). Original rewrite, NOT a port:
+  dropped the 100+ hardcoded dungeon tables + GetTrinityString IDs + wrong-arity OnLogin from the
+  44KB Legion original. New design: on OnMapChanged, if in dungeon/raid and under-manned, apply a
+  removable TOTAL_VALUE stat bonus per base stat scaled by (intendedSize - playersPresent); clears on
+  map change / logout; per-player tracking so it never stacks. Config-driven, no SQL.
+- Verified: g++ syntax clean; APIs OK (GetStat(Stats), HandleStatModifier(UnitMods,TOTAL_VALUE,float,bool),
+  UNIT_MOD_STAT_START/END, IsDungeon/IsRaid, GetPlayersCountExceptGMs, OnMapChanged(Player*), UpdateAllStats).
+- TOTAL staged now: 21 scripts + 10 SQL. Not copied to core, no build.
+
+[2026-06-15] CASCExplorer local-open crash diagnosed (no code change)
+- User ran CASCExplorer (Local, pointed at client root). It got PAST the old "Local mode not
+  supported" wall (.build.info bootstrap WORKED) but crashed:
+  System.NullReferenceException at CASCLib.CASCConfig.get_ArchiveGroup() (CASCConfig.cs:507)
+  -> CDNIndexHandler.Initialize() (CDNIndexHandler.cs:31).
+- Root cause (confirmed from CASCExplorer decompiled LoadLocalStorageConfig + CDNIndexHandler):
+  even local mode reads the CDNConfig file; ArchiveGroup property returned null (CDNConfig has no
+  usable archive-group entry), so CDN index init NREd. Known-fragile CASCExplorer local path
+  (cf. CascLib issue #285). NOT a .build.info problem.
+- Verified against OUR core source (src/tools/map_extractor/System.cpp + extractor_common/
+  CascHandles.cpp): mapextractor opens <input>/Data via CascLib CascOpenStorageEx, product "wow",
+  does NOT read .build.info, gets build via GetStorageInfo(CascStorageProduct). So our extractor
+  does not depend on CASCExplorer or on the CDN archive-group. CASCExplorer detour not required.
+- Decision: drop CASCExplorer for extraction; use the core's own extractors (CascLib-based). No build run.
+
+[2026-06-15] Added doc HOW_BUILD_INFO_WAS_DERIVED.md (no code change)
+- Wrote a doc explaining exactly how the CASC info was obtained and turned into .build.info:
+  the cmd commands used (dir /a, dir /s /b Data\config, type <hash file>), what each flag does,
+  what each BuildConfig/CDNConfig value was and which .build.info field it maps to, plus the
+  conventions/defaults (Active=1, CDN host/path, enUS Tags assumption) and a regenerate-from-scratch
+  recipe. Honesty note included: raw config files were pasted in chat, not stored in workspace.
+
+[2026-06-15] Verified + corrected HOW_BUILD_INFO_WAS_DERIVED.md against authoritative sources
+- Cross-checked every format claim vs wowdev.wiki TACT (build-name/build-uid/install/install-size,
+  archives/archive-group; TACT product wow=Retail), wowdev.wiki CASC (data.NNN/.idx/config\XX\YY layout),
+  and a known-working hand-made 8.3.7(35662) .build.info from the TrinityCore forum.
+- FIXES applied (previous version had errors):
+  * Branch column is a REGION code (us/eu), NOT "wow". build-uid maps to Product, not Branch. Corrected.
+  * .build.info field set is version-dependent. Switched the recommended example to the VERIFIED
+    14-column 8.3.7 layout (has Product, NO KeyRing) instead of the prior 15-col KeyRing variant.
+  * Added a minimal also-working variant (Install Key/IM Size left blank) and noted those are optional.
+  * Added Tags/locale-assumption labelling and a Sources section listing every reference used.
+- Hash values unchanged (still from user's pasted Data\config dump). No code change, no build.
+
+[2026-06-15] vmap4extractor run analyzed (no code change)
+- User ran the vmap4 extractor (BfaCore "Extract V4.06"). MILESTONE: opened casc storage on
+  D:\...\Data and "Detected client build: 35662" with NO .build.info needed (as predicted) -
+  CascLib opens Data directly. Extraction is running ("Extracting GameObject models...").
+- The flood of "Can't open FILExxxxxxxx.xxx ... BAD_FORMAT / No such file / Could not open all
+  Group file" messages are NON-FATAL by design. Verified in OUR source:
+  vmapexport.cpp WMO loop -> on group open failure prints msg, sets file_ok=false, break,
+  remove() partial file, then RETURN TRUE (skip this WMO, continue). wmo.cpp open() returns
+  false + "No such file." for unresolvable group FileDataIDs. Tool only aborts on hard errors
+  (e.g. cannot open output for writing). So these are skip-and-continue warnings.
+- Output WMO dir is ./Buildings (relative to where exe runs). Healthy BfA extraction = tens of
+  thousands of files; a few hundred would indicate a real problem. Verdict deferred to finished output.
+- Advised user: let it run to completion, then count Buildings/vmaps output to judge normal-vs-thin. No build.
+
+[2026-06-15] vmap4extractor progress checkpoint (no code change)
+- Extraction healthy and ongoing. Maps showing full [####...####] progress bars = succeeding.
+  Files confirmed landing in ./Buildings (user verified).
+- The FILE_NOT_FOUND failures are concentrated in EXPECTED-absent categories on a 8.3.7 retail client:
+  WoD garrison WMOs (6or_garrison_*, 6hu_garrison_*), transport ships/submarines, and dead/test maps
+  (zzzOld, Test Dungeon, Legion Dungeon placeholders). Blizzard stripped those raw assets by 8.3.7;
+  map records still reference them, hence FILE_NOT_FOUND. Non-fatal, skip-and-continue (per our source).
+- BAD_FORMAT on some *_obj0.adt (HellfireRaid62, legionnexus, Valhallas, Helheim, Acquisition*) =
+  unused/test/scenario maps or empty obj-layer ADTs; skipped, map geometry still extracts.
+- Verdict: normal BfA vmap extraction. Advised: let it finish; then count ./Buildings + vmaps output.
+
+[2026-06-15] Server website: evaluated options + cloned FusionCMS (no core code change)
+- Researched GitHub WoW-server site options. Two viable, active, BfA+SRP6-capable:
+  FusionCMS (full CMS) and masterking32/WoWSimpleRegistration (lightweight). User chose FusionCMS.
+- Cloned FusionWowCMS/FusionCMS v9.5.0 to web/FusionCMS (CodeIgniter 4, PHP 8.3+). Removed .git +
+  node_modules (rebuildable / not needed at runtime).
+- VERIFIED by reading files (not just README): emulators/trinity_bfa.php exists and writes
+  salt+verifier (=SRP6, correct for 8.3.7 auth) and uses SOAP; wow_expansions.php has BfA=7.
+  Requirements: PHP8.3 + soap/gmp/gd/intl etc, MySQL/MariaDB (matches MariaDB 11.8.6).
+- HONESTY FLAG: repo LICENSE.md is a RESTRICTIVE custom license (No Modification except via merged
+  PR; No rebrand/redistribute), NOT the AGPLv3 the README badge claims. Running for own server OK;
+  rebranding/redistribution NOT OK. LICENSE.MYCODE does NOT apply to FusionCMS (same as TC framework).
+- Wrote web/FusionCMS_SETUP_Psycho-Core.md: requirements, Psycho_cms DB, SOAP soapadmin + RBAC 219/228,
+  web installer steps wiring Psycho_auth/characters/world, max_expansion=7, theming-as-allowed-branding.
+
+[2026-06-15] Config audit of custom scripts + from-scratch website (no core code change)
+TASK 2 - CONFIG AUDIT (ALL 21 scripts):
+- Scanned every Psycho_*.cpp for sConfigMgr->Get*Default. Found 36 unique config keys.
+- Diff vs _LOADER_AND_CONFIG.txt: ALL 36 keys + ALL 21 AddSC decls/calls already present and
+  correct; no missing/stale KEYS. The real gaps were: no descriptions/defaults/ranges, chat
+  commands (.pbypass/.pgomove/.playspellvisual/.psv/.transmog/.tmog + RBAC) undocumented, NPC
+  IDs not consolidated, and no single paste-ready conf block.
+- FIX: wrote Scripts/Psycho_Custom.conf.dist - exhaustive annotated worldserver.conf block (all
+  36 keys w/ code-exact defaults + comments), commands+RBAC list, NPC entry list (1001001-1004).
+  Appended a pointer to it at the end of _LOADER_AND_CONFIG.txt (existing per-batch lists kept).
+TASK 1 - FROM-SCRATCH WEBSITE (LICENSE.MYCODE, FusionCMS as reference only):
+- Built web/PsychoSite (original, no framework): public/index.php, public/register.php,
+  src/layout.php, src/Srp6.php, src/Db.php, src/config.sample.php, README.md.
+- src/Srp6.php reproduces the server's SRP6 (SRP6.cpp): g=7, N=894B...9BB7, salt=32 rand,
+  x=SHA1(salt||SHA1(UPPER(user):UPPER(pass))) LE, verifier=g^x mod N as 32B LE. Stores raw
+  binary to account.salt/verifier; no SOAP needed.
+- VERIFIED: installed php8.4+gmp in sandbox; php -l clean on all 6 files; SRP6 self-test PASSES -
+  our verifier == independent reference byte-for-byte; right pass accepts, wrong rejects, username
+  case-insensitive; salt/verifier both 32 bytes. Rendered both pages OK; saved preview_*.html.
