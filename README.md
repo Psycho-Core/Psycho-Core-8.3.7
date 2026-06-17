@@ -107,7 +107,7 @@ Configure output includes:
 >
 > ✅ **modules builds successfully**, including `mod-psychobot`.
 >
-> ⚠️ **worldserver has not been built.** Do not run a worldserver build unless explicitly approved.
+> ⚠️ **worldserver has not been built.**
 >
 > ⚠️ **scripts target is still in progress.** Current blocker is a non-PCH include issue:
 >   - File: `src/server/scripts/EasternKingdoms/BastionOfTwilight/bastion_of_twilight.h`
