@@ -28,9 +28,6 @@ This is *not* a binary release — you compile it yourself from this repository
 against your own MariaDB and feed it the data files (maps, vmaps, mmaps, DB2/DBC)
 extracted from a real BfA 8.3.7 WoW client.
 
-This is the new **Psycho_Core** base. External upstream/source-base references are
-intentionally left out for now and can be added later.
-
 ---
 
 ## Highlights of this branch
