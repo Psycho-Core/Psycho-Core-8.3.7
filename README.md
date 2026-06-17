@@ -14,7 +14,7 @@
 ![MariaDB](https://img.shields.io/badge/MariaDB-11.8.6-orange)
 ![Client](https://img.shields.io/badge/BfA-8.3.7%20%2835662%29-purple)
 
-A modernized TrinityCore-based emulator for **World of Warcraft: Battle for Azeroth**,
+A modernized emulator for **World of Warcraft: Battle for Azeroth**,
 with a refreshed toolchain (CMake 4.3.2, Boost 1.83, OpenSSL 3.5.x) and MariaDB 11.8.6
 as the recommended database.
 
@@ -214,70 +214,6 @@ modules/mod-psychobot/sql/characters/
 modules/mod-psychobot/sql/world/
 ```
 
----
-
-## Database status
-
-The public `sql/` folder does not include a complete populated world/hotfix DB package.
-
-Present:
-
-```text
-sql/base/1_auth.sql
-sql/base/2_characters.sql
-sql/updates/world/*
-sql/updates/hotfixes/*
-sql/updates/characters/*
-```
-
-Missing:
-
-```text
-full world DB base
-full hotfix DB base
-```
-
-Do not assume the public `sql/` folder alone is enough to run a populated BFA world.
-
----
-
-## Reports
-
-```text
-TOOLCHAIN_UPDATE_NOTES.md
-MODULE_RESEARCH_REPORT.md
-API_DIFFERENCE_REPORT.md
-FILE_COMPLETENESS_REPORT.md
-configure_summary.txt
-changelog.txt
-chatlog.txt
-```
-
----
-
-## Development rule
-
-Do not run a build unless explicitly approved.
-
-Allowed without further approval:
-
-```text
-static inspection
-file comparison
-CMake configure/generate
-report generation
-```
-
-Not allowed unless explicitly requested:
-
-```text
-worldserver build
-ALL_BUILD
-running server binaries
-importing SQL into a live database
-```
-
----
 
 ## License
 
