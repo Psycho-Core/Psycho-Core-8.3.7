@@ -16,9 +16,8 @@
 ├── authserver(.exe)         (or bnetserver.exe on this BFA core)
 ├── worldserver.conf         (copied from .dist, edited)
 ├── bnetserver.conf          (copied from .dist, edited)
-├── configs/
-│   └── modules/
-│       └── mod_psychobot.conf   (from configs/modules/*.conf.dist)
+├── conf-backup/
+│   └── mod_psychobot.conf.dist  (backup reference only; live Psychobot keys are in worldserver.conf)
 ├── data/                    <- DataDir (extracted client data)
 │   ├── dbc/  maps/  vmaps/  mmaps/  cameras/  gt/
 ├── lua_scripts/             <- (only if Eluna is added later)
@@ -38,6 +37,7 @@ HotfixDatabaseInfo    = "127.0.0.1;3306;Psycho;Psycho;Psycho_hotfixes"
 ```
 > `./data` and `./logs` resolve relative to wherever you launch worldserver from — fully portable.
 > Best practice: launch worldserver from the server root (or a launcher .bat that `cd`s there first).
+> Psychobot settings are edited in `worldserver.conf` on this core; `conf-backup/mod_psychobot.conf.dist` is only a pristine reference copy.
 
 ### Dependency portability (source tree)
 The CMake Find macros search the bundled `dep/` folders FIRST (relative to repo root, no drive

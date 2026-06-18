@@ -21,10 +21,10 @@ A one-page tick list. Detailed steps in BUILD_GUIDE_WINDOWS.md / BUILD_GUIDE_LIN
 
 ## D. Runtime (server root, portable)
 - [ ] Copy binaries + required DLLs (Win) into a SERVER ROOT folder
-- [ ] Rename *.conf.dist → *.conf  (worldserver, bnetserver, configs/modules/mod_psychobot)
+- [ ] Rename `worldserver.conf.dist` → `worldserver.conf` and `bnetserver.conf.dist` → `bnetserver.conf`
 - [ ] Set `DataDir = "./data"`, `LogsDir = "./logs"` (no drive labels)
 - [ ] Put extracted client data (dbc/maps/vmaps/mmaps/cameras/gt ≈ 10-15 GB) in ./data
-- [ ] (mod-psychobot) set Psychobot.Enable = 1 in configs/modules/mod_psychobot.conf if you want bots
+- [ ] (mod-psychobot) set `Psychobot.Enable = 1` in `worldserver.conf` if you want bots
 
 ## E. First run
 - [ ] Start bnetserver/authserver → then worldserver
@@ -33,5 +33,5 @@ A one-page tick list. Detailed steps in BUILD_GUIDE_WINDOWS.md / BUILD_GUIDE_LIN
 
 ## Reminders
 - Paths in confs = relative to server root (./data, ./logs) — keeps the server portable.
-- mod-psychobot conf lives in <server root>/configs/modules/mod_psychobot.conf (verified).
+- mod-psychobot keys live in `<server root>/worldserver.conf`; `conf-backup/mod_psychobot.conf.dist` is a restore/reference copy.
 - DB creds default to Psycho/Psycho/Psycho_* (changed from bfa_*/root).

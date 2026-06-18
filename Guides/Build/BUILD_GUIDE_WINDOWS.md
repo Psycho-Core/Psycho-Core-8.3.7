@@ -65,8 +65,10 @@ Build Solution. (Or from cmd: `cmake --build . --config RelWithDebInfo`.)
 ## 5. Collect the runtime (portable server root)
 After build, binaries land in `build/bin/<Config>/`. Create your SERVER ROOT and copy:
 - worldserver.exe, bnetserver.exe (+ any required .dll: libmariadb, libcrypto/libssl, etc.)
-- configs/  (worldserver.conf.dist, bnetserver.conf.dist, configs/modules/mod_psychobot.conf.dist)
-Rename each `*.conf.dist` -> `*.conf`.
+- worldserver.conf.dist, bnetserver.conf.dist
+- conf-backup/mod_psychobot.conf.dist  (reference only; live Psychobot keys are merged into worldserver.conf)
+Rename `worldserver.conf.dist` -> `worldserver.conf` and `bnetserver.conf.dist` -> `bnetserver.conf`.
+`mod_psychobot.conf.dist` stays as a backup/reference copy in `conf-backup/`.
 
 ## 6. Databases (MariaDB)
 - Create DBs: `Psycho_auth`, `Psycho_world`, `Psycho_characters`, `Psycho_hotfixes`.

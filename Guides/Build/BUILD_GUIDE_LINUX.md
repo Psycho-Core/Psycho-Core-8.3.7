@@ -53,10 +53,13 @@ After `make install`, the server lands in `../run/` (your INSTALL_PREFIX):
 ```
 run/
 ├── bin/{worldserver, bnetserver}
-├── etc/{worldserver.conf.dist, bnetserver.conf.dist, modules/mod_psychobot.conf.dist}
+├── etc/{worldserver.conf.dist, bnetserver.conf.dist}
+├── conf-backup/{mod_psychobot.conf.dist}   # backup reference only; live keys are in worldserver.conf
 ```
-Copy each `*.conf.dist` -> `*.conf`. Treat `run/` (or wherever you place the binaries) as the
-SERVER ROOT and use relative paths in the conf.
+Copy `worldserver.conf.dist` -> `worldserver.conf` and `bnetserver.conf.dist` -> `bnetserver.conf`.
+`mod_psychobot.conf.dist` is shipped to `conf-backup/` as a restore/reference copy only because
+its keys are already merged into `worldserver.conf`. Treat `run/` (or wherever you place the
+binaries) as the SERVER ROOT and use relative paths in the conf.
 
 ## 6. Databases (MariaDB)
 ```
