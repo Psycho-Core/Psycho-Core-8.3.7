@@ -10,7 +10,16 @@
 
 if(WIN32)
   set(BOOST_DEBUG ON)
-  if(DEFINED ENV{BOOST_ROOT})
+
+  # UNCONDITIONAL, FIRST: auto-detect the portable in-tree Boost under dep/boost.
+  # If boost/version.hpp exists there, FORCE-set BOOST_ROOT + Boost_INCLUDE_DIR so it
+  # overrides any stale env var (e.g. an old 1.70.0 system Boost) and the user never
+  # has to set anything manually. Only falls through to env-var logic if dep/boost is empty.
+  if(EXISTS "${CMAKE_SOURCE_DIR}/dep/boost/boost/version.hpp")
+    set(BOOST_ROOT "${CMAKE_SOURCE_DIR}/dep/boost" CACHE PATH "Boost root" FORCE)
+    set(Boost_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/dep/boost" CACHE PATH "Boost include dir" FORCE)
+    message(STATUS "Auto-detected Boost in dep/boost (portable in-tree install).")
+  elseif(DEFINED ENV{BOOST_ROOT})
     set(BOOST_ROOT $ENV{BOOST_ROOT})
     if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 19.0)
       set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib${PLATFORM}-msvc-12.0)
@@ -25,23 +34,21 @@ if(WIN32)
         ${BOOST_ROOT}/stage/lib
         ${BOOST_ROOT}/lib)
     endif()
-  elseif(NOT DEFINED Boost_DIR AND NOT DEFINED BOOST_ROOT AND NOT DEFINED BOOSTROOT)
-    # CMake 4.x + portable Windows builds: try the common local Boost install
-    # folders before failing. The local cmake/macros/FindBoost.cmake also checks
-    # these paths, but setting BOOST_ROOT here keeps the old TrinityCore logic
-    # compatible with users who did not set an environment variable.
-    if(EXISTS "C:/local/boost_1_83_0/boost/version.hpp")
-      set(BOOST_ROOT "C:/local/boost_1_83_0" CACHE PATH "Boost root" FORCE)
-    elseif(EXISTS "C:/boost_1_83_0/boost/version.hpp")
-      set(BOOST_ROOT "C:/boost_1_83_0" CACHE PATH "Boost root" FORCE)
-    else()
-      message(STATUS "BOOST_ROOT was not set; FindBoost will search common paths. If Boost is not found, set BOOST_ROOT to your Boost 1.83 folder.")
-    endif()
+  elseif(EXISTS "C:/local/boost_1_83_0/boost/version.hpp")
+    set(BOOST_ROOT "C:/local/boost_1_83_0" CACHE PATH "Boost root" FORCE)
+  elseif(EXISTS "C:/boost_1_83_0/boost/version.hpp")
+    set(BOOST_ROOT "C:/boost_1_83_0" CACHE PATH "Boost root" FORCE)
+  else()
+    message(STATUS "BOOST_ROOT was not set; FindBoost will search common paths. If Boost is not found, set BOOST_ROOT to your Boost 1.83 folder.")
   endif()
 
   set(Boost_USE_STATIC_LIBS        ON)
   set(Boost_USE_MULTITHREADED      ON)
   set(Boost_USE_STATIC_RUNTIME     OFF)
+  # Resolve Release (mt) Boost libs only. Mixing a Debug Boost lib into a
+  # Release build triggers LNK2038 RuntimeLibrary/IDL mismatches.
+  set(Boost_USE_RELEASE_LIBS       ON)
+  set(Boost_USE_DEBUG_LIBS         OFF)
 endif()
 
 if (CMAKE_VERSION VERSION_LESS "3.16.0")

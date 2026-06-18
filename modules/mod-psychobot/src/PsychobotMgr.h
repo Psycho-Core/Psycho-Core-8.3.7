@@ -34,6 +34,7 @@ namespace psychobot
         // Master-facing controls (driven by the .psychobot command).
         // Returns a human-readable status string.
         std::string AddBot(Player* master, std::string const& charName);
+        std::string SummonBot(Player* master, std::string const& charName); // ".psychobot summon" (add + teleport to master)
         std::string RemoveBot(Player* master, std::string const& charName);
         std::string ListBots(Player* master);
         std::string SetSpec(Player* master, std::string const& args);   // "<name> <specIndex>"

@@ -19,6 +19,16 @@
 /// @{
 /// \file
 
+// OpenSSL base headers MUST come before any project header: project headers
+// (World.h -> WorldSession.h -> RSA.h -> openssl/rsa.h -> openssl/bn.h) transitively
+// pull in openssl/bn.h, which uses CRYPTO_RWLOCK. That opaque type is defined in
+// openssl/types.h, pulled in by openssl/crypto.h. If bn.h is seen first the build
+// fails with "C2061: syntax error: identifier 'CRYPTO_RWLOCK'". Including crypto.h
+// here first guarantees CRYPTO_RWLOCK (and OpenSSL_version/OPENSSL_VERSION) are
+// defined before any bn.h use. ssl.h follows for the SSL API.
+#include <openssl/crypto.h>
+#include <openssl/ssl.h>
+
 #include "Common.h"
 #include "AppenderDB.h"
 #include "AsyncAcceptor.h"
@@ -161,7 +171,9 @@ extern int main(int argc, char** argv)
         []()
         {
             TC_LOG_INFO("server.worldserver", "Using configuration file %s.", sConfigMgr->GetFilename().c_str());
-            TC_LOG_INFO("server.worldserver", "Using SSL version: %s (library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));
+            // OPENSSL_VERSION_TEXT (from opensslv.h) is a compile-time string that needs
+            // no runtime call, so it works identically across OpenSSL 1.x and 3.x.
+            TC_LOG_INFO("server.worldserver", "Using SSL version: %s", OPENSSL_VERSION_TEXT);
             TC_LOG_INFO("server.worldserver", "Using Boost version: %i.%i.%i", BOOST_VERSION / 100000, BOOST_VERSION / 100 % 1000, BOOST_VERSION % 100);
         }
     );

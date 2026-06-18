@@ -64,7 +64,8 @@ namespace psychobot
         {
             std::string base = name;
             std::string qualifier;
-            if (size_t pos = name.find("::"); pos != std::string::npos)
+            size_t pos = name.find("::");
+            if (pos != std::string::npos)
             {
                 qualifier = name.substr(pos + 2);
                 base = name.substr(0, pos);

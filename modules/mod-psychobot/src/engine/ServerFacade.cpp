@@ -95,7 +95,7 @@ namespace psychobot
             if (!bot || !spellId || !bot->HasSpell(spellId))
                 return false;
 
-            SpellInfo const* info = sSpellMgr->GetSpellInfo(spellId, DIFFICULTY_NONE);
+            SpellInfo const* info = sSpellMgr->GetSpellInfo(spellId);
             if (!info)
                 return false;
 
@@ -176,7 +176,7 @@ namespace psychobot
             Pet* pet = bot->GetPet();
             if (!pet || !pet->IsAlive())
                 return false;
-            SpellInfo const* info = sSpellMgr->GetSpellInfo(spellId, DIFFICULTY_NONE);
+            SpellInfo const* info = sSpellMgr->GetSpellInfo(spellId);
             if (!info)
                 return false;
             if (SpellHistory* h = pet->GetSpellHistory())

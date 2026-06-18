@@ -84,13 +84,20 @@ if( WIN32 )
     add_custom_command(TARGET worldserver
       POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/worldserver.conf.dist ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/
+      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/run_worldserver.bat ${CMAKE_BINARY_DIR}/bin/$(ConfigurationName)/
     )
   elseif ( MINGW )
     add_custom_command(TARGET worldserver
       POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/worldserver.conf.dist ${CMAKE_BINARY_DIR}/bin/
+      COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/run_worldserver.bat ${CMAKE_BINARY_DIR}/bin/
     )
   endif()
+
+  # Copy the MariaDB/MySQL client DLL (libmariadb.dll/libmysql.dll) next to the
+  # executable so the server can load it at runtime without manual setup.
+  include(${CMAKE_SOURCE_DIR}/cmake/macros/CopyMySQLClientDLL.cmake)
+  CopyMySQLClientDLL(worldserver)
 endif()
 
 if( UNIX )

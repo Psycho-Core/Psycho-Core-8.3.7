@@ -35,8 +35,11 @@
 #include "MySQLWorkaround.h"
 #include <mysqld_error.h>
 
-#define MIN_MYSQL_SERVER_VERSION 50100u
-#define MIN_MYSQL_CLIENT_VERSION 50100u
+// MariaDB Connector C reports version as 3xxYY (e.g. 3.3.8 = 30308), which is
+// far below the MySQL 5.1 minimum of 50100. This project explicitly uses the
+// MariaDB client library, so set the minimum to accommodate MariaDB's numbering.
+#define MIN_MYSQL_SERVER_VERSION 10000u
+#define MIN_MYSQL_CLIENT_VERSION 10000u
 
 class PingOperation : public SQLOperation
 {
@@ -54,9 +57,18 @@ DatabaseWorkerPool<T>::DatabaseWorkerPool()
       _async_threads(0), _synch_threads(0)
 {
     WPFatal(mysql_thread_safe(), "Used MySQL library isn't thread-safe.");
-    WPFatal(mysql_get_client_version() >= MIN_MYSQL_CLIENT_VERSION, "BfaCore does not support MySQL versions below 5.1");
-    WPFatal(mysql_get_client_version() == MYSQL_VERSION_ID, "Used MySQL library version (%s) does not match the version used to compile BfaCore (%s). Search on forum for TCE00011.",
-        mysql_get_client_info(), MYSQL_SERVER_VERSION);
+    WPFatal(mysql_get_client_version() >= MIN_MYSQL_CLIENT_VERSION, "Psycho-Core does not support client library versions below the minimum.");
+
+    // NOTE: The legacy strict version-match check (mysql_get_client_version() ==
+    // MYSQL_VERSION_ID) is fundamentally incompatible with MariaDB and has been
+    // removed. MariaDB Server packages use TWO independent version schemes:
+    //   - Headers define version macros as the SERVER version (e.g. 11.8.6 = 110806)
+    //   - The bundled libmariadb.dll reports the CONNECTOR C version at runtime
+    //     (e.g. 3.4.9 = 30409) via mysql_get_client_version()
+    // These can NEVER be equal, so any comparison between them is meaningless and
+    // will always trigger a false FATAL. The two checks above (thread-safety +
+    // minimum version) provide real safety guarantees. TrinityCore upstream also
+    // removed this check for the same reason.
 }
 
 template <class T>

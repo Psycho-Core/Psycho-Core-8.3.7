@@ -117,13 +117,22 @@ function(_psychocore_find_boost_component component)
     "boost_${component}-vc141-mt-x64-1_83"
     "libboost_${component}-vc140-mt-x64-1_83"
     "boost_${component}-vc140-mt-x64-1_83"
-    "libboost_${component}-vc143-mt-gd-x64-1_83"
-    "boost_${component}-vc143-mt-gd-x64-1_83"
-    "libboost_${component}-vc142-mt-gd-x64-1_83"
-    "boost_${component}-vc142-mt-gd-x64-1_83"
     "libboost_${component}"
     "boost_${component}"
   )
+
+  # Debug (-gd) variants are searched ONLY when explicitly requested via
+  # Boost_USE_DEBUG_LIBS. Linking a Debug Boost lib into a Release build causes
+  # LNK2038 RuntimeLibrary / _ITERATOR_DEBUG_LEVEL mismatches (the linker also
+  # then asks for libboost_...-mt-gd-...-1_83.lib which is often absent), so by
+  # default we resolve the Release (mt) libraries only.
+  if(Boost_USE_DEBUG_LIBS)
+    list(APPEND _names
+      "libboost_${component}-vc143-mt-gd-x64-1_83"
+      "boost_${component}-vc143-mt-gd-x64-1_83"
+      "libboost_${component}-vc142-mt-gd-x64-1_83"
+      "boost_${component}-vc142-mt-gd-x64-1_83")
+  endif()
 
   find_library(Boost_${component_upper}_LIBRARY
     NAMES ${_names}

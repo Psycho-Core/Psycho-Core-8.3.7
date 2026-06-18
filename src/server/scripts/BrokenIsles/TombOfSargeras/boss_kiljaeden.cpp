@@ -447,7 +447,7 @@ struct boss_tos_kiljaeden : BossAI
             me->SetFacingTo(flyPos[4].GetAngle(me) - M_PI);
             events.RescheduleEvent(EVENT_ARMAGEDDON, 1000);
             events.RescheduleEvent(EVENT_BURSTING_DREADFLAME, IsMythicRaid() ? 4000 : 2000);
-            if (!false /*IsLfrRaid - no LFR in this build*/)
+            if (!false) //IsLfrRaid - no LFR in this build
                 events.RescheduleEvent(EVENT_FOCUSED_DREADFLAME, IsMythicRaid() ? 25000 : 18000);
             if (IsHeroicRaid())
                 events.RescheduleEvent(EVENT_RUPTURING_SINGULARITY, 7000);
@@ -475,7 +475,7 @@ struct boss_tos_kiljaeden : BossAI
             me->SetFacingTo(flyPos[4].GetAngle(me) - M_PI);
             events.RescheduleEvent(EVENT_ARMAGEDDON, 1000);
             events.RescheduleEvent(EVENT_BURSTING_DREADFLAME, IsMythicRaid() ? 24000 : 20000);
-            if (!false /*IsLfrRaid - no LFR in this build*/)
+            if (!false) //IsLfrRaid - no LFR in this build
                 events.RescheduleEvent(EVENT_FOCUSED_DREADFLAME, IsMythicRaid() ? 4000 : 2000);
             if (IsHeroicRaid())
                 events.RescheduleEvent(EVENT_RUPTURING_SINGULARITY, 8000);

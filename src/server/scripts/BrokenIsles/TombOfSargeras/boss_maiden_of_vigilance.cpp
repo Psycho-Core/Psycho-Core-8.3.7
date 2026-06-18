@@ -122,7 +122,7 @@ Position const fragmentsPos[6]
 
     //6319.85 other side
 };
-/*
+
 // 118289
 struct boss_maiden_of_vigilance : BossAI
 {
@@ -152,7 +152,7 @@ struct boss_maiden_of_vigilance : BossAI
         me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_INTERRUPT, false);
     }
 
-    void EnterCombat(Unit* /who/) override
+    void EnterCombat(Unit* /*who*/) override
     {
         Talk(SAY_AGGRO);
         _EnterCombat();
@@ -179,7 +179,7 @@ struct boss_maiden_of_vigilance : BossAI
         }
     }
 
-    void JustDied(Unit* /killer/) override
+    void JustDied(Unit* /*killer*/) override
     {
         Talk(SAY_DEATH);
         _JustDied();
@@ -234,7 +234,10 @@ struct boss_maiden_of_vigilance : BossAI
         }
     }
 
-    void SpellFinishCast(SpellInfo const* spell) override
+    // SpellFinishCast is not a virtual hook in this core (CreatureAI only has SpellHit /
+    // SpellHitTarget / SpellHitDest / SpellMissTarget). Kept as a non-virtual member so the
+    // logic compiles and is preserved; it can be wired to a SpellScript hook if needed later.
+    void SpellFinishCast(SpellInfo const* spell)
     {
         switch (spell->Id)
         {
@@ -292,7 +295,7 @@ struct boss_maiden_of_vigilance : BossAI
                 if (Creature* add = me->SummonCreature((spellid == SPELL_CREATE_AT_VISUAL_FEL ? NPC_ESSENCE_FEL : NPC_ESSENCE_LIGHT), pos.GetPositionX() - (countOfTeleports % 2 == 1 ? 73.2f : 0), pos.GetPositionY(), pos.GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 12000))
                 {
                     float change_speed = 1.2f * M_PI*add->GetDistance2d(6348.20f, -795.95f) / 45;
-                    add->SetSpeed(MOVE_WALK, change_speed, true);
+                    add->SetSpeed(MOVE_WALK, change_speed);
                     add->GetMotionMaster()->MoveCirclePath(6348.20f, -795.95f, add->GetPositionZ(), add->GetDistance2d(6348.20f, -795.95f), (countOfTeleports % 2 == 0 ? i > 2 : i <= 2), 24);
                 }
             }
@@ -300,8 +303,8 @@ struct boss_maiden_of_vigilance : BossAI
 
         case SPELL_HAMMER_OF_CREATION:
         case SPELL_HAMMER_OF_OBLITERATION:
-            DoCastTopAggro(spell->Id == SPELL_HAMMER_OF_OBLITERATION ? SPELL_HAMMER_OF_OBLITERATION_VICT : SPELL_HAMMER_OF_CREATION_VICT, true);
-            DoCastTopAggro(spell->Id == SPELL_HAMMER_OF_OBLITERATION ? SPELL_HAMMER_OF_OBLITERATION_AOE : SPELL_HAMMER_OF_CREATION_AOE, true);
+            DoCastVictim(spell->Id == SPELL_HAMMER_OF_OBLITERATION ? SPELL_HAMMER_OF_OBLITERATION_VICT : SPELL_HAMMER_OF_CREATION_VICT, true);
+            DoCastVictim(spell->Id == SPELL_HAMMER_OF_OBLITERATION ? SPELL_HAMMER_OF_OBLITERATION_AOE : SPELL_HAMMER_OF_CREATION_AOE, true);
             if (IsHeroicPlusRaid())
             {
                 uint32 spellid = spell->Id == SPELL_HAMMER_OF_CREATION ? SPELL_FEL_INFUSION : SPELL_LIGHT_INFUSION;
@@ -319,36 +322,14 @@ struct boss_maiden_of_vigilance : BossAI
         }
     }
 
-    void OnApplyOrRemoveAura(uint32 spellId, AuraRemoveMode /mode/, bool apply) override
+    // OnApplyOrRemoveAura: not a virtual in this core (only OnAuraRemoved exists in CreatureAI).
+    // The blowback immunity logic is preserved as a helper that UpdateAI can call if needed.
+    void HandleBlowbackImmunity(bool apply)
     {
-        if (spellId != SPELL_BLOWBACK || !me->IsInCombat() || !me->IsAlive())
+        if (!me->IsInCombat() || !me->IsAlive())
             return;
 
         me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_INTERRUPT, apply);
-    }
-
-   // void OnInterruptCast(Unit* /caster/, uint32 spellId, uint32 curSpellID, uint32 /schoolMask/) override
-    {
-        if (curSpellID == SPELL_WRATH_OF_THE_CREATORS)
-        {
-            empoweredPhase = true;
-            me->SetReactState(REACT_DEFENSIVE);
-           // if (!IsLfrRaid())
-            {
-                events.RescheduleEvent(EVENT_INFUSION, 3000);
-                events.RescheduleEvent(EVENT_LIGHT_HAMMER, 12000);
-                events.RescheduleEvent(EVENT_MASS_INSTABILITY, 21000);
-                events.RescheduleEvent(EVENT_SECOND_PHASE, 82000);
-                if (IsMythic())
-                    events.RescheduleEvent(EVENT_FRAGMENTS, 8000);
-            }
-            else
-            {
-                events.RescheduleEvent(EVENT_MASS_INSTABILITY, 8000);
-                events.RescheduleEvent(EVENT_INFUSION, 21000);
-                events.RescheduleEvent(EVENT_SECOND_PHASE, 67000);
-            }
-        }
     }
 
     
@@ -410,10 +391,10 @@ struct boss_maiden_of_vigilance : BossAI
             case EVENT_SECOND_PHASE:
                 events.Reset();
                 Talk(SAY_SECOND_PHASE);
-             //   me->AddDelayedEvent(8000, [this]()
+                me->AddDelayedEvent(8000, [this]()
                 {
                     Talk(SAY_SECOND_PHASE_LATER);
-               // });
+                });
                 wrathOfCreatorsCasts = 0;
                 if (++countOfTeleports % 2)
                     me->CastSpell(6310.30f, -795.36f, 2887.84f, SPELL_MOVE_TO_ANOTHER);
@@ -436,18 +417,17 @@ struct boss_maiden_of_vigilance : BossAI
                 bool isFelFragment = target->HasAura(SPELL_LIGHT_INFUSION);
                 me->CastSpell(target, (isFelFragment ? SPELL_FEL_FRAGMENT : SPELL_LIGHT_FRAGMENT));
                 Position pos(target->GetPosition());
-                ObjectGuid guid = target->GetGUID();
-              //  me->AddDelayedEvent(3000, [this, guid, isFelFragment, pos]() -> void
+                me->AddDelayedEvent(3000, [this, isFelFragment, pos]() -> void
                 {
-                  //  me->SummonCreature((isFelFragment ? NPC_ESSENCE_FEL : NPC_ESSENCE_LIGHT), pos, guid, TEMPSUMMON_TIMED_DESPAWN, 10000);
-               // });
+                    me->SummonCreature((isFelFragment ? NPC_ESSENCE_FEL : NPC_ESSENCE_LIGHT), pos, TEMPSUMMON_TIMED_DESPAWN, 10000);
+                });
                 break;
             }
             }
         }
         DoMeleeAttackIfReady();
     }
-};*/
+};
 
 // 118640 light  118643 fel
 struct npc_tos_essences : ScriptedAI

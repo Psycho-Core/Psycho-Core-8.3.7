@@ -1,5 +1,17 @@
 # Chat Log
 CRITICAL NOTE: Must summeries chat with date and time stamps. NO LOCATION, and be updated after each step is complete before reporting back.
+
+>>> CRITICAL BUILD RULES (added 2026-06-18, must never be violated) <<<
+1. NO DUMMY FIXES. Never stub, placeholder, #if 0 out, or delete real logic to
+   make an error disappear. Every fix must address the actual root cause and
+   produce working code that compiles against the core's real API.
+2. When a core API is absent, ADAPT the call to a real equivalent that exists
+   (e.g. DoCastTopAggro -> DoCastVictim; commented-out lambda -> restored as
+   valid code using an existing overload), never disable it with a dummy.
+3. ALWAYS verify brace balance (comment-aware), comment nesting, and that every
+   override actually matches a base virtual, before reporting a fix done.
+
+CRITICAL NOTE: Must summeries chat with date and time stamps. NO LOCATION, and be updated after each step is complete before reporting back.
 User goal:
 - Use original Titans Psycho_Core-8.3.7 as the new source base.
 - Use Psycho_Core-8.3.7 as the reference for toolchain, modules support, and mod-psychobot later.
@@ -280,3 +292,55 @@ CHECK ALL SCRIPTS, (3) report back.
 - Wrote from-scratch site web/PsychoSite (original, LICENSE.MYCODE), with correct BfA SRP6 account
   creation verified byte-for-byte against the core's SRP6.cpp via an installed PHP+gmp self-test.
 - No core code change, no build.
+
+## 2026-06-18 (VS Rebuild error fixes)
+- User: read Dev/changelog.txt + Dev/chatlog.txt, then read two uploaded VS
+  outputs (Vs-errors.txt = error list, VS-OUTPUT.txt = full Rebuild log).
+- Read all four. Diagnosed: Rebuild All (Release x64) = 21 succeeded / 5 failed /
+  1 skipped. Confirmed GitHub repo is the unmodified base (fcbb2d7); the fixes the
+  old logs describe were never committed, so Windows hit every original error.
+- Investigated every failing area against the actual source (SpellMgr.h arity,
+  LocalizedString type, PsychobotMgr API, Battleground/Archaeology includes,
+  OpenSSL call, FindBoost lib selection, FindMySQL paths, modules CMakeLists).
+- User: "fix all errors".
+- Applied 10 source/build-system fixes (listed in Dev/changelog.txt + Dev/FIXES_APPLIED.md):
+  OpenSSL 3.x guard; 1-arg GetSpellInfo (x3); LocalizedString deref; SummonBot impl;
+  C++17 on modules target; NEW ModulesPCH.h force-include shim (fixes the 100+ header
+  unordered_map cascade without editing each header); FindBoost debug-lib gating;
+  FindMySQL paths + clear error message; unordered_map includes in 2 core headers.
+- Key proactive fix: the modules project builds without a PCH, so 100+ core headers
+  that rely on the core PCH for std containers broke. Solved centrally with a
+  force-included std shim rather than 100+ per-file edits.
+- Two items are environment-only and documented for the user: (1) supply MySQL
+  headers (unzip bundled MariaDB / install Connector-C / set MYSQL_INCLUDE_DIR);
+  (2) DELETE the build/ folder and reconfigure so no stale /MDd objects cause the
+  Boost MD/MDd mismatch.
+- Did not run a core build (Windows-only toolchain). All checks are static against
+  headers/signatures + brace balance + grep verification.
+- Awaiting next instruction.
+
+## 2026-06-18 (verification + CRYPTO_RWLOCK + toolchain audit)
+- User: verify all fixes made, make sure toolchains point to correct dep folders.
+- Re-verified all 9 fix categories: ALL PRESENT.
+- Found+fixed a 10th error I'd initially missed: CRYPTO_RWLOCK syntax error in
+  openssl/bn.h (worldserver Main.cpp). Cause: bn.h transitively included before
+  crypto.h. Fix: #include <openssl/ssl.h> as first include in Main.cpp.
+- Audited FindBoost/FindOpenSSL/FindMySQL vs the 3 dep/ INSTALL docs. All three
+  correctly search the dep/ folders (and match the extraction layouts exactly),
+  with external fallbacks. No toolchain path errors found.
+- Awaiting next instruction.
+
+## 2026-06-18 (Round 2 errors)
+- User uploaded Vs-errors-2.txt + VS-OUTPUT-2.txt. New errors now that round-1
+  fixes are applied + mysql.h found + Boost fixed.
+- Diagnosed + fixed 8 errors across 8 files (see Dev/changelog.txt):
+  1) database UpdateFetcher missing <chrono>.
+  2-3) worldserver OpenSSL CRYPTO_RWLOCK (crypto.h must be first) + version call ->
+     OPENSSL_VERSION_TEXT.
+  4-5) modules std::unary_function broke because round-1 set C++17; reverted to C++14
+     and rewrote the one C++17 init-statement.
+  6) boss_maiden_of_vigilance.cpp malformed /param/ comments + orphan function bodies.
+  7-8) boss_kaathar + boss_mannoroth nested /* /* */ */ comments.
+- bnetserver LNK1181 was a cascade of database failing (no database.lib).
+- All 8 fixes verified: brace balance OK, nesting clean, C++14 confirmed, no C++17
+  headers in ModulesPCH. No core build run (Windows toolchain). Awaiting next step.

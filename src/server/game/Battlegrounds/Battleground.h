@@ -24,6 +24,7 @@
 #include "Position.h"
 #include "SharedDefines.h"
 #include <map>
+#include <unordered_map>
 
 class BattlegroundMap;
 class Creature;

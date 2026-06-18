@@ -18,6 +18,8 @@
 #ifndef _ARCHAEOLOGY_PLAYER_MGR_H
 #define _ARCHAEOLOGY_PLAYER_MGR_H
 
+#include <unordered_map>
+
 class Player;
 
 struct Digsite

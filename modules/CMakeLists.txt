@@ -130,6 +130,16 @@ foreach(SOURCE_MODULE ${MODULES_MODULE_LIST})
       PROPERTIES
         FOLDER "modules")
 
+    # Dynamic modules also build without a PCH: force-include the std-container
+    # shim (same as the static modules library). NOTE: kept at the core's C++14
+    # standard deliberately — raising to C++17 would remove std::unary_function,
+    # which core headers (UnitAI.h) still derive from.
+    if(MSVC)
+      target_compile_options(${MODULE_PROJECT_NAME} PRIVATE /FI"${CMAKE_CURRENT_SOURCE_DIR}/ModulesPCH.h")
+    else()
+      target_compile_options(${MODULE_PROJECT_NAME} PRIVATE -include ${CMAKE_CURRENT_SOURCE_DIR}/ModulesPCH.h)
+    endif()
+
     if (UNIX)
       install(TARGETS ${MODULE_PROJECT_NAME}
         DESTINATION ${INSTALL_OFFSET}
@@ -181,6 +191,23 @@ target_include_directories(modules
 set_target_properties(modules
   PROPERTIES
     FOLDER "modules")
+
+# The modules target is built WITHOUT a precompiled header, but it includes core
+# headers that were written to rely on the core PCH transitively supplying std
+# containers (std::string, std::unordered_map, ...). Force-include ModulesPCH.h
+# so every module TU starts with the same standard-library availability. This
+# fixes all "X is not a member of std" / "unknown override specifier" errors that
+# would otherwise cascade from non-PCH inclusion of core headers.
+#
+# NOTE: modules are kept at the core's C++14 standard. Do NOT raise to C++17:
+# core headers (e.g. UnitAI.h) derive from std::unary_function, which was removed
+# in C++17. The single C++17 init-statement in NamedObjectContext.h was rewritten
+# to be C++14-compatible instead.
+if(MSVC)
+  target_compile_options(modules PRIVATE /FI"${CMAKE_CURRENT_SOURCE_DIR}/ModulesPCH.h")
+else()
+  target_compile_options(modules PRIVATE -include ${CMAKE_CURRENT_SOURCE_DIR}/ModulesPCH.h)
+endif()
 
 # Allow each module to inject extra CMake (find_package/link/include) inline.
 foreach(SOURCE_MODULE ${MODULES_MODULE_LIST})

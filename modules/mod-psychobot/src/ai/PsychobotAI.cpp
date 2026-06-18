@@ -259,7 +259,9 @@ namespace psychobot
             if (!entry)
                 continue;
 
-            char const* spellName = entry->Name[LOCALE_enUS];
+            char const* spellName = nullptr;
+            if (entry->Name)
+                spellName = (*entry->Name)[LOCALE_enUS];
             if (!spellName || !*spellName)
                 continue;
 
@@ -278,7 +280,7 @@ namespace psychobot
         if (!_bot || !spellId || !target)
             return false;
 
-        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId, DIFFICULTY_NONE);
+        SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
         if (!spellInfo)
             return false;
 

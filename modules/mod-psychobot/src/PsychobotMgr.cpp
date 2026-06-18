@@ -99,6 +99,52 @@ namespace psychobot
         return "Failed to add Psychobot.";
     }
 
+    std::string PsychobotMgr::SummonBot(Player* master, std::string const& charName)
+    {
+        if (!sConfigMgr->GetBoolDefault("Psychobot.Enable", false))
+            return "Psychobot is disabled (set Psychobot.Enable = 1).";
+
+        if (!master)
+            return "No master.";
+
+        if (charName.empty())
+            return "Usage: .psychobot summon <charactername>";
+
+        Player* bot = ObjectAccessor::FindConnectedPlayerByName(charName);
+        if (!bot)
+        {
+            // Offline: bring the character in via the same socketless login path
+            // as AddBot and remember its master. AI attaches on OnPlayerLogin; the
+            // bot is teleported to the master once it is fully in world (next tick).
+            CharacterCacheEntry const* entry = sCharacterCache->GetCharacterCacheByName(charName);
+            if (!entry)
+                return "No character named '" + charName + "' exists.";
+            if (entry->Guid == master->GetGUID())
+                return "You cannot summon yourself.";
+
+            std::string reason;
+            if (LoginMgr::LoginBot(entry->Guid, entry->AccountId, reason))
+            {
+                _pendingMasters[entry->Guid] = master->GetGUID();
+                return "Summoning '" + charName + "'... " + reason
+                     + " (it will appear beside you once loaded).";
+            }
+            return "Could not bring '" + charName + "' online: " + reason;
+        }
+
+        if (bot->GetGUID() == master->GetGUID())
+            return "You cannot summon yourself.";
+
+        // Already in world: ensure AI is attached (idempotent) and teleport it
+        // straight to the master's location.
+        if (!IsBot(bot->GetGUID()))
+            AttachAI(bot, master->GetGUID());
+
+        bot->TeleportTo(master->GetMapId(), master->GetPositionX(),
+            master->GetPositionY(), master->GetPositionZ(), master->GetOrientation());
+        return "Summoned Psychobot: " + bot->GetName() + ".";
+    }
+
     std::string PsychobotMgr::RemoveBot(Player* master, std::string const& charName)
     {
         if (!master)

@@ -1,13 +1,13 @@
 /*
 * BfaCore <Reforged>
-* MySQL - 5.7.32 : Database - bfa_characters
+* MySQL - 5.7.32 : Database - psycho_characters
 *********************************************************************
 */
 
 /*!40101 SET NAMES utf8 */;
 
-CREATE DATABASE IF NOT EXISTS `characters_bfa` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-USE `characters_bfa`;
+CREATE DATABASE IF NOT EXISTS `psycho_characters` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+USE `psycho_characters`;
 
 CREATE TABLE `account_battlepet` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,

@@ -49,6 +49,35 @@ set(PSYCHOCORE_BUNDLED_MARIADB_BINARY_PATHS
 
 if(WIN32 AND EXISTS "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}")
   message(STATUS "Using bundled MariaDB search root: ${PSYCHOCORE_BUNDLED_MARIADB_ROOT}")
+
+  # UNCONDITIONAL auto-detect of the in-tree MariaDB client (portable build).
+  # If mysql.h and the import lib exist ANYWHERE under dep/mysql, FORCE-set the cache
+  # variables so they override stale cache / system MySQL Server installs and the user
+  # never has to set MYSQL_INCLUDE_DIR / MYSQL_LIBRARY manually.
+  # Searches both dep/mysql and dep/mysql/mariadb-11.8.6-winx64 layouts.
+  foreach(_root "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}" "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/mariadb-11.8.6-winx64")
+    # Headers
+    if(EXISTS "${_root}/include/mysql.h" AND NOT MYSQL_INCLUDE_DIR)
+      set(MYSQL_INCLUDE_DIR "${_root}/include" CACHE PATH "MySQL include dir" FORCE)
+      message(STATUS "Auto-detected MySQL headers: ${MYSQL_INCLUDE_DIR}")
+    endif()
+    # Library — searched independently of headers, at common lib sub-paths
+    foreach(_libsubdir lib lib/opt lib/mariadb)
+      foreach(_libname libmariadb libmysql mariadbclient)
+        if(EXISTS "${_root}/${_libsubdir}/${_libname}.lib")
+          set(MYSQL_LIBRARY "${_root}/${_libsubdir}/${_libname}.lib" CACHE FILEPATH "MySQL library" FORCE)
+          message(STATUS "Auto-detected MySQL library: ${MYSQL_LIBRARY}")
+          break()
+        endif()
+      endforeach()
+      if(MYSQL_LIBRARY)
+        break()
+      endif()
+    endforeach()
+    if(MYSQL_LIBRARY)
+      break()
+    endif()
+  endforeach()
 endif()
 
 if( UNIX )
@@ -118,8 +147,20 @@ find_path(MYSQL_INCLUDE_DIR
   NAMES
     mysql.h
   PATHS
+    ${MYSQL_INCLUDE_DIR}
+    $ENV{MYSQL_INCLUDE_DIR}
     ${PSYCHOCORE_BUNDLED_MARIADB_INCLUDE_PATHS}
     ${MYSQL_ADD_INCLUDE_PATH}
+    # MariaDB Connector C (common Windows install locations)
+    "${PROGRAM_FILES_64}/MariaDB/MariaDB Connector C 3.3/include"
+    "${PROGRAM_FILES_64}/MariaDB/MariaDB Connector C 3.2/include"
+    "${PROGRAM_FILES_64}/MariaDB/MariaDB Connector C 3.1/include"
+    "${PROGRAM_FILES_64}/MariaDB Connector C/include"
+    "${PROGRAM_FILES_64}/MariaDB Connector C 64-bit/include"
+    "${PROGRAM_FILES_32}/MariaDB/MariaDB Connector C 3.3/include"
+    "${PROGRAM_FILES_32}/MariaDB/MariaDB Connector C 3.2/include"
+    "${PROGRAM_FILES_32}/MariaDB Connector C/include"
+    "${PROGRAM_FILES_32}/MariaDB Connector C 32-bit/include"
     /usr/include
     /usr/include/mysql
     /usr/local/include
@@ -295,10 +336,44 @@ endif( WIN32 )
 if( MYSQL_LIBRARY )
   if( MYSQL_INCLUDE_DIR )
     set( MYSQL_FOUND 1 )
+
+    # Final override: if the bundled MariaDB client lib exists under dep/mysql, it
+    # ALWAYS wins over any system MySQL Server install that find_library may have
+    # picked up. Re-verify and FORCE-set so the user never gets the wrong library.
+    foreach(_root "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}" "${PSYCHOCORE_BUNDLED_MARIADB_ROOT}/mariadb-11.8.6-winx64")
+      foreach(_libsubdir lib lib/opt lib/mariadb)
+        foreach(_libname libmariadb libmysql mariadbclient)
+          if(EXISTS "${_root}/${_libsubdir}/${_libname}.lib")
+            get_filename_component(_current_lib "${MYSQL_LIBRARY}" NAME)
+            if(NOT "${_current_lib}" STREQUAL "${_libname}.lib" OR NOT "${MYSQL_LIBRARY}" STREQUAL "${_root}/${_libsubdir}/${_libname}.lib")
+              set(MYSQL_LIBRARY "${_root}/${_libsubdir}/${_libname}.lib" CACHE FILEPATH "MySQL library" FORCE)
+              message(STATUS "Overriding MySQL library with bundled: ${MYSQL_LIBRARY}")
+            endif()
+            break()
+          endif()
+        endforeach()
+        if(EXISTS "${_root}/${_libsubdir}/libmariadb.lib" OR EXISTS "${_root}/${_libsubdir}/libmysql.lib")
+          break()
+        endif()
+      endforeach()
+      if(EXISTS "${_root}/lib/libmariadb.lib" OR EXISTS "${_root}/lib/libmysql.lib")
+        break()
+      endif()
+    endforeach()
+
     message(STATUS "Found MySQL library: ${MYSQL_LIBRARY}")
     message(STATUS "Found MySQL headers: ${MYSQL_INCLUDE_DIR}")
   else( MYSQL_INCLUDE_DIR )
-    message(FATAL_ERROR "Could not find MySQL headers! Please install the development libraries and headers")
+    message(FATAL_ERROR
+      "Could not find MySQL headers (mysql.h)!\n"
+      "The 'database' project needs the MariaDB/MySQL client development headers.\n"
+      "Fix ONE of these:\n"
+      "  1) Unzip dep/mysql/mariadb-11.8.6-winx64.zip so that\n"
+      "     dep/mysql/mariadb-11.8.6-winx64/include/mysql.h exists, OR\n"
+      "  2) Install 'MariaDB Connector C' and let FindMySQL auto-detect it, OR\n"
+      "  3) Set MYSQL_INCLUDE_DIR to the folder that contains mysql.h, e.g.\n"
+      "     cmake -DMYSQL_INCLUDE_DIR=\"C:/Program Files/MariaDB/MariaDB Connector C 3.3/include\" ...\n"
+      "Also set MYSQL_LIBRARY (or MYSQL_ADD_LIBRARIES_PATH) to the matching lib folder.")
   endif( MYSQL_INCLUDE_DIR )
   if( MYSQL_EXECUTABLE )
     message(STATUS "Found MySQL executable: ${MYSQL_EXECUTABLE}")

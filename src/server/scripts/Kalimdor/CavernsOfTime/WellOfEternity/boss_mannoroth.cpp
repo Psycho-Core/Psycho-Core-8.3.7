@@ -480,7 +480,7 @@ public:
                     {
                         if (Player* pPlayer = i->GetSource())
                             if (Group* pGroup = pPlayer->GetGroup())
-                                if (pPlayer->GetGuildId() && false /* IsGuildGroup removed in BFA */)
+                                if (pPlayer->GetGuildId() && false) // IsGuildGroup removed in BFA
                                 {
                                     pGroup->UpdateGuildAchievementCriteria(CRITERIA_TYPE_BE_SPELL_TARGET, SPELL_COMPLETE_ENCOUNTER, 0, 0, NULL, me);
                                     break;

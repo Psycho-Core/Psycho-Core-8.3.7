@@ -15,8 +15,8 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENSSL_CRYPTO_H
-#define OPENSSL_CRYPTO_H
+#ifndef PSYCHO_OPENSSL_CRYPTO_H
+#define PSYCHO_OPENSSL_CRYPTO_H
 
 #include "Define.h"
 
@@ -32,4 +32,4 @@ namespace OpenSSLCrypto
     TC_COMMON_API void threadsCleanup();
 }
 
-#endif
+#endif // PSYCHO_OPENSSL_CRYPTO_H

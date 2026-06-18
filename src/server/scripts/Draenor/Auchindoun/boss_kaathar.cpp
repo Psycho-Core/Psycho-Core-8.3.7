@@ -425,7 +425,7 @@ struct boss_kaathar : public BossAI
                 {
                 for (Creature* l_Itr : l_ListSargereiDraeneis)
                 {
-                l_Itr/* PhasingHandler::AddPhase(l_Itr, 1, true); */ // TODO: phase change
+                l_Itr  // PhasingHandler::AddPhase(l_Itr, 1, true);  // TODO: phase change
                 l_Itr->SetFaction(HostileFaction);
                 l_Itr->SetReactState(ReactStates::REACT_AGGRESSIVE);
                 l_Itr->RemoveFlag(UnitFields::UNIT_FIELD_FLAGS, UnitFlags::UNIT_FLAG_IMMUNE_TO_PC);
