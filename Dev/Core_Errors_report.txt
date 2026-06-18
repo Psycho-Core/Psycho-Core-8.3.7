@@ -1,0 +1,154 @@
+===========================================================================
+ PSYCHO_CORE 8.3.7 - CORE FILES AUDIT REPORT
+ Generated: 2026-06-18
+ Source: Psycho-Core-8_3_7.zip
+ Scope: All src/server/game/ .cpp/.h + WorldSession + CharacterHandler
+        + module integration points (SQL, conf, cmake, S28 hooks)
+===========================================================================
+
+METHODOLOGY
+-----------
+1. Scanned all 369 core .cpp files and all headers for broken API calls,
+   dangerous patterns, and integration issues.
+2. Verified every S28 (socketless bot session) hook in WorldSession.
+3. Checked mod-psychobot config key alignment, SQL schema, RBAC, and
+   cmake wiring.
+4. Triaged every flagged hit as real live code vs inside comment blocks.
+
+RESULT: 1 real bug found and fixed in core (InspectHandler.cpp).
+        All S28 WorldSession hooks verified correct.
+        All mod-psychobot integration points verified correct.
+
+
+===========================================================================
+ FIX #1 - InspectHandler.cpp: Old field API used for honor kill stats
+===========================================================================
+FILE: src/server/game/Handlers/InspectHandler.cpp
+FUNCTION: WorldSession::HandleRequestHonorStatsOpcode
+LINES: 96-98
+
+WHAT WAS WRONG:
+  The handler used the old TrinityCore direct-field-read API to fetch
+  honor kill stats for the inspect target:
+    honorStats.LifetimeHK  = player->GetUInt32Value(ACTIVE_PLAYER_FIELD_LIFETIME_HONORABLE_KILLS);
+    honorStats.YesterdayHK = player->GetUInt16Value(ACTIVE_PLAYER_FIELD_KILLS, ...);
+    honorStats.TodayHK     = player->GetUInt16Value(ACTIVE_PLAYER_FIELD_KILLS, ...);
+
+  Neither GetUInt32Value nor GetUInt16Value exist anywhere in this
+  core's Object.h or any game header. ACTIVE_PLAYER_FIELD_LIFETIME_HONORABLE_KILLS
+  and ACTIVE_PLAYER_FIELD_KILLS don't exist either. This is a compile
+  error that would prevent the worldserver from building.
+
+  Note: Line 73 in the same file (HandleInspectOpcode) ALREADY uses the
+  correct BFA method for the same data:
+    inspectResult.LifetimeHK = player->m_activePlayerData->LifetimeHonorableKills;
+
+FIX APPLIED:
+  Lines 96-98 updated to use the same typed update-field accessor:
+    honorStats.LifetimeHK  = player->m_activePlayerData->LifetimeHonorableKills;
+    honorStats.YesterdayHK = player->m_activePlayerData->YesterdayHonorableKills;
+    honorStats.TodayHK     = player->m_activePlayerData->TodayHonorableKills;
+
+  UF::ActivePlayerData fields confirmed present in UpdateFields.h:
+    UpdateField<uint32, 66, 77> LifetimeHonorableKills;
+    UpdateField<uint16, 66, 76> YesterdayHonorableKills;
+    UpdateField<uint16, 66, 75> TodayHonorableKills;
+
+SEVERITY: Compile error. Would prevent worldserver from building.
+
+
+===========================================================================
+ S28 WORLDSESSION BOT HOOKS - ALL VERIFIED CORRECT
+===========================================================================
+Every S28 socketless-session edit was verified against the actual source:
+
+  WorldSession.h:1078   bool IsBot() const { return m_isBot; }          OK
+  WorldSession.h:1079   void SetBot(bool bot) { m_isBot = bot; }        OK
+  WorldSession.h:1083   void SetBotRemove()                              OK
+  WorldSession.h:1084   bool IsBotRemoving() const                       OK
+  WorldSession.h:1089   void BotLogin(ObjectGuid guid)  (declared)      OK
+  WorldSession.h:2171   bool m_isBot = false              (member)      OK
+  WorldSession.h:2172   bool m_botRemove = false          (member)      OK
+
+  WorldSession.cpp SendPacket():  null-socket guard at line 260 checks
+    if (!m_Socket[conIdx]) { if (!m_isBot) log...; return; }            OK
+
+  WorldSession.cpp Update():  bot lifecycle at lines 512-523:
+    if (m_isBot) { if (m_botRemove) return false; return true; }        OK
+
+  WorldSession.cpp Update():  IsConnectionIdle guard at line 353:
+    if (IsConnectionIdle() && m_Socket[CONNECTION_TYPE_REALM])          OK
+    (null-checks socket before CloseSocket() call)
+
+  WorldSession.cpp KickPlayer():  bot guard at line 685:
+    if (m_isBot) return;                                                 OK
+
+  CharacterHandler.cpp:916   WorldSession::BotLogin(ObjectGuid)
+    Full implementation: guard checks m_isBot, builds LoginQueryHolder,
+    calls Initialize(), drives HandlePlayerLoginFromDB async path.       OK
+
+
+===========================================================================
+ THINGS CHECKED AND CONFIRMED CLEAN
+===========================================================================
+
+Old field API in core (GetUInt32Value, GetUInt16Value, GetGUIDLow, etc.):
+  5 remaining hits found after InspectHandler fix. All confirmed inside
+  /* */ block comments - they don't compile and are harmless leftovers:
+    - BattlePayMgr.cpp:127    GetGUIDLow    inside /*...*/
+    - Player.cpp:10925        GetGUIDLow    inside /*...*/ (inline)
+    - Guild.cpp:3277          GetGUIDLow    inside // */ closing block
+    - Battleground.cpp:1436   GetGUIDLow    inside /*...*/
+    - ArchaeologyMgr.cpp:94   GetUInt16Value inside /*...*/
+  None of these affect compilation.
+
+Config keys (mod-psychobot):
+  27 keys defined in mod_psychobot.conf.dist.
+  27 keys referenced in source code. EXACT MATCH. No missing or extra keys.
+
+CMake build system:
+  src/server/game/CMakeLists.txt uses CollectSourceFiles() macro
+  (GLOB_RECURSE equivalent) - all 369 .cpp files are auto-collected.
+  mod-psychobot.cmake is a minimal hook file (no explicit source listing
+  needed; the module build engine auto-collects all files under src/).
+
+Module SQL / RBAC:
+  psychobot_rbac.sql grants permissions 1200-1215 to role 194
+  ("Role: Sec Level Moderator") using INSERT IGNORE (safe to re-run).
+  Role 193 (GM) inherits role 194 via rbac_linked_permissions (193->194),
+  so GMs get .psychobot commands automatically. Correct.
+
+Database prepared statements:
+  LOGIN_GET_ACCOUNT_ID_BY_USERNAME exists in LoginDatabase.h (line 78)
+  and is mapped to the correct SQL query. PQuery/PExecute exist on
+  DatabaseWorkerPool. All factory DB calls verified.
+
+AccountMgr::CreateAccount signature:
+  AccountOpResult CreateAccount(username, password, email="",
+    bnetAccountId=0, bnetIndex=0) - matches PsychobotFactory's usage.
+
+Player::Create signature:
+  bool Create(ObjectGuid::LowType guidlow,
+    WorldPackets::Character::CharacterCreateInfo const* createInfo)
+  Matches PsychobotFactory's call exactly.
+
+CharacterCache::AddCharacterCacheEntry:
+  Confirmed present in CharacterCache.h with correct signature.
+  PsychobotFactory.cpp includes CharacterCache.h and calls it correctly
+  after SaveToDB().
+
+TODO/FIXME in core (182 total):
+  All are in feature stubs (BattlePets, BattlePay, Archaeology, AH) -
+  pre-existing known-incomplete systems, not regressions. None affect
+  bot functionality or the general worldserver runtime.
+
+
+===========================================================================
+ FILES DELIVERED
+===========================================================================
+Core-Files-FIXED.zip
+  - src/server/game/Handlers/InspectHandler.cpp (1 fix applied)
+  - Drop into src/server/game/Handlers/ in your core.
+
+This is the only core file that needed changing.
+===========================================================================

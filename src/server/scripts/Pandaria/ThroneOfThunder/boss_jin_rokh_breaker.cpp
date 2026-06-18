@@ -677,7 +677,7 @@ public:
 
             if (players.empty())
             {
-                TC_LOG_ERROR("scripts", "Focused Lightning guid %u found no players in instance %u, possible exploit", me->GetGUIDLow(), me->GetMap()->GetInstanceId());
+                TC_LOG_ERROR("scripts", "Focused Lightning guid %u found no players in instance %u, possible exploit", me->GetGUID().GetCounter(), me->GetMap()->GetInstanceId());
                 return;
             }
 

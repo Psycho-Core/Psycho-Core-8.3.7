@@ -93,9 +93,9 @@ void WorldSession::HandleInspectOpcode(WorldPackets::Inspect::Inspect& inspect)
 
     WorldPackets::Inspect::InspectHonorStats honorStats;
     honorStats.PlayerGUID  = request.TargetGUID;
-    honorStats.LifetimeHK  = player->GetUInt32Value(ACTIVE_PLAYER_FIELD_LIFETIME_HONORABLE_KILLS);
-    honorStats.YesterdayHK = player->GetUInt16Value(ACTIVE_PLAYER_FIELD_KILLS, PLAYER_FIELD_KILLS_OFFSET_YESTERDAY_KILLS);
-    honorStats.TodayHK     = player->GetUInt16Value(ACTIVE_PLAYER_FIELD_KILLS, PLAYER_FIELD_KILLS_OFFSET_TODAY_KILLS);
+    honorStats.LifetimeHK  = player->m_activePlayerData->LifetimeHonorableKills;
+    honorStats.YesterdayHK = player->m_activePlayerData->YesterdayHonorableKills;
+    honorStats.TodayHK     = player->m_activePlayerData->TodayHonorableKills;
     honorStats.LifetimeMaxRank = 0; /// @todo
 
     SendPacket(honorStats.Write());

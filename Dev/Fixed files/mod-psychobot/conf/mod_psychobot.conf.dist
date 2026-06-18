@@ -8,8 +8,10 @@
 # Psycho_Core mod-psychobot configuration  (Stage 1: Foundation + Main AI)
 ########################################
 #
-# Copy to "mod_psychobot.conf" (drop .dist) in your server's configs/modules
-# directory, or merge the keys into worldserver.conf. Read via sConfigMgr.
+# PSYCHO_CORE NOTE: This core's ConfigMgr loads ONLY worldserver.conf, so these keys are
+# already MERGED into worldserver.conf.dist and load from there natively (edit them there).
+# This file is shipped to <server root>/conf-backup/ as a pristine restore reference only.
+# Read via sConfigMgr.
 #
 [worldserver]
 

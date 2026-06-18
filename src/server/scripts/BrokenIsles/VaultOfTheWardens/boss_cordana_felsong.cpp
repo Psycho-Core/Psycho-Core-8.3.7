@@ -157,7 +157,7 @@ public:
             _Reset();
             me->SetWalk(false);
             SetFlyMode(false);
-            me->KillAllDelayedEvents();
+            me->m_Events.KillAllEvents(false);
 
             me->SetReactState(REACT_DEFENSIVE);
             me->RemoveAurasDueToSpell(SPELL_VENGEANCE_SHIELD);
@@ -175,7 +175,7 @@ public:
             Reset();
             _EnterCombat();
 
-            me->AddDelayedCombat(1000, [this]()->void
+            me->GetScheduler().Schedule(Milliseconds(1000), [this](TaskContext)
             {
                 me->CastSpell(me, SPELL_ELUNES_LIGHT, true);
             });
@@ -259,7 +259,7 @@ public:
 
         void MoveInLineOfSight(Unit* who) override
         {
-            if (who->GetTypeId() != TYPEID_PLAYER || who->ToPlayer()->isGameMaster())
+            if (who->GetTypeId() != TYPEID_PLAYER || who->ToPlayer()->IsGameMaster())
                 return;
 
             if (who->GetPositionX() >= 4093.63f && who->GetPositionX() <= 4168.71f && who->HasAura(SPELL_ELUNES_LIGHT_OVERRIDE))
@@ -317,7 +317,7 @@ public:
                     me->GetMotionMaster()->Clear();
                     me->SetWalk(false);
 
-                    if (me->isInCombat())
+                    if (me->IsInCombat())
                     {
                         Talk(SAY_SHADOWSTEP_REMOVE);
                         ScheduleEvents();
@@ -426,7 +426,7 @@ public:
                     events.RescheduleEvent(EVENT_KNOCKDOWN_KICK, 16000);
                     break;
                 case EVENT_KNOCKDOWN_KICK_TRIGGER:
-                    if (Unit* vict = me->getVictim())
+                    if (Unit* vict = me->GetVictim())
                         if (vict->HasAura(SPELL_ELUNES_LIGHT_OVERRIDE))
                             DoCast(vict, SPELL_TURN_KICK);
                     break;
@@ -449,7 +449,7 @@ public:
                     DoCast(me, SPELL_SHADOWSTEP_2, true);
                     Talk(SAY_SHADOWSTEP_EMOTE);
 
-                    me->StopAttack();
+                    me->AttackStop();
 
                     events.Reset();
                     DoCast(SPELL_FEL_GLAIVE);
@@ -461,7 +461,7 @@ public:
                     events.RescheduleEvent(EVENT_VENGEANCE, 35000);
                     break;
                 case EVENT_CREEPING_FIRST:
-                    me->StopAttack();
+                    me->AttackStop();
 
                     events.Reset();
                     DoCast(SPELL_CREEPING_DOOM_SHIELD);

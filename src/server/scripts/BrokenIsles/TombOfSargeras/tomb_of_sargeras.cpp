@@ -158,7 +158,7 @@ struct npc_tos_kadghar_1 : ScriptedAI
 
                     add->CombatStop();
                     add->CastSpell(introPositions[i + 1], SPELL_INTRO_TELEPORT, false);
-                    add->SetUInt32Value(UNIT_FIELD_EMOTE_STATE, EMOTE_ONESHOT_NONE);
+                    add->SetEmoteState(EMOTE_STATE_NONE);
                     add->AddDelayedEvent(1000, [add] {add->SetFacingTo(6.25f); });
                 }
 
@@ -179,10 +179,10 @@ struct npc_tos_kadghar_1 : ScriptedAI
 
             for (auto goid : { GO_INTRODESTROY_1, GO_INTRODESTROY_2, GO_INTRODESTROY_3 })
                 if (GameObject* go = me->GetMap()->GetGameObject(instance->GetGuidData(goid)))
-                    go->SetByteValue(GAMEOBJECT_FIELD_BYTES_1, 0, 0);
+                    go->SetGoState(GO_STATE_ACTIVE);
 
             if (GameObject* go = me->GetMap()->GetGameObject(instance->GetGuidData(GO_GOROTH_GATES)))
-                go->SetByteValue(GAMEOBJECT_FIELD_BYTES_1, 0, 1);
+                go->SetGoState(GO_STATE_READY);
 
 
             me->AddDelayedEvent(2000, [this]() -> void
@@ -203,7 +203,7 @@ struct npc_tos_kadghar_1 : ScriptedAI
 
                         add->CombatStop();
                         add->CastSpell(introPositions[i + 1], SPELL_INTRO_TELEPORT, false);
-                        add->SetUInt32Value(UNIT_FIELD_EMOTE_STATE, EMOTE_ONESHOT_NONE);
+                        add->SetEmoteState(EMOTE_STATE_NONE);
                         add->AddDelayedEvent(1000, [add] {add->SetFacingTo(6.25f); });
                     }
 
@@ -211,9 +211,9 @@ struct npc_tos_kadghar_1 : ScriptedAI
 
                 if (GameObject* go = me->GetMap()->GetGameObject(instance->GetGuidData(GO_INQUISITION_DOOR_INTRO)))
                 {
-                    go->SetByteValue(GAMEOBJECT_FIELD_BYTES_1, 0, 0);
+                    go->SetGoState(GO_STATE_ACTIVE);
                     go->AddDelayedEvent(4000, [go] {
-                        go->SetByteValue(GAMEOBJECT_FIELD_BYTES_1, 0, 1);
+                        go->SetGoState(GO_STATE_READY);
                     });
                 }
 
