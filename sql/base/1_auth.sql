@@ -1,13 +1,11 @@
 /*
 * BfaCore <Reforged>
-* MySQL - 5.7.32 : Database - psycho_auth
+* MySQL - 5.7.32 : Database - bfa_auth
 *********************************************************************
 */
 
-CREATE DATABASE IF NOT EXISTS `psycho_auth` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-USE `psycho_auth`;
-
-SET FOREIGN_KEY_CHECKS=0;
+CREATE DATABASE IF NOT EXISTS `auth_bfa` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+USE `auth_bfa`;
 
 CREATE TABLE IF NOT EXISTS `account` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
@@ -53,11 +51,11 @@ CREATE TABLE IF NOT EXISTS `account` (
   KEY `hwid` (`hwid`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='Account System';
 
--- Listage des données de la table psycho_auth.account : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.account : ~0 rows (environ)
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. account_access
+-- Listage de la structure de la table auth_bfa. account_access
 CREATE TABLE IF NOT EXISTS `account_access` (
   `id` int(10) unsigned NOT NULL,
   `gmlevel` tinyint(3) unsigned NOT NULL,
@@ -65,11 +63,11 @@ CREATE TABLE IF NOT EXISTS `account_access` (
   PRIMARY KEY (`id`,`RealmID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.account_access : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.account_access : ~0 rows (environ)
 /*!40000 ALTER TABLE `account_access` DISABLE KEYS */;
 /*!40000 ALTER TABLE `account_access` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. account_banned
+-- Listage de la structure de la table auth_bfa. account_banned
 CREATE TABLE IF NOT EXISTS `account_banned` (
   `id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Account id',
   `bandate` int(10) unsigned NOT NULL DEFAULT '0',
@@ -80,11 +78,11 @@ CREATE TABLE IF NOT EXISTS `account_banned` (
   PRIMARY KEY (`id`,`bandate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Ban List';
 
--- Listage des données de la table psycho_auth.account_banned : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.account_banned : ~0 rows (environ)
 /*!40000 ALTER TABLE `account_banned` DISABLE KEYS */;
 /*!40000 ALTER TABLE `account_banned` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. account_character_template
+-- Listage de la structure de la table auth_bfa. account_character_template
 CREATE TABLE IF NOT EXISTS `account_character_template` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `account` int(10) NOT NULL DEFAULT '0',
@@ -106,11 +104,11 @@ CREATE TABLE IF NOT EXISTS `account_character_template` (
   KEY `realm` (`realm`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
--- Listage des données de la table psycho_auth.account_character_template : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.account_character_template : ~0 rows (environ)
 /*!40000 ALTER TABLE `account_character_template` DISABLE KEYS */;
 /*!40000 ALTER TABLE `account_character_template` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. account_last_played_character
+-- Listage de la structure de la table auth_bfa. account_last_played_character
 CREATE TABLE IF NOT EXISTS `account_last_played_character` (
   `accountId` int(10) unsigned NOT NULL,
   `region` tinyint(3) unsigned NOT NULL,
@@ -122,11 +120,11 @@ CREATE TABLE IF NOT EXISTS `account_last_played_character` (
   PRIMARY KEY (`accountId`,`region`,`battlegroup`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.account_last_played_character : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.account_last_played_character : ~0 rows (environ)
 /*!40000 ALTER TABLE `account_last_played_character` DISABLE KEYS */;
 /*!40000 ALTER TABLE `account_last_played_character` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. account_muted
+-- Listage de la structure de la table auth_bfa. account_muted
 CREATE TABLE IF NOT EXISTS `account_muted` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `mutedate` int(10) unsigned NOT NULL DEFAULT '0',
@@ -136,11 +134,11 @@ CREATE TABLE IF NOT EXISTS `account_muted` (
   PRIMARY KEY (`guid`,`mutedate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='mute List';
 
--- Listage des données de la table psycho_auth.account_muted : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.account_muted : ~0 rows (environ)
 /*!40000 ALTER TABLE `account_muted` DISABLE KEYS */;
 /*!40000 ALTER TABLE `account_muted` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. autobroadcast
+-- Listage de la structure de la table auth_bfa. autobroadcast
 CREATE TABLE IF NOT EXISTS `autobroadcast` (
   `realmid` int(11) NOT NULL DEFAULT '-1',
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
@@ -149,11 +147,11 @@ CREATE TABLE IF NOT EXISTS `autobroadcast` (
   PRIMARY KEY (`id`,`realmid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.autobroadcast : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.autobroadcast : ~0 rows (environ)
 /*!40000 ALTER TABLE `autobroadcast` DISABLE KEYS */;
 /*!40000 ALTER TABLE `autobroadcast` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. battlenet_accounts
+-- Listage de la structure de la table auth_bfa. battlenet_accounts
 CREATE TABLE IF NOT EXISTS `battlenet_accounts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
   `email` varchar(320) NOT NULL,
@@ -174,11 +172,11 @@ CREATE TABLE IF NOT EXISTS `battlenet_accounts` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='Account System';
 
--- Listage des données de la table psycho_auth.battlenet_accounts : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.battlenet_accounts : ~0 rows (environ)
 /*!40000 ALTER TABLE `battlenet_accounts` DISABLE KEYS */;
 /*!40000 ALTER TABLE `battlenet_accounts` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. battlenet_account_bans
+-- Listage de la structure de la table auth_bfa. battlenet_account_bans
 CREATE TABLE IF NOT EXISTS `battlenet_account_bans` (
   `id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Account id',
   `bandate` int(10) unsigned NOT NULL DEFAULT '0',
@@ -188,11 +186,11 @@ CREATE TABLE IF NOT EXISTS `battlenet_account_bans` (
   PRIMARY KEY (`id`,`bandate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Ban List';
 
--- Listage des données de la table psycho_auth.battlenet_account_bans : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.battlenet_account_bans : ~0 rows (environ)
 /*!40000 ALTER TABLE `battlenet_account_bans` DISABLE KEYS */;
 /*!40000 ALTER TABLE `battlenet_account_bans` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. battlenet_account_heirlooms
+-- Listage de la structure de la table auth_bfa. battlenet_account_heirlooms
 CREATE TABLE IF NOT EXISTS `battlenet_account_heirlooms` (
   `accountId` int(10) unsigned NOT NULL,
   `itemId` int(11) unsigned NOT NULL DEFAULT '0',
@@ -200,11 +198,11 @@ CREATE TABLE IF NOT EXISTS `battlenet_account_heirlooms` (
   PRIMARY KEY (`accountId`,`itemId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.battlenet_account_heirlooms : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.battlenet_account_heirlooms : ~0 rows (environ)
 /*!40000 ALTER TABLE `battlenet_account_heirlooms` DISABLE KEYS */;
 /*!40000 ALTER TABLE `battlenet_account_heirlooms` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. battlenet_account_mounts
+-- Listage de la structure de la table auth_bfa. battlenet_account_mounts
 CREATE TABLE IF NOT EXISTS `battlenet_account_mounts` (
   `battlenetAccountId` int(10) unsigned NOT NULL,
   `mountSpellId` int(10) unsigned NOT NULL,
@@ -212,11 +210,11 @@ CREATE TABLE IF NOT EXISTS `battlenet_account_mounts` (
   PRIMARY KEY (`battlenetAccountId`,`mountSpellId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.battlenet_account_mounts : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.battlenet_account_mounts : ~0 rows (environ)
 /*!40000 ALTER TABLE `battlenet_account_mounts` DISABLE KEYS */;
 /*!40000 ALTER TABLE `battlenet_account_mounts` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. battlenet_account_toys
+-- Listage de la structure de la table auth_bfa. battlenet_account_toys
 CREATE TABLE IF NOT EXISTS `battlenet_account_toys` (
   `accountId` int(10) unsigned NOT NULL,
   `itemId` int(11) NOT NULL DEFAULT '0',
@@ -225,34 +223,36 @@ CREATE TABLE IF NOT EXISTS `battlenet_account_toys` (
   PRIMARY KEY (`accountId`,`itemId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.battlenet_account_toys : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.battlenet_account_toys : ~0 rows (environ)
 /*!40000 ALTER TABLE `battlenet_account_toys` DISABLE KEYS */;
 /*!40000 ALTER TABLE `battlenet_account_toys` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. battlenet_item_appearances
+-- Listage de la structure de la table auth_bfa. battlenet_item_appearances
 CREATE TABLE IF NOT EXISTS `battlenet_item_appearances` (
   `battlenetAccountId` int(10) unsigned NOT NULL,
   `blobIndex` smallint(5) unsigned NOT NULL,
   `appearanceMask` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`battlenetAccountId`,`blobIndex`)
+  PRIMARY KEY (`battlenetAccountId`,`blobIndex`),
+  CONSTRAINT `fk_battlenet_item_appearances` FOREIGN KEY (`battlenetAccountId`) REFERENCES `battlenet_accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.battlenet_item_appearances : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.battlenet_item_appearances : ~0 rows (environ)
 /*!40000 ALTER TABLE `battlenet_item_appearances` DISABLE KEYS */;
 /*!40000 ALTER TABLE `battlenet_item_appearances` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. battlenet_item_favorite_appearances
+-- Listage de la structure de la table auth_bfa. battlenet_item_favorite_appearances
 CREATE TABLE IF NOT EXISTS `battlenet_item_favorite_appearances` (
   `battlenetAccountId` int(10) unsigned NOT NULL,
   `itemModifiedAppearanceId` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`battlenetAccountId`,`itemModifiedAppearanceId`)
+  PRIMARY KEY (`battlenetAccountId`,`itemModifiedAppearanceId`),
+  CONSTRAINT `fk_battlenet_item_favorite_appearances` FOREIGN KEY (`battlenetAccountId`) REFERENCES `battlenet_accounts` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.battlenet_item_favorite_appearances : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.battlenet_item_favorite_appearances : ~0 rows (environ)
 /*!40000 ALTER TABLE `battlenet_item_favorite_appearances` DISABLE KEYS */;
 /*!40000 ALTER TABLE `battlenet_item_favorite_appearances` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. battle_pets
+-- Listage de la structure de la table auth_bfa. battle_pets
 CREATE TABLE IF NOT EXISTS `battle_pets` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `account` int(10) unsigned NOT NULL DEFAULT '0',
@@ -280,11 +280,11 @@ CREATE TABLE IF NOT EXISTS `battle_pets` (
   KEY `account` (`account`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.battle_pets : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.battle_pets : ~0 rows (environ)
 /*!40000 ALTER TABLE `battle_pets` DISABLE KEYS */;
 /*!40000 ALTER TABLE `battle_pets` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. battle_pet_slots
+-- Listage de la structure de la table auth_bfa. battle_pet_slots
 CREATE TABLE IF NOT EXISTS `battle_pet_slots` (
   `id` tinyint(3) NOT NULL,
   `battlenetAccountId` int(10) NOT NULL,
@@ -293,11 +293,11 @@ CREATE TABLE IF NOT EXISTS `battle_pet_slots` (
   PRIMARY KEY (`id`,`battlenetAccountId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.battle_pet_slots : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.battle_pet_slots : ~0 rows (environ)
 /*!40000 ALTER TABLE `battle_pet_slots` DISABLE KEYS */;
 /*!40000 ALTER TABLE `battle_pet_slots` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. build_info
+-- Listage de la structure de la table auth_bfa. build_info
 CREATE TABLE IF NOT EXISTS `build_info` (
   `build` int(11) NOT NULL,
   `majorVersion` int(11) DEFAULT NULL,
@@ -312,7 +312,7 @@ CREATE TABLE IF NOT EXISTS `build_info` (
   PRIMARY KEY (`build`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Listage des données de la table psycho_auth.build_info : ~99 rows (environ)
+-- Listage des données de la table auth_bfa.build_info : ~99 rows (environ)
 /*!40000 ALTER TABLE `build_info` DISABLE KEYS */;
 INSERT INTO `build_info` (`build`, `majorVersion`, `minorVersion`, `bugfixVersion`, `hotfixVersion`, `winAuthSeed`, `win64AuthSeed`, `mac64AuthSeed`, `winChecksumSeed`, `macChecksumSeed`) VALUES
 	(5875, 1, 12, 1, NULL, NULL, NULL, NULL, '95EDB27C7823B363CBDDAB56A392E7CB73FCCA20', '8D173CC381961EEBABF336F5E6675B101BB513E5'),
@@ -416,7 +416,7 @@ INSERT INTO `build_info` (`build`, `majorVersion`, `minorVersion`, `bugfixVersio
 	(35662, 8, 3, 7, NULL, NULL, '578BC94870C278CB6962F30E6DC203BB', '5966016C368ED9F7AAB603EE6703081C', NULL, NULL);
 /*!40000 ALTER TABLE `build_info` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. ip_banned
+-- Listage de la structure de la table auth_bfa. ip_banned
 CREATE TABLE IF NOT EXISTS `ip_banned` (
   `ip` varchar(15) NOT NULL DEFAULT '127.0.0.1',
   `bandate` int(10) unsigned NOT NULL,
@@ -426,11 +426,11 @@ CREATE TABLE IF NOT EXISTS `ip_banned` (
   PRIMARY KEY (`ip`,`bandate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Banned IPs';
 
--- Listage des données de la table psycho_auth.ip_banned : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.ip_banned : ~0 rows (environ)
 /*!40000 ALTER TABLE `ip_banned` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ip_banned` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. logs
+-- Listage de la structure de la table auth_bfa. logs
 CREATE TABLE IF NOT EXISTS `logs` (
   `time` int(10) unsigned NOT NULL,
   `realm` int(10) unsigned NOT NULL,
@@ -439,11 +439,11 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `string` text CHARACTER SET latin1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table psycho_auth.logs : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.logs : ~0 rows (environ)
 /*!40000 ALTER TABLE `logs` DISABLE KEYS */;
 /*!40000 ALTER TABLE `logs` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. logs_ip_actions
+-- Listage de la structure de la table auth_bfa. logs_ip_actions
 CREATE TABLE IF NOT EXISTS `logs_ip_actions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique Identifier',
   `account_id` int(10) unsigned NOT NULL COMMENT 'Account ID',
@@ -457,34 +457,37 @@ CREATE TABLE IF NOT EXISTS `logs_ip_actions` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Used to log ips of individual actions';
 
--- Listage des données de la table psycho_auth.logs_ip_actions : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.logs_ip_actions : ~0 rows (environ)
 /*!40000 ALTER TABLE `logs_ip_actions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `logs_ip_actions` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. rbac_account_permissions
+-- Listage de la structure de la table auth_bfa. rbac_account_permissions
 CREATE TABLE IF NOT EXISTS `rbac_account_permissions` (
   `accountId` int(10) unsigned NOT NULL COMMENT 'Account id',
   `permissionId` int(10) unsigned NOT NULL COMMENT 'Permission id',
   `granted` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Granted = 1, Denied = 0',
   `realmId` int(11) NOT NULL DEFAULT '-1' COMMENT 'Realm Id, -1 means all',
-  PRIMARY KEY (`accountId`,`permissionId`,`realmId`)
+  PRIMARY KEY (`accountId`,`permissionId`,`realmId`),
   KEY `fk__rbac_account_roles__rbac_permissions` (`permissionId`),
+  CONSTRAINT `fk__rbac_account_permissions__account` FOREIGN KEY (`accountId`) REFERENCES `account` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk__rbac_account_roles__rbac_permissions` FOREIGN KEY (`permissionId`) REFERENCES `rbac_permissions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Account-Permission relation';
 
--- Listage des données de la table psycho_auth.rbac_account_permissions : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.rbac_account_permissions : ~0 rows (environ)
 /*!40000 ALTER TABLE `rbac_account_permissions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `rbac_account_permissions` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. rbac_default_permissions
+-- Listage de la structure de la table auth_bfa. rbac_default_permissions
 CREATE TABLE IF NOT EXISTS `rbac_default_permissions` (
   `secId` int(10) unsigned NOT NULL COMMENT 'Security Level id',
   `permissionId` int(10) unsigned NOT NULL COMMENT 'permission id',
   `realmId` int(11) NOT NULL DEFAULT '-1' COMMENT 'Realm Id, -1 means all',
-  PRIMARY KEY (`secId`,`permissionId`,`realmId`)
+  PRIMARY KEY (`secId`,`permissionId`,`realmId`),
   KEY `fk__rbac_default_permissions__rbac_permissions` (`permissionId`),
+  CONSTRAINT `fk__rbac_default_permissions__rbac_permissions` FOREIGN KEY (`permissionId`) REFERENCES `rbac_permissions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Default permission to assign to different account security levels';
 
--- Listage des données de la table psycho_auth.rbac_default_permissions : ~6 rows (environ)
+-- Listage des données de la table auth_bfa.rbac_default_permissions : ~6 rows (environ)
 /*!40000 ALTER TABLE `rbac_default_permissions` DISABLE KEYS */;
 INSERT INTO `rbac_default_permissions` (`secId`, `permissionId`, `realmId`) VALUES
 	(0, 28, -1),
@@ -495,16 +498,18 @@ INSERT INTO `rbac_default_permissions` (`secId`, `permissionId`, `realmId`) VALU
 	(0, 195, -1);
 /*!40000 ALTER TABLE `rbac_default_permissions` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. rbac_linked_permissions
+-- Listage de la structure de la table auth_bfa. rbac_linked_permissions
 CREATE TABLE IF NOT EXISTS `rbac_linked_permissions` (
   `id` int(10) unsigned NOT NULL COMMENT 'Permission id',
   `linkedId` int(10) unsigned NOT NULL COMMENT 'Linked Permission id',
-  PRIMARY KEY (`id`,`linkedId`)
+  PRIMARY KEY (`id`,`linkedId`),
   KEY `fk__rbac_linked_permissions__rbac_permissions1` (`id`),
   KEY `fk__rbac_linked_permissions__rbac_permissions2` (`linkedId`),
+  CONSTRAINT `fk__rbac_linked_permissions__rbac_permissions1` FOREIGN KEY (`id`) REFERENCES `rbac_permissions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk__rbac_linked_permissions__rbac_permissions2` FOREIGN KEY (`linkedId`) REFERENCES `rbac_permissions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Permission - Linked Permission relation';
 
--- Listage des données de la table psycho_auth.rbac_linked_permissions : ~673 rows (environ)
+-- Listage des données de la table auth_bfa.rbac_linked_permissions : ~673 rows (environ)
 /*!40000 ALTER TABLE `rbac_linked_permissions` DISABLE KEYS */;
 INSERT INTO `rbac_linked_permissions` (`id`, `linkedId`) VALUES
 	(192, 21),
@@ -1182,14 +1187,14 @@ INSERT INTO `rbac_linked_permissions` (`id`, `linkedId`) VALUES
 	(199, 797);
 /*!40000 ALTER TABLE `rbac_linked_permissions` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. rbac_permissions
+-- Listage de la structure de la table auth_bfa. rbac_permissions
 CREATE TABLE IF NOT EXISTS `rbac_permissions` (
   `id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Permission id',
   `name` varchar(100) NOT NULL COMMENT 'Permission name',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Permission List';
 
--- Listage des données de la table psycho_auth.rbac_permissions : ~691 rows (environ)
+-- Listage des données de la table auth_bfa.rbac_permissions : ~691 rows (environ)
 /*!40000 ALTER TABLE `rbac_permissions` DISABLE KEYS */;
 INSERT INTO `rbac_permissions` (`id`, `name`) VALUES
 	(1, 'Instant logout'),
@@ -1885,20 +1890,20 @@ INSERT INTO `rbac_permissions` (`id`, `name`) VALUES
 	(2009, 'Command: reload spell_script_names');
 /*!40000 ALTER TABLE `rbac_permissions` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. realmcharacters
+-- Listage de la structure de la table auth_bfa. realmcharacters
 CREATE TABLE IF NOT EXISTS `realmcharacters` (
   `realmid` int(10) unsigned NOT NULL DEFAULT '0',
   `acctid` int(10) unsigned NOT NULL,
   `numchars` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`realmid`,`acctid`)
+  PRIMARY KEY (`realmid`,`acctid`),
   KEY `acctid` (`acctid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Realm Character Tracker';
 
--- Listage des données de la table psycho_auth.realmcharacters : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.realmcharacters : ~0 rows (environ)
 /*!40000 ALTER TABLE `realmcharacters` DISABLE KEYS */;
 /*!40000 ALTER TABLE `realmcharacters` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. realmlist
+-- Listage de la structure de la table auth_bfa. realmlist
 CREATE TABLE IF NOT EXISTS `realmlist` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL DEFAULT '',
@@ -1914,17 +1919,17 @@ CREATE TABLE IF NOT EXISTS `realmlist` (
   `gamebuild` int(10) unsigned NOT NULL DEFAULT '35662',
   `Region` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `Battlegroup` tinyint(3) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
   UNIQUE KEY `idx_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='Realm System';
 
--- Listage des données de la table psycho_auth.realmlist : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.realmlist : ~0 rows (environ)
 /*!40000 ALTER TABLE `realmlist` DISABLE KEYS */;
 INSERT INTO `realmlist` (`id`, `name`, `address`, `localAddress`, `localSubnetMask`, `port`, `icon`, `flag`, `timezone`, `allowedSecurityLevel`, `population`, `gamebuild`, `Region`, `Battlegroup`) VALUES
 	(1, 'BfaCore <Reforged>', '127.0.0.1', '127.0.0.1', '255.255.255.0', 8085, 0, 0, 10, 0, 0, 35662, 1, 1);
 /*!40000 ALTER TABLE `realmlist` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. store_history
+-- Listage de la structure de la table auth_bfa. store_history
 CREATE TABLE IF NOT EXISTS `store_history` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `realm` int(11) unsigned NOT NULL,
@@ -1957,11 +1962,11 @@ CREATE TABLE IF NOT EXISTS `store_history` (
   KEY `char_guid` (`char_guid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
--- Listage des données de la table psycho_auth.store_history : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.store_history : ~0 rows (environ)
 /*!40000 ALTER TABLE `store_history` DISABLE KEYS */;
 /*!40000 ALTER TABLE `store_history` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. store_products
+-- Listage de la structure de la table auth_bfa. store_products
 CREATE TABLE IF NOT EXISTS `store_products` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `category` int(11) NOT NULL DEFAULT '0',
@@ -1984,11 +1989,11 @@ CREATE TABLE IF NOT EXISTS `store_products` (
   KEY `enable` (`enable`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
--- Listage des données de la table psycho_auth.store_products : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.store_products : ~0 rows (environ)
 /*!40000 ALTER TABLE `store_products` DISABLE KEYS */;
 /*!40000 ALTER TABLE `store_products` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. transfer_requests
+-- Listage de la structure de la table auth_bfa. transfer_requests
 CREATE TABLE IF NOT EXISTS `transfer_requests` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `acid` int(11) unsigned NOT NULL,
@@ -2024,11 +2029,11 @@ CREATE TABLE IF NOT EXISTS `transfer_requests` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
--- Listage des données de la table psycho_auth.transfer_requests : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.transfer_requests : ~0 rows (environ)
 /*!40000 ALTER TABLE `transfer_requests` DISABLE KEYS */;
 /*!40000 ALTER TABLE `transfer_requests` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. updates
+-- Listage de la structure de la table auth_bfa. updates
 CREATE TABLE IF NOT EXISTS `updates` (
   `name` varchar(200) NOT NULL COMMENT 'filename with extension of the update.',
   `hash` char(40) DEFAULT '' COMMENT 'sha1 hash of the sql file.',
@@ -2038,24 +2043,24 @@ CREATE TABLE IF NOT EXISTS `updates` (
   PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='List of all applied updates in this database.';
 
--- Listage des données de la table psycho_auth.updates : 0 rows
+-- Listage des données de la table auth_bfa.updates : 0 rows
 /*!40000 ALTER TABLE `updates` DISABLE KEYS */;
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. updates_include
+-- Listage de la structure de la table auth_bfa. updates_include
 CREATE TABLE IF NOT EXISTS `updates_include` (
   `path` varchar(200) NOT NULL COMMENT 'directory to include. $ means relative to the source directory.',
   `state` enum('RELEASED','ARCHIVED') NOT NULL DEFAULT 'RELEASED' COMMENT 'defines if the directory contains released or archived updates.',
   PRIMARY KEY (`path`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='List of directories where we want to include sql updates.';
 
--- Listage des données de la table psycho_auth.updates_include : 1 rows
+-- Listage des données de la table auth_bfa.updates_include : 1 rows
 /*!40000 ALTER TABLE `updates_include` DISABLE KEYS */;
 INSERT INTO `updates_include` (`path`, `state`) VALUES
 	('$/sql/updates/auth', 'RELEASED');
 /*!40000 ALTER TABLE `updates_include` ENABLE KEYS */;
 
--- Listage de la structure de la table psycho_auth. uptime
+-- Listage de la structure de la table auth_bfa. uptime
 CREATE TABLE IF NOT EXISTS `uptime` (
   `realmid` int(10) unsigned NOT NULL,
   `starttime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -2065,11 +2070,11 @@ CREATE TABLE IF NOT EXISTS `uptime` (
   PRIMARY KEY (`realmid`,`starttime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Uptime system';
 
--- Listage des données de la table psycho_auth.uptime : ~0 rows (environ)
+-- Listage des données de la table auth_bfa.uptime : ~0 rows (environ)
 /*!40000 ALTER TABLE `uptime` DISABLE KEYS */;
 /*!40000 ALTER TABLE `uptime` ENABLE KEYS */;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-SET FOREIGN_KEY_CHECKS=1;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-SET SQL_NOTES=@OLD_SQL_NOTES;;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
