@@ -107,7 +107,8 @@ std::string DBUpdater<WorldDatabaseConnection>::GetTableName()
 template<>
 std::string DBUpdater<WorldDatabaseConnection>::GetBaseFile()
 {
-    return GitRevision::GetFullDatabase();
+    return BuiltInConfig::GetSourceDirectory() +
+        "/sql/base/world_database.sql";
 }
 
 template<>
@@ -120,7 +121,7 @@ bool DBUpdater<WorldDatabaseConnection>::IsEnabled(uint32 const updateMask)
 template<>
 BaseLocation DBUpdater<WorldDatabaseConnection>::GetBaseLocationType()
 {
-    return LOCATION_DOWNLOAD;
+    return LOCATION_REPOSITORY;
 }
 
 // Character Database
@@ -166,7 +167,8 @@ std::string DBUpdater<HotfixDatabaseConnection>::GetTableName()
 template<>
 std::string DBUpdater<HotfixDatabaseConnection>::GetBaseFile()
 {
-    return GitRevision::GetHotfixesDatabase();
+    return BuiltInConfig::GetSourceDirectory() +
+        "/sql/base/hotfixes_database.sql";
 }
 
 template<>
@@ -179,7 +181,7 @@ bool DBUpdater<HotfixDatabaseConnection>::IsEnabled(uint32 const updateMask)
 template<>
 BaseLocation DBUpdater<HotfixDatabaseConnection>::GetBaseLocationType()
 {
-    return LOCATION_DOWNLOAD;
+    return LOCATION_REPOSITORY;
 }
 
 // All
@@ -246,7 +248,7 @@ bool DBUpdater<T>::Update(DatabaseWorkerPool<T>& pool)
 
     if (!is_directory(sourceDirectory))
     {
-        TC_LOG_ERROR("sql.updates", "DBUpdater: The given source directory %s does not exist, change the path to the directory where your sql directory exists (for example c:\\source\\trinitycore). Shutting down.", sourceDirectory.generic_string().c_str());
+        TC_LOG_ERROR("sql.updates", "DBUpdater: The given source directory %s does not exist, change the path to the directory where your sql directory exists (for example C:\\Psycho-core.8.3.7). Shutting down.", sourceDirectory.generic_string().c_str());
         return false;
     }
 
@@ -316,7 +318,7 @@ bool DBUpdater<T>::Populate(DatabaseWorkerPool<T>& pool)
             {
                 std::string const filename = base.filename().generic_string();
                 std::string const workdir = boost::filesystem::current_path().generic_string();
-                TC_LOG_ERROR("sql.updates", ">> File \"%s\" is missing, download it from \"https://github.com/TrinityCore/TrinityCore/releases\"" \
+                TC_LOG_ERROR("sql.updates", ">> File \"%s\" is missing, download it from \"https://github.com/Psycho-Core/Psycho-Core-8.3.7/releases\"" \
                     " uncompress it and place the file \"%s\" in the directory \"%s\".", filename.c_str(), filename.c_str(), workdir.c_str());
                 break;
             }
@@ -417,7 +419,7 @@ void DBUpdater<T>::ApplyFile(DatabaseWorkerPool<T>& pool, std::string const& hos
         TC_LOG_FATAL("sql.updates", "Applying of file \'%s\' to database \'%s\' failed!" \
             " If you are a user, please pull the latest revision from the repository. "
             "Also make sure you have not applied any of the databases with your sql client. "
-            "You cannot use auto-update system and import sql files from TrinityCore repository with your sql client. "
+            "You cannot use auto-update system and import sql files from Psycho-Core repository with your sql client. "
             "If you are a developer, please fix your sql query.",
             path.generic_string().c_str(), pool.GetConnectionInfo()->database.c_str());
 

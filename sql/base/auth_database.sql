@@ -7,6 +7,8 @@
 CREATE DATABASE IF NOT EXISTS `psycho_auth` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 USE `psycho_auth`;
 
+SET FOREIGN_KEY_CHECKS=0;
+
 CREATE TABLE IF NOT EXISTS `account` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
   `username` varchar(32) NOT NULL DEFAULT '',
@@ -232,8 +234,7 @@ CREATE TABLE IF NOT EXISTS `battlenet_item_appearances` (
   `battlenetAccountId` int(10) unsigned NOT NULL,
   `blobIndex` smallint(5) unsigned NOT NULL,
   `appearanceMask` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`battlenetAccountId`,`blobIndex`),
-  CONSTRAINT `fk_battlenet_item_appearances` FOREIGN KEY (`battlenetAccountId`) REFERENCES `battlenet_accounts` (`id`)
+  PRIMARY KEY (`battlenetAccountId`,`blobIndex`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Listage des données de la table psycho_auth.battlenet_item_appearances : ~0 rows (environ)
@@ -244,8 +245,7 @@ CREATE TABLE IF NOT EXISTS `battlenet_item_appearances` (
 CREATE TABLE IF NOT EXISTS `battlenet_item_favorite_appearances` (
   `battlenetAccountId` int(10) unsigned NOT NULL,
   `itemModifiedAppearanceId` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`battlenetAccountId`,`itemModifiedAppearanceId`),
-  CONSTRAINT `fk_battlenet_item_favorite_appearances` FOREIGN KEY (`battlenetAccountId`) REFERENCES `battlenet_accounts` (`id`)
+  PRIMARY KEY (`battlenetAccountId`,`itemModifiedAppearanceId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Listage des données de la table psycho_auth.battlenet_item_favorite_appearances : ~0 rows (environ)
@@ -467,10 +467,8 @@ CREATE TABLE IF NOT EXISTS `rbac_account_permissions` (
   `permissionId` int(10) unsigned NOT NULL COMMENT 'Permission id',
   `granted` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Granted = 1, Denied = 0',
   `realmId` int(11) NOT NULL DEFAULT '-1' COMMENT 'Realm Id, -1 means all',
-  PRIMARY KEY (`accountId`,`permissionId`,`realmId`),
+  PRIMARY KEY (`accountId`,`permissionId`,`realmId`)
   KEY `fk__rbac_account_roles__rbac_permissions` (`permissionId`),
-  CONSTRAINT `fk__rbac_account_permissions__account` FOREIGN KEY (`accountId`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk__rbac_account_roles__rbac_permissions` FOREIGN KEY (`permissionId`) REFERENCES `rbac_permissions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Account-Permission relation';
 
 -- Listage des données de la table psycho_auth.rbac_account_permissions : ~0 rows (environ)
@@ -482,9 +480,8 @@ CREATE TABLE IF NOT EXISTS `rbac_default_permissions` (
   `secId` int(10) unsigned NOT NULL COMMENT 'Security Level id',
   `permissionId` int(10) unsigned NOT NULL COMMENT 'permission id',
   `realmId` int(11) NOT NULL DEFAULT '-1' COMMENT 'Realm Id, -1 means all',
-  PRIMARY KEY (`secId`,`permissionId`,`realmId`),
+  PRIMARY KEY (`secId`,`permissionId`,`realmId`)
   KEY `fk__rbac_default_permissions__rbac_permissions` (`permissionId`),
-  CONSTRAINT `fk__rbac_default_permissions__rbac_permissions` FOREIGN KEY (`permissionId`) REFERENCES `rbac_permissions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Default permission to assign to different account security levels';
 
 -- Listage des données de la table psycho_auth.rbac_default_permissions : ~6 rows (environ)
@@ -502,11 +499,9 @@ INSERT INTO `rbac_default_permissions` (`secId`, `permissionId`, `realmId`) VALU
 CREATE TABLE IF NOT EXISTS `rbac_linked_permissions` (
   `id` int(10) unsigned NOT NULL COMMENT 'Permission id',
   `linkedId` int(10) unsigned NOT NULL COMMENT 'Linked Permission id',
-  PRIMARY KEY (`id`,`linkedId`),
+  PRIMARY KEY (`id`,`linkedId`)
   KEY `fk__rbac_linked_permissions__rbac_permissions1` (`id`),
   KEY `fk__rbac_linked_permissions__rbac_permissions2` (`linkedId`),
-  CONSTRAINT `fk__rbac_linked_permissions__rbac_permissions1` FOREIGN KEY (`id`) REFERENCES `rbac_permissions` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk__rbac_linked_permissions__rbac_permissions2` FOREIGN KEY (`linkedId`) REFERENCES `rbac_permissions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Permission - Linked Permission relation';
 
 -- Listage des données de la table psycho_auth.rbac_linked_permissions : ~673 rows (environ)
@@ -1895,7 +1890,7 @@ CREATE TABLE IF NOT EXISTS `realmcharacters` (
   `realmid` int(10) unsigned NOT NULL DEFAULT '0',
   `acctid` int(10) unsigned NOT NULL,
   `numchars` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`realmid`,`acctid`),
+  PRIMARY KEY (`realmid`,`acctid`)
   KEY `acctid` (`acctid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Realm Character Tracker';
 
@@ -1919,7 +1914,7 @@ CREATE TABLE IF NOT EXISTS `realmlist` (
   `gamebuild` int(10) unsigned NOT NULL DEFAULT '35662',
   `Region` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `Battlegroup` tinyint(3) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
   UNIQUE KEY `idx_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='Realm System';
 
@@ -2074,7 +2069,7 @@ CREATE TABLE IF NOT EXISTS `uptime` (
 /*!40000 ALTER TABLE `uptime` DISABLE KEYS */;
 /*!40000 ALTER TABLE `uptime` ENABLE KEYS */;
 
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+SET FOREIGN_KEY_CHECKS=1;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+SET SQL_NOTES=@OLD_SQL_NOTES;;

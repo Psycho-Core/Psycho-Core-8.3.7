@@ -5,7 +5,7 @@ echo ============================================
 echo   Psycho-Core 8.3.7 - Worldserver
 echo ============================================
 echo.
-start /wait worldserver.exe
+worldserver.exe
 echo.
 echo ============================================
 echo   worldserver.exe has stopped.

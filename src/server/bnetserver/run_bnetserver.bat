@@ -5,7 +5,7 @@ echo ============================================
 echo   Psycho-Core 8.3.7 - Bnetserver
 echo ============================================
 echo.
-start /wait bnetserver.exe
+bnetserver.exe
 echo.
 echo ============================================
 echo   bnetserver.exe has stopped.

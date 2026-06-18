@@ -184,7 +184,7 @@ BanExpiryCheckInterval = 60
 #        Example:     "../TrinityCore"
 #        Default:     ""
 
-SourceDirectory  = ""
+SourceDirectory  = "."
 
 #
 #    MySQLExecutable
@@ -222,7 +222,7 @@ IPLocationFile = ""
 #                                                                           Unix/Linux)
 #        Default:     "127.0.0.1;3306;trinity;trinity;auth"
 
-LoginDatabaseInfo = "127.0.0.1;3306;Psycho;Psycho;Psycho_auth"
+LoginDatabaseInfo = "127.0.0.1;3307;psycho;psycho;psycho_auth"
 
 #
 #    LoginDatabase.WorkerThreads

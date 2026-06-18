@@ -108,10 +108,10 @@ LogsDir = ".\Logs"
 #    Don't open port on firewall to external connections (it belongs to mysql, not to wow server).
 #    The username you choose must have permisions to create/alter/rename tables.
 
-LoginDatabaseInfo     = "127.0.0.1;3306;Psycho;Psycho;Psycho_auth"
-WorldDatabaseInfo     = "127.0.0.1;3306;Psycho;Psycho;Psycho_world"
-CharacterDatabaseInfo = "127.0.0.1;3306;Psycho;Psycho;Psycho_characters"
-HotfixDatabaseInfo    = "127.0.0.1;3306;Psycho;Psycho;Psycho_hotfixes"
+LoginDatabaseInfo     = "127.0.0.1;3307;psycho;psycho;psycho_auth"
+WorldDatabaseInfo     = "127.0.0.1;3307;psycho;psycho;psycho_world"
+CharacterDatabaseInfo = "127.0.0.1;3307;psycho;psycho;psycho_characters"
+HotfixDatabaseInfo    = "127.0.0.1;3307;psycho;psycho;psycho_hotfixes"
 
 #
 #    LoginDatabase.WorkerThreads
@@ -214,7 +214,7 @@ BuildDirectory  = ""
 #        Example:     "../TrinityCore"
 #        Default:     ""
 
-SourceDirectory  = ".\Updater\"
+SourceDirectory  = "."
 
 #
 #    MySQLExecutable
