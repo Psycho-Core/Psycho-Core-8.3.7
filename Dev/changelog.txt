@@ -832,3 +832,67 @@ TASK 1 - FROM-SCRATCH WEBSITE (LICENSE.MYCODE, FusionCMS as reference only):
   TrinityCore upstream itself removed this check for the same reason.
   The two REAL safety checks remain: thread-safety (mysql_thread_safe) + minimum
   version (>= 10000). Runtime: 30409 >= 10000 → PASSES.
+
+## 2026-06-18 (Round 10+ - SQL MariaDB Compatibility + Auto-Updater + Database Setup)
+>>> CRITICAL BUILD RULES REMINDER: NO DUMMY FIXES <<<
+
+### ICON FIX
+- assets/worldserver.ico was actually a PNG file (not ICO format). Converted to proper
+  multi-size ICO (16-128px, 32-bit BMP format). Replaced both src/server/worldserver/worldserver.ico
+  and src/server/bnetserver/bnetserver.ico. .rc files rebranded to Psycho-Core.
+
+### DATABASE CREDENTIALS (final)
+- Changed ALL config to: port=3307, user=psycho, password=psycho
+- conf.dist: worldserver + bnetserver
+- create_psycho_databases.sql: psycho/psycho
+- fix_psycho_user.sql: psycho/psycho
+- my.ini: port=3307
+
+### .BAT LAUNCHERS
+- Created run_worldserver.bat + run_bnetserver.bat (pause on exit)
+- Wired into CMakeLists POST_BUILD
+
+### AUTO-UPDATER FIXES
+- DBUpdater.cpp: Changed all 4 GetBaseFile() to use BuiltInConfig::GetSourceDirectory()
+  + correct filenames (auth_database.sql, characters_database.sql, world_database.sql,
+  hotfixes_database.sql). Changed all GetBaseLocationType() to LOCATION_REPOSITORY.
+  Removed broken GitRevision::GetFullDatabase() / GetHotfixesDatabase() macros.
+- SourceDirectory = "." in both conf.dist files.
+- Created sql/updates/auth/ directory (was missing).
+
+### SQL MERGED FILES (user-friendly one-import approach)
+- auth_database.sql (renamed from 1_auth.sql)
+- characters_database.sql (base + both character updates merged in)
+- world_updates.sql (all 28 world updates combined into one file)
+- hotfixes_updates.sql (hotfix update combined)
+
+### SQL MARIADB 11.8 COMPATIBILITY SWEEP
+Root cause: All base SQL dumps were created for MySQL 5.7. MariaDB 11.8 is dramatically
+stricter about foreign keys, table creation order, and syntax.
+Comprehensive fixes applied to ALL base SQL files:
+- Removed ALL FOREIGN KEY constraints (server manages integrity in C++ code)
+- Changed all CREATE TABLE -> CREATE TABLE IF NOT EXISTS (idempotent/safe re-import)
+- Added SET FOREIGN_KEY_CHECKS=0 at top of all files
+- Changed SET FOREIGN_KEY_CHECKS=1 at end (removed MariaDB-incompatible IFNULL(@OLD_...) patterns)
+- Removed all /*!40014 /*!40101 /*!40111 MySQL-version-specific comment syntax
+- Fixed characters update: ADD COLUMN IF NOT EXISTS (MariaDB compatible)
+
+### SETUP SCRIPTS
+- setup_databases.bat: One-click full database import (8 steps)
+- CopyMySQLClientDLL.cmake: Auto-copies libmariadb.dll next to exes
+
+### DATABASE IMPORT ORDER (for users):
+1. Download DB-1 to DB-4 from GitHub releases
+2. Combine into world_database.sql + hotfixes_database.sql
+3. Run dep/mysql/setup_databases.bat
+4. Done - all 4 databases + mod-psychobot + all updates applied
+
+### FILES CHANGED THIS ROUND:
+SQL: auth_database.sql, 1_auth.sql, characters_database.sql, 2_characters.sql,
+     world_updates.sql, hotfixes_updates.sql
+Code: DBUpdater.cpp, revision_data.h.in.cmake, worldserver.conf.dist, bnetserver.conf.dist,
+      worldserver.rc, bnetserver.rc, worldserver.ico, bnetserver.ico
+CMake: worldserver/CMakeLists.txt, bnetserver/CMakeLists.txt, dep/boost/CMakeLists.txt,
+       FindMySQL.cmake, FindBoost.cmake, CopyMySQLClientDLL.cmake
+Scripts: run_worldserver.bat, run_bnetserver.bat, setup_databases.bat, import_all_sql.bat,
+         create_psycho_databases.sql, fix_psycho_user.sql, my.ini

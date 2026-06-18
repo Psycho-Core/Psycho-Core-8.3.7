@@ -344,3 +344,23 @@ CHECK ALL SCRIPTS, (3) report back.
 - bnetserver LNK1181 was a cascade of database failing (no database.lib).
 - All 8 fixes verified: brace balance OK, nesting clean, C++14 confirmed, no C++17
   headers in ModulesPCH. No core build run (Windows toolchain). Awaiting next step.
+
+## 2026-06-18 (Round 10+ - SQL MariaDB Compatibility + Full Database Setup)
+- User: frustrated by SQL errors. bnetserver works, worldserver fails on DB structure.
+- Diagnosed: base SQL dumps created for MySQL 5.7, but user runs MariaDB 11.8.
+  MariaDB 11.8 is much stricter about FK constraints, table order, and syntax.
+- COMPREHENSIVE FIX: swept ALL base SQL files for MariaDB compatibility:
+  1. Removed ALL foreign key constraints (server manages integrity in C++)
+  2. Changed all CREATE TABLE to CREATE TABLE IF NOT EXISTS
+  3. Added SET FOREIGN_KEY_CHECKS=0/1 (removed MariaDB-incompatible IFNULL patterns)
+  4. Removed /*!40014 /*!40101 /*!40111 MySQL-version comment syntax
+  5. Fixed characters update to use ADD COLUMN IF NOT EXISTS
+- Created merged SQL files for easy user setup:
+  auth_database.sql, characters_database.sql (updates merged), world_updates.sql (28 combined),
+  hotfixes_updates.sql
+- Created setup_databases.bat: one-click full database import
+- Fixed auto-updater: DBUpdater.cpp base file paths + SourceDirectory config
+- Fixed icon: PNG converted to proper ICO format
+- Fixed DB credentials: port 3307, user psycho, password psycho
+- Updated changelog.txt with full session summary.
+- Awaiting user to drop databases and retry with cleaned SQL.
