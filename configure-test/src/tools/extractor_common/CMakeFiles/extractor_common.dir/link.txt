@@ -1,2 +1,0 @@
-/usr/bin/ar qc libextractor_common.a CMakeFiles/extractor_common.dir/CascHandles.cpp.o CMakeFiles/extractor_common.dir/DB2CascFileSource.cpp.o
-/usr/bin/ranlib libextractor_common.a
