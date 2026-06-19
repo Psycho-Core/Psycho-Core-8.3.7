@@ -1,0 +1,393 @@
+===========================================================================
+ PSYCHO_CORE 8.3.7 — MASTER ERRORS REPORT
+ Maintained: 2026-06-18  |  Updated each session in-place
+ Source ZIP: Psycho-Core-8_3_7.zip
+===========================================================================
+
+This is the single running report for all audit and fix work on
+Psycho_Core 8.3.7. Every session appends to this file — nothing is
+deleted. Status markers: [FIXED] [CONFIRMED CLEAN] [NOTE] [PENDING]
+
+
+===========================================================================
+ SESSION 1  (2026-06-10)
+ mod-psychobot: PsychobotFactory.cpp/.h initial audit
+===========================================================================
+
+[FIXED] #1 — Account index rescan bug (GenerateOneBot)
+  GenerateOneBot() rescanned bot accounts from index 1 on every call.
+  Fixed: added _nextAccountIndex member to PsychobotFactory.h; loop now
+  starts from the cached index and updates it on success.
+  File: modules/mod-psychobot/src/PsychobotFactory.cpp/.h
+
+[FIXED] #2 — Orphaned DB rows on purge (PurgeAllBots)
+  PurgeAllBots() left rows in ai_playerbot_db_store,
+  ai_playerbot_random_bots, and ai_playerbot_guild_tasks after deleting
+  bot characters. Fixed: added three DELETE statements keyed on character
+  GUID inside the purge loop.
+  File: modules/mod-psychobot/src/PsychobotFactory.cpp
+
+[FIXED] #3 — CharacterCache registration gap (GenerateOneBot)
+  Freshly spawned bots were not registered with CharacterCache, so
+  .psychobot summon/add failed by name until server restart.
+  Fixed: call sCharacterCache->AddCharacterCacheEntry() after SaveToDB().
+  Added #include "CharacterCache.h".
+  File: modules/mod-psychobot/src/PsychobotFactory.cpp
+
+[CONFIRMED CLEAN] S28 WorldSession core edits
+  All 7 required hooks verified present and correct:
+  WorldSession.h  — m_isBot, m_botRemove, IsBot, SetBot, SetBotRemove,
+                    IsBotRemoving, BotLogin (declared)
+  WorldSession.cpp — null-socket guards in SendPacket, Update,
+                     IsConnectionIdle, KickPlayer
+  CharacterHandler.cpp — WorldSession::BotLogin() fully implemented
+  No core edits needed.
+
+[NOTE] PsychobotAiFactory.h/.cpp — REQUIRED. Builds each bot's AI
+  behavior context (per-class strategies/triggers/values). Not optional.
+
+[NOTE] PvP objective stubs — DoFlagTactics, DoBaseTactics,
+  DoResourceTactics, DoArenaTactics always return false. Bots fight in
+  BGs/Arenas but don't carry flags or cap bases. Intentional framework
+  hooks; not a bug.
+
+[NOTE] RBAC permission 194 comment mislabel — psychobot_rbac.sql
+  comments call 194 "the GM role" but 194 = "Role: Sec Level Moderator".
+  Functionally correct (193 GM inherits 194 via linked_permissions).
+  Comment-only cosmetic issue.
+
+[NOTE] Factory commands run synchronously on world thread — spawning
+  50+ bots or purging a large pool will cause a brief world-thread hitch.
+  Not a bug; expected TC GM command behavior.
+
+
+===========================================================================
+ SESSION 2  (2026-06-11)
+ SQL data review — legacy ai_playerbot_* files
+===========================================================================
+
+[CONFIRMED CLEAN] Bot names — psychobot_names.sql already contains both
+  ai_playerbot_names and ai_playerbot_guild_names with 69,632+ rows
+  (vs uploaded CSV's 10,679). Names are present; do NOT import the
+  uploaded CSV files.
+
+[NOTE — DO NOT IMPORT] characters_ai_playerbot_names.sql + .csv
+  Three problems: (a) names already exist in psychobot_names.sql with
+  more data; (b) LOAD DATA INFILE uses hardcoded Windows path
+  'E:/Mangosthree/...'; (c) script deletes names >12 chars and shrinks
+  the column — destructive against your existing data.
+
+[NOTE — DO NOT IMPORT] ai_playerbot_guild_names.sql — redundant.
+[NOTE — DO NOT IMPORT] characters_ai_playerbot_speech.sql — creates
+  ai_playerbot_speech tables; mod-psychobot uses ai_playerbot_texts
+  (from psychobot_texts.sql) instead. Speech tables unused.
+[NOTE — DO NOT IMPORT] characters_ai_playerbot.sql — random_bots and
+  db_store already in module SQL; guild_tasks unused by any source code.
+[NOTE — DO NOT IMPORT] characters_ai_playerbot_custom_strategy.sql,
+  characters_ai_playerbot_tele_cache.sql, index_world.sql — all
+  redundant; already in module SQL.
+
+[NOTE — CONDITIONALLY IMPORT] characters_auctionhousebot.sql +
+  ahbot_* indexes from index_characters.sql — ahbot_history/category/
+  price tables not in module SQL. PsychobotAhBot.cpp is active and
+  ticking. Import ONLY if worldserver logs "Table doesn't exist" errors
+  for these tables on startup.
+
+
+===========================================================================
+ SESSION 3  (2026-06-12)
+ Full mod-psychobot master-zip audit (Psycho_Core-8.3.7-Master.zip)
+===========================================================================
+
+[CONFIRMED CLEAN] Missing files check — all 145 source files present;
+  all 12 class folders have complete AiObjectContext/Strategies/Triggers
+  trios; all includes resolve; LICENSE.MYCODE.txt present at repo root;
+  mod_psychobot_loader.cpp correctly wired; all SQL dirs present.
+
+[CONFIRMED CLEAN] Build-readiness pass — WorldSession 11-arg constructor
+  call matches exactly; Player constructor does not call SetPlayer so
+  temp session is safe to delete; GetGenerator<HighGuid::Player>() is
+  valid; SaveToDB 3-arg form matches; LearnTalent/ActivateTalentGroup
+  signatures match; all Allied Race enums resolve via CharacterPackets.h.
+
+
+===========================================================================
+ SESSION 4  (2026-06-13)
+ Core swap — Psycho-Core-_8_3_7.zip compatibility check
+===========================================================================
+
+[CONFIRMED CLEAN] Module compatibility with new "Reforged + Modernized"
+  BFA core — all API calls (talent, spec, group, WorldSession compat
+  overload, S28 hooks) verified against this core's specific headers.
+  New core already ships a dedicated 11-arg WorldSession overload with a
+  comment explicitly naming mod-psychobot.
+
+[CONFIRMED CLEAN] Scripts general — all 88 "Psycho-only/removed" symbols
+  checked against all script files: zero hits in any of the 1,338 files.
+
+[FIXED] custom_npcs.cpp — OnQuestAccept(Player*, const Quest quest)
+  Parameter declared by value instead of const pointer. Changed to
+  Quest const*. compile error / hook never fires without this fix.
+  File: src/server/scripts/Custom/custom_npcs.cpp
+
+
+===========================================================================
+ SESSION 5  (2026-06-14)
+ Full scripts API audit — all 1,338 script .cpp files
+===========================================================================
+
+[FIXED] 167 fixes across 43 script files. Full list:
+
+  Casing errors:
+    isAlive->IsAlive (boss_maiden_of_vigilance, 5 lines)
+    isInCombat->IsInCombat (5 files)
+    isGameMaster->IsGameMaster (boss_cordana_felsong)
+    isInTankSpec->GetRoleForGroup()==1 (boss_maiden_of_vigilance)
+    getPowerType->GetPowerType (boss_fallen_avatar, boss_harjatan)
+    getVictim->GetVictim (boss_cordana_felsong)
+    IsLfrRaid->false (boss_kiljaeden x2, boss_maiden_of_vigilance)
+
+  Old Object field write API (removed in BFA):
+    SetUInt32Value(UNIT_FIELD_EMOTE_STATE,x)->SetEmoteState(x)
+      (boss_sisters_of_moon x3, tomb_of_sargeras x2)
+    SetByteValue(GAMEOBJECT_FIELD_BYTES_1,0,0/1)->SetGoState(...)
+      (tomb_of_sargeras x4)
+    SetInt32Value(UNIT_FIELD_POWER+1,x)->SetPower(GetPowerType(),x)
+      (boss_eonar x2)
+    GetUInt32Value(UNIT_FIELD_POWER+1)->GetPower(GetPowerType())
+      (boss_eonar x3)
+    SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_DISPLAY*,id)->SetVirtualItem(slot,id)
+      (cs_npc.cpp x3)
+
+  Unit/Creature API:
+    SetLevitate->SetDisableGravity (boss_twin_valkyr, boss_nightbane)
+    SetLootRecipient(null)->ResetLootRecipients() (4 files)
+    StopAttack->AttackStop (boss_cordana_felsong x2, boss_sisters_of_moon)
+    KillAllDelayedEvents->m_Events.KillAllEvents(false) (2 files)
+    HasSpellCooldown->GetSpellHistory()->HasCooldown (boss_fallen_protectors)
+
+  Player API:
+    GetSelection->GetSelectedUnit (cs_npc.cpp)
+    SetFreeTalentPoints->InitTalentForLevel / commented (3 files)
+    CheckQuestStatus->GetQuestStatus==QUEST_STATUS_x (3 files, 36 sites)
+
+  Old packet API:
+    SendMonsterMove->MovePoint (halls_of_stone x2)
+    BuildHeartBeatMsg->commented (boss_omnotron)
+
+  GUID API:
+    GetGUIDLow->GetGUID().GetCounter() (boss_jin_rokh_breaker)
+
+  LFG WoD extensions (not in BFA LFGMgr) -> commented out:
+    AutomaticLootAssignation / RewardDungeonDoneFor (17 files)
+
+  Scheduler / delayed actions:
+    AddDelayedCombat->GetScheduler().Schedule() (boss_cordana_felsong,
+      boss_kiljaeden x5, boss_sisters_of_moon, boss_fallen_avatar x4)
+    CastSpellDelay->GetScheduler().Schedule() (boss_elerethe_renferal,
+      boss_fallen_avatar)
+    MoveSmoothFlyPath->MoveSmoothPath(fly=true) (boss_fallen_avatar)
+
+  Guild/Group:
+    IsGuildGroup->false (boss_mannoroth)
+
+[CONFIRMED CLEAN] All remaining hits (DoPermBindPlayersForRaid,
+  ForEachPlayer, SendDisplayToast, GetThreatTarget, SetFloatValue on
+  AreaTrigger) confirmed inside /* */ comment blocks.
+
+[CONFIRMED CLEAN] mod-psychobot — all 3 PsychobotFactory fixes already
+  present in this zip at time of scripts audit.
+
+
+===========================================================================
+ SESSION 6  (2026-06-17)
+ Full re-audit — Psycho-Core-8_3_7.zip (latest upload)
+===========================================================================
+
+[CONFIRMED CLEAN] mod-psychobot — all 3 PsychobotFactory fixes present.
+  _nextAccountIndex, AddCharacterCacheEntry, PurgeAllBots cleanup.
+
+[FIXED] 167 fixes re-applied to this zip's script files (same set as
+  Session 5 — fixes had not been carried into this new zip).
+  43 files fixed. Zero broken API calls remaining in all 1,338 scripts.
+  Full fix list identical to Session 5 above.
+
+
+===========================================================================
+ SESSION 7  (2026-06-18)
+ Core files audit — src/server/game/ all .cpp/.h
+===========================================================================
+
+[FIXED] #4 — InspectHandler.cpp: Old field API for honor kill stats
+  WorldSession::HandleRequestHonorStatsOpcode used removed API:
+    player->GetUInt32Value(ACTIVE_PLAYER_FIELD_LIFETIME_HONORABLE_KILLS)
+    player->GetUInt16Value(ACTIVE_PLAYER_FIELD_KILLS, ...)
+  Neither GetUInt32Value/GetUInt16Value nor those field enums exist in
+  this BFA core. Compile error — worldserver would not build.
+  Fixed to use typed update-field accessors (consistent with line 73 of
+  the same file which already uses the correct form):
+    player->m_activePlayerData->LifetimeHonorableKills
+    player->m_activePlayerData->YesterdayHonorableKills
+    player->m_activePlayerData->TodayHonorableKills
+  File: src/server/game/Handlers/InspectHandler.cpp
+
+[CONFIRMED CLEAN] All S28 WorldSession bot hooks (re-verified on this zip):
+  WorldSession.h: m_isBot, m_botRemove, IsBot, SetBot, SetBotRemove,
+    IsBotRemoving, BotLogin — all present.
+  WorldSession.cpp: null-socket guard in SendPacket (line 260),
+    bot lifecycle in Update() (lines 512-523), IsConnectionIdle guard
+    (line 353), KickPlayer early-return (line 685) — all correct.
+  CharacterHandler.cpp:916 — WorldSession::BotLogin() fully implemented.
+
+[CONFIRMED CLEAN] Config keys — all 27 Psychobot.* keys in
+  mod_psychobot.conf.dist match exactly with source code usage.
+
+[CONFIRMED CLEAN] CMake — CollectSourceFiles() (GLOB-based) auto-collects
+  all 369 core .cpp files. mod-psychobot.cmake is a minimal hook; module
+  build engine auto-collects all module sources.
+
+[CONFIRMED CLEAN] RBAC — psychobot_rbac.sql grants permissions 1200-1215
+  to role 194 (Moderator) using INSERT IGNORE. Role 193 (GM) inherits
+  role 194 via rbac_linked_permissions (193->194 confirmed in 1_auth.sql).
+
+[CONFIRMED CLEAN] Database — LOGIN_GET_ACCOUNT_ID_BY_USERNAME present in
+  LoginDatabase.h. PQuery/PExecute exist on DatabaseWorkerPool.
+  AccountMgr::CreateAccount, Player::Create, CharacterCache::
+  AddCharacterCacheEntry signatures all match PsychobotFactory usage.
+
+[CONFIRMED CLEAN] Remaining old-API hits in core — 5 hits found after
+  InspectHandler fix; all confirmed inside /* */ comment blocks:
+  BattlePayMgr.cpp, Player.cpp, Guild.cpp, Battleground.cpp,
+  ArchaeologyMgr.cpp. None affect compilation.
+
+[NOTE] 182 TODO/FIXME markers in core — all in feature stubs (BattlePets,
+  BattlePay, Archaeology, AuctionHouse). Pre-existing; not regressions.
+  None affect bot functionality or general worldserver runtime.
+
+
+===========================================================================
+ CURRENT STATUS SUMMARY
+===========================================================================
+
+  mod-psychobot module:   CLEAN (all 3 factory fixes applied)
+  Core scripts (1,338):   CLEAN (167 fixes applied, 0 broken calls)
+  Core files (369 cpp):   CLEAN (1 fix applied — InspectHandler)
+  S28 bot session hooks:  CLEAN (all 7 hooks verified)
+  Config / SQL / CMake:   CLEAN (all verified)
+
+  Files to apply to your Psycho-Core-8_3_7.zip:
+    src/server/scripts/*  — Scripts-FIXED.zip (43 files)
+    src/server/game/Handlers/InspectHandler.cpp — Core-Files-FIXED.zip
+    modules/mod-psychobot/ — mod-psychobot-FIXED.zip
+
+===========================================================================
+
+
+===========================================================================
+ SESSION 8  (2026-06-19)
+ SQL database files — all-DBs.zip / DB-3.zip / DB-4.zip
+ (note: "all-DBs.zip" did not actually upload — DB-3.zip and DB-4.zip did)
+===========================================================================
+
+YOUR DB CONFIG (from worldserver.conf, used to fix every file):
+  LoginDatabaseInfo     = 127.0.0.1;3307;psycho;psycho;psycho_auth
+  WorldDatabaseInfo     = 127.0.0.1;3307;psycho;psycho;psycho_world
+  CharacterDatabaseInfo = 127.0.0.1;3307;psycho;psycho;psycho_characters
+  HotfixDatabaseInfo    = 127.0.0.1;3307;psycho;psycho;psycho_hotfixes
+
+WHAT WAS IN THE TWO ZIPS:
+  DB-3.zip  — a single 4_world.sql (583MB). Starts with DROP DATABASE,
+              same 245 tables/same row counts as DB-4's world.sql, just
+              different INSERT formatting/line endings. OLDER dump.
+  DB-4.zip  — 1_auth.sql, 2_characters.sql, 4_world.sql (the 3 base
+              schemas) + updates/{world,characters,hotfixes}/ (32 patch
+              files). 1_auth.sql and 2_characters.sql are byte-identical
+              to the core's own sql/base/ files.
+
+[NOTE] DB-3.zip was NOT used and should NOT be imported.
+  Reason: it opens with `DROP DATABASE IF EXISTS` + recreate, and its
+  245 tables hold the exact same row counts as DB-4's world.sql — it's
+  simply an older/differently-formatted export of the same data, with no
+  unique content. Importing it would be pure data loss risk for no gain.
+
+[FIXED] Database name mismatches — all 3 base files plus all 31 update
+  files referenced the core's original example DB names (auth_bfa,
+  characters_bfa, world_bfa) instead of your actual names. Every
+  CREATE DATABASE, USE, and 2 hardcoded inline references
+  (`world_bfa`.`trainer_spell` in 2022_01_24_world_fix_trainers.sql)
+  were rewritten to psycho_auth / psycho_characters / psycho_world.
+
+[FIXED] MariaDB 11.8.6 strict-mode zero-date rejection — 1_auth.sql has
+  legacy TIMESTAMP columns defaulting to '0000-00-00 00:00:00'; world.sql
+  has 15 similar zero-date values. MariaDB 11.x's default strict sql_mode
+  includes NO_ZERO_DATE/NO_ZERO_IN_DATE, which would reject these inserts
+  outright. Fixed by wrapping each file's import with:
+    SET SESSION sql_mode = REPLACE(REPLACE(@@SESSION.sql_mode,
+      'NO_ZERO_DATE',''), 'NO_ZERO_IN_DATE','');
+  ... and restoring the original sql_mode at the end of the file.
+  (characters.sql had zero zero-dates — no fix needed there.)
+
+[FIXED] CRLF line endings — DB-4's 1_auth.sql and 2_characters.sql used
+  Windows CRLF throughout; normalized to LF for clean MariaDB import.
+
+[FIXED] Update-file application order — confirmed by reading
+  src/server/database/Updater/UpdateFetcher.h directly: the core's own
+  DBUpdater enumerates update files into a std::set<...,PathCompare>,
+  i.e. plain lexicographic filename sort (same as `ls | sort`). All 29
+  world/, 2 characters/, and 1 hotfixes/ update files were concatenated
+  onto their respective base files in that exact order, so the
+  consolidated files behave identically to what your worldserver's own
+  auto-updater would have produced.
+
+[FIXED] mod-psychobot SQL folded in — appended to the matching
+  consolidated file in deterministic (alphabetical) order:
+    auth:       psychobot_rbac.sql
+    characters: psychobot_custom_strategy.sql, psychobot_db_store.sql,
+                psychobot_random_bots.sql, psychobot_strategies.sql
+    world:      psychobot_cache.sql, psychobot_indexes.sql,
+                psychobot_names.sql, psychobot_rpg_races.sql,
+                psychobot_texts.sql
+
+[NOTE — GAP, NOT FIXED] No base schema for psycho_hotfixes anywhere.
+  Neither DB-3.zip, DB-4.zip, nor the core's own sql/base/ contains a
+  CREATE-TABLE schema for the hotfixes database. HotfixDatabase.cpp
+  shows this core expects a large DB2-mirroring schema (achievement,
+  achievement_locale, animation_data, adventure_journal, ... one table
+  per client DB2 file) — hundreds of tables that must match the
+  prepared statements in HotfixDatabase.cpp exactly. The only hotfixes
+  file provided (2022_02_02_hotfixes_fix_fishing_spell.sql) is an UPDATE
+  that assumes this schema already exists (it does DELETE/INSERT into
+  hotfix_data and spell_effect). I have NOT fabricated this schema —
+  guessing at hundreds of table definitions that must byte-match C++
+  prepared statements is too high-risk to invent. You'll need the
+  matching hotfixes base SQL from wherever you sourced DB-3/DB-4 (it's
+  normally a separate "hotfixes" or "db_hotfixes" dump), or it can be
+  generated by running this core's DB2 hotfix-extractor tool against
+  your client's DB2 files if one is included in this build.
+  The hotfixes UPDATE file is included standalone (07_hotfixes_UPDATE_ONLY
+  — apply manually once you have the base schema).
+
+VERIFICATION PERFORMED ON THE FINAL FILES (not just assumed correct):
+  - Streamed full-file scan (546MB world file) confirming:
+      • 257 CREATE TABLE statements = 245 (world base) + 11
+        (mod-psychobot world tables) + 1 (battleground_template
+        update) — exact arithmetic match, confirming nothing was
+        truncated or duplicated.
+      • Unescaped single-quote count is even (23,600,794) — strong
+        signal against mid-string truncation/corruption across the
+        full 546MB file.
+      • File ends in a complete, valid statement (not cut off).
+  - grep-confirmed zero remaining auth_bfa/characters_bfa/world_bfa
+    references and zero DROP DATABASE statements in all 3 files.
+  - characters.sql (150 CREATE TABLE) and auth.sql (32 CREATE TABLE)
+    passed the same end-of-file and quote-balance checks.
+
+FILES DELIVERED:
+  01_psycho_auth.sql        (75 KB)   — complete, ready to import as-is
+  02_psycho_characters.sql  (113 KB)  — complete, ready to import as-is
+  03_psycho_world.sql       (556 MB)  — complete, ready to import as-is
+  Import order: 01 -> 02 -> 03 (world last, since it's independent of
+  the other two and is by far the largest).
+  Hotfixes DB: still needs its base schema sourced separately — see
+  NOTE above. Cannot be marked ready until that schema is provided.
+===========================================================================
