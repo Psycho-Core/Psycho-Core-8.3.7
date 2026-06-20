@@ -364,3 +364,31 @@ CHECK ALL SCRIPTS, (3) report back.
 - Fixed DB credentials: port 3307, user psycho, password psycho
 - Updated changelog.txt with full session summary.
 - Awaiting user to drop databases and retry with cleaned SQL.
+
+## 2026-06-20 (Auto-updater configuration + SQL base file alignment)
+
+- User cloned the Psycho-Core-8.3.7 repo into workspace.
+- Read Dev/changelog.txt and Dev/chatlog.txt — reported full contents to user.
+- Read sql/base/Updater_Config_Guide.txt and sql/base/Errors_report.txt — reported
+  auto-updater architecture and all 14 prior sessions of work to user.
+
+- User requested: point the auto-updater at the 4 new base SQL filenames
+  (psycho_auth.sql, psycho_characters.sql, psycho_world.sql, psycho_hotfixes.sql),
+  delete the pre-merged update files, keep update directories for future use.
+
+- Changed all 4 DBUpdater.cpp GetBaseFile() paths to the new filenames.
+- Deleted 31 .sql files from sql/updates/ (29 world + 2 characters).
+- Kept sql/updates/hotfixes/ fishing spell patch (not pre-merged into any base).
+- Created sql/updates/auth/ directory (was missing; referenced by updates_include).
+- Pre-populated the `updates` tracking table in psycho_characters.sql with SHA1
+  hashes for the 2 pre-merged character updates (REPLACE INTO for idempotency).
+- Created sql/base/updates_prepopulate.sql for the world + hotfixes databases
+  (29 world + 1 hotfix hash entries + 2 updates_include directory entries).
+  All 32 SHA1 hashes verified byte-for-byte against Git — zero mismatches.
+- Changed INSERT INTO to REPLACE INTO for idempotency (safe to re-run).
+- Initially set hotfixes GetBaseFile to return "" (current file is UPDATE-ONLY).
+  User confirmed they will replace psycho_hotfixes.sql with the full base schema.
+  Changed GetBaseFile back to return the path string.
+
+- Updated Dev/changelog.txt and Dev/chatlog.txt with this session's work.
+- Awaiting user's next command.

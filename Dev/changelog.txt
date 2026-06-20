@@ -896,3 +896,55 @@ CMake: worldserver/CMakeLists.txt, bnetserver/CMakeLists.txt, dep/boost/CMakeLis
        FindMySQL.cmake, FindBoost.cmake, CopyMySQLClientDLL.cmake
 Scripts: run_worldserver.bat, run_bnetserver.bat, setup_databases.bat, import_all_sql.bat,
          create_psycho_databases.sql, fix_psycho_user.sql, my.ini
+
+## 2026-06-20 (Auto-updater base SQL configuration + update directory cleanup)
+
+### DBUpdater.cpp — GetBaseFile() pointed at new base SQL filenames
+- LoginDatabaseConnection::GetBaseFile → sql/base/psycho_auth.sql
+  (was: sql/base/auth_database.sql — file did not exist)
+- WorldDatabaseConnection::GetBaseFile → sql/base/psycho_world.sql
+  (was: sql/base/world_database.sql — file did not exist)
+- CharacterDatabaseConnection::GetBaseFile → sql/base/psycho_characters.sql
+  (was: sql/base/characters_database.sql — file did not exist)
+- HotfixDatabaseConnection::GetBaseFile → sql/base/psycho_hotfixes.sql
+  (was: sql/base/hotfixes_database.sql — file did not exist; user will replace
+  the current UPDATE-ONLY patch with the full hotfixes base schema)
+- All four GetBaseLocationType() already return LOCATION_REPOSITORY — unchanged.
+
+### Deleted pre-merged update files from sql/updates/
+- Removed 29 .sql files from sql/updates/world/
+- Removed 2 .sql files from sql/updates/characters/
+- Kept 1 .sql file in sql/updates/hotfixes/ (fishing spell patch — not pre-merged)
+- Created sql/updates/auth/ directory (was missing; referenced by updates_include)
+- All four directories still exist and are ready for future update .sql files.
+
+### Pre-populated `updates` tracking tables
+- psycho_characters.sql: added REPLACE INTO `updates` for the 2 pre-merged
+  character update files with their SHA1 hashes, so the auto-updater skips
+  them if the files ever reappear in sql/updates/characters/.
+- Created sql/base/updates_prepopulate.sql: standalone script to run AFTER
+  importing psycho_world.sql and the full hotfixes base schema. Inserts:
+  - 29 world update entries (REPLACE INTO `updates` in psycho_world)
+  - 1 hotfix update entry (REPLACE INTO `updates` in psycho_hotfixes)
+  - 2 `updates_include` entries (INSERT IGNORE — world + hotfixes directories)
+  All 32 SHA1 hashes verified byte-for-byte against Git.
+
+### Idempotency
+- All `updates` table inserts use REPLACE INTO (safe to re-run).
+- All `updates_include` inserts use INSERT IGNORE (safe to re-run).
+- No duplicate-key errors on re-import.
+
+### Auto-updater flow on startup (for each database)
+1. Open → connect to the database
+2. Populate → if empty (0 tables), find and apply the base SQL file
+3. Update → read updates_include → scan directories → apply new .sql files
+   (skips anything already recorded in the `updates` table by hash)
+
+### Files changed this session
+  src/server/database/Updater/DBUpdater.cpp  (4 GetBaseFile paths)
+  sql/base/psycho_characters.sql             (2 REPLACE INTO updates entries)
+  sql/base/psycho_auth.sql                   (comment added — auth has no current updates)
+  sql/base/updates_prepopulate.sql           (NEW — 29 world + 1 hotfix entries + 2 updates_include)
+  sql/updates/auth/                          (NEW — empty directory for future patches)
+  sql/updates/world/*.sql                    (DELETED — 29 files, pre-merged into base)
+  sql/updates/characters/*.sql               (DELETED — 2 files, pre-merged into base)

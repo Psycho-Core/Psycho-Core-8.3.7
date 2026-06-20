@@ -81,7 +81,7 @@ template<>
 std::string DBUpdater<LoginDatabaseConnection>::GetBaseFile()
 {
     return BuiltInConfig::GetSourceDirectory() +
-        "/sql/base/auth_database.sql";
+        "/sql/base/psycho_auth.sql";
 }
 
 template<>
@@ -108,7 +108,7 @@ template<>
 std::string DBUpdater<WorldDatabaseConnection>::GetBaseFile()
 {
     return BuiltInConfig::GetSourceDirectory() +
-        "/sql/base/world_database.sql";
+        "/sql/base/psycho_world.sql";
 }
 
 template<>
@@ -141,7 +141,7 @@ template<>
 std::string DBUpdater<CharacterDatabaseConnection>::GetBaseFile()
 {
     return BuiltInConfig::GetSourceDirectory() +
-        "/sql/base/characters_database.sql";
+        "/sql/base/psycho_characters.sql";
 }
 
 template<>
@@ -168,7 +168,7 @@ template<>
 std::string DBUpdater<HotfixDatabaseConnection>::GetBaseFile()
 {
     return BuiltInConfig::GetSourceDirectory() +
-        "/sql/base/hotfixes_database.sql";
+        "/sql/base/psycho_hotfixes.sql";
 }
 
 template<>

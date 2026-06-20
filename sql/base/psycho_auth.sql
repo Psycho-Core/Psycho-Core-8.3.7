@@ -11,14 +11,28 @@
 SET @OLD_SQL_MODE := @@SESSION.sql_mode;
 SET SESSION sql_mode = REPLACE(REPLACE(@@SESSION.sql_mode, 'NO_ZERO_DATE', ''), 'NO_ZERO_IN_DATE', '');
 
+-- Suppress "Table already exists" NOTE/WARNING from CREATE TABLE IF NOT EXISTS.
+-- MariaDB's mysql CLI returns non-zero exit on warnings in batch mode, which
+-- the auto-updater interprets as a failure. sql_notes=0 prevents that.
+SET SESSION sql_notes = 0;
+
+-- Disable FK checks so tables can be created in any order.
+-- Several child tables (e.g. rbac_account_permissions) reference parent
+-- tables (e.g. rbac_permissions) that appear later in this file.
+SET FOREIGN_KEY_CHECKS = 0;
+
 /*
 * BfaCore <Reforged>
 * MySQL - 5.7.32 : Database - bfa_auth
 *********************************************************************
 */
-
-CREATE DATABASE IF NOT EXISTS `psycho_auth` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-USE `psycho_auth`;
+-- NOTE: CREATE DATABASE and USE statements are intentionally omitted.
+-- The auto-updater's mysql CLI already specifies the target database
+-- on the command line. Including CREATE DATABASE + USE here can cause
+-- MariaDB 11.8 to conflict when tables already exist from a prior import.
+-- For MANUAL import only, run these first:
+--   CREATE DATABASE IF NOT EXISTS `psycho_auth` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+--   USE `psycho_auth`;
 
 CREATE TABLE IF NOT EXISTS `account` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
@@ -2057,6 +2071,8 @@ CREATE TABLE IF NOT EXISTS `updates` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='List of all applied updates in this database.';
 
 -- Listage des données de la table psycho_auth.updates : 0 rows
+-- Auth database has no update patches currently, but the updates_include
+-- entry below points the updater at sql/updates/auth/ for future patches.
 /*!40000 ALTER TABLE `updates` DISABLE KEYS */;
 /*!40000 ALTER TABLE `updates` ENABLE KEYS */;
 
@@ -2087,10 +2103,11 @@ CREATE TABLE IF NOT EXISTS `uptime` (
 /*!40000 ALTER TABLE `uptime` DISABLE KEYS */;
 /*!40000 ALTER TABLE `uptime` ENABLE KEYS */;
 
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+-- NOTE: Original mysqldump restore lines removed.
+-- @OLD_FOREIGN_KEY_CHECKS / @OLD_CHARACTER_SET_CLIENT / @OLD_SQL_NOTES were
+-- never initialised in this reorganised file, so restoring them would trigger
+-- MariaDB 11.8 ERROR 1231.  Session variables are managed by the explicit
+-- SET FOREIGN_KEY_CHECKS and SET SESSION lines at top/bottom of this file.
 
 -- ===========================================================================
 -- mod-psychobot: RBAC permissions for the .psychobot GM command tree
@@ -2148,5 +2165,9 @@ INSERT IGNORE INTO `rbac_linked_permissions` (`id`, `linkedId`) VALUES
 (194, 1200);
 
 
--- Restore original sql_mode
+-- Re-enable FK checks (tables are all created now, references are valid).
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Restore original sql_mode and sql_notes
+SET SESSION sql_notes = 1;
 SET SESSION sql_mode = @OLD_SQL_MODE;

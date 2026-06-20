@@ -15,10 +15,23 @@
 
 /*!40101 SET NAMES utf8 */;
 
-CREATE DATABASE IF NOT EXISTS `psycho_characters` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-USE `psycho_characters`;
+-- Suppress "Table already exists" NOTE/WARNING from CREATE TABLE IF NOT EXISTS.
+-- MariaDB's mysql CLI returns non-zero exit on warnings in batch mode, which
+-- the auto-updater interprets as a failure. sql_notes=0 prevents that.
+SET SESSION sql_notes = 0;
 
-CREATE TABLE `account_battlepet` (
+-- Disable FK checks so tables can be created in any order.
+-- character_garrison_follower_abilities (FK → character_garrison_followers)
+-- is defined before the parent table in this dump.
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- NOTE: CREATE DATABASE and USE statements are intentionally omitted.
+-- The auto-updater's mysql CLI already specifies the target database.
+-- For MANUAL import only, run these first:
+--   CREATE DATABASE IF NOT EXISTS `psycho_characters` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+--   USE `psycho_characters`;
+
+CREATE TABLE IF NOT EXISTS `account_battlepet` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `account` int(10) unsigned NOT NULL DEFAULT '0',
   `slot` int(11) NOT NULL DEFAULT '-1',
@@ -49,9 +62,9 @@ CREATE TABLE `account_battlepet` (
 
 /*Table structure for table `account_data` */
 
-DROP TABLE IF EXISTS `account_data`;
+-- DROP TABLE IF EXISTS `account_data`;
 
-CREATE TABLE `account_data` (
+CREATE TABLE IF NOT EXISTS `account_data` (
   `accountId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Account Identifier',
   `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `time` int(10) unsigned NOT NULL DEFAULT '0',
@@ -63,9 +76,9 @@ CREATE TABLE `account_data` (
 
 /*Table structure for table `account_instance_times` */
 
-DROP TABLE IF EXISTS `account_instance_times`;
+-- DROP TABLE IF EXISTS `account_instance_times`;
 
-CREATE TABLE `account_instance_times` (
+CREATE TABLE IF NOT EXISTS `account_instance_times` (
   `accountId` int(10) unsigned NOT NULL,
   `instanceId` int(10) unsigned NOT NULL DEFAULT '0',
   `releaseTime` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -76,9 +89,9 @@ CREATE TABLE `account_instance_times` (
 
 /*Table structure for table `account_tutorial` */
 
-DROP TABLE IF EXISTS `account_tutorial`;
+-- DROP TABLE IF EXISTS `account_tutorial`;
 
-CREATE TABLE `account_tutorial` (
+CREATE TABLE IF NOT EXISTS `account_tutorial` (
   `accountId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Account Identifier',
   `tut0` int(10) unsigned NOT NULL DEFAULT '0',
   `tut1` int(10) unsigned NOT NULL DEFAULT '0',
@@ -95,9 +108,9 @@ CREATE TABLE `account_tutorial` (
 
 /*Table structure for table `arena_team` */
 
-DROP TABLE IF EXISTS `arena_team`;
+-- DROP TABLE IF EXISTS `arena_team`;
 
-CREATE TABLE `arena_team` (
+CREATE TABLE IF NOT EXISTS `arena_team` (
   `arenaTeamId` int(10) unsigned NOT NULL DEFAULT '0',
   `name` varchar(24) NOT NULL,
   `captainGuid` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -120,9 +133,9 @@ CREATE TABLE `arena_team` (
 
 /*Table structure for table `arena_team_member` */
 
-DROP TABLE IF EXISTS `arena_team_member`;
+-- DROP TABLE IF EXISTS `arena_team_member`;
 
-CREATE TABLE `arena_team_member` (
+CREATE TABLE IF NOT EXISTS `arena_team_member` (
   `arenaTeamId` int(10) unsigned NOT NULL DEFAULT '0',
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `weekGames` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -137,9 +150,9 @@ CREATE TABLE `arena_team_member` (
 
 /*Table structure for table `auction_bidders` */
 
-DROP TABLE IF EXISTS `auction_bidders`;
+-- DROP TABLE IF EXISTS `auction_bidders`;
 
-CREATE TABLE `auction_bidders` (
+CREATE TABLE IF NOT EXISTS `auction_bidders` (
   `auctionId` int(10) unsigned NOT NULL,
   `playerGuid` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`auctionId`,`playerGuid`)
@@ -149,9 +162,9 @@ CREATE TABLE `auction_bidders` (
 
 /*Table structure for table `auction_items` */
 
-DROP TABLE IF EXISTS `auction_items`;
+-- DROP TABLE IF EXISTS `auction_items`;
 
-CREATE TABLE `auction_items` (
+CREATE TABLE IF NOT EXISTS `auction_items` (
   `auctionId` int(10) unsigned NOT NULL,
   `itemGuid` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`auctionId`,`itemGuid`),
@@ -162,9 +175,9 @@ CREATE TABLE `auction_items` (
 
 /*Table structure for table `auctionhouse` */
 
-DROP TABLE IF EXISTS `auctionhouse`;
+-- DROP TABLE IF EXISTS `auctionhouse`;
 
-CREATE TABLE `auctionhouse` (
+CREATE TABLE IF NOT EXISTS `auctionhouse` (
   `id` int(10) unsigned NOT NULL DEFAULT '0',
   `auctionHouseId` int(10) unsigned NOT NULL DEFAULT '0',
   `owner` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -182,9 +195,9 @@ CREATE TABLE `auctionhouse` (
 
 /*Table structure for table `blackmarket_auctions` */
 
-DROP TABLE IF EXISTS `blackmarket_auctions`;
+-- DROP TABLE IF EXISTS `blackmarket_auctions`;
 
-CREATE TABLE `blackmarket_auctions` (
+CREATE TABLE IF NOT EXISTS `blackmarket_auctions` (
   `marketId` int(10) NOT NULL DEFAULT '0',
   `currentBid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `time` int(10) NOT NULL DEFAULT '0',
@@ -197,9 +210,9 @@ CREATE TABLE `blackmarket_auctions` (
 
 /*Table structure for table `bugreport` */
 
-DROP TABLE IF EXISTS `bugreport`;
+-- DROP TABLE IF EXISTS `bugreport`;
 
-CREATE TABLE `bugreport` (
+CREATE TABLE IF NOT EXISTS `bugreport` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
   `type` longtext NOT NULL,
   `content` longtext NOT NULL,
@@ -210,9 +223,9 @@ CREATE TABLE `bugreport` (
 
 /*Table structure for table `calendar_events` */
 
-DROP TABLE IF EXISTS `calendar_events`;
+-- DROP TABLE IF EXISTS `calendar_events`;
 
-CREATE TABLE `calendar_events` (
+CREATE TABLE IF NOT EXISTS `calendar_events` (
   `EventID` bigint(20) unsigned NOT NULL DEFAULT '0',
   `Owner` bigint(20) unsigned NOT NULL DEFAULT '0',
   `Title` varchar(255) NOT NULL DEFAULT '',
@@ -229,9 +242,9 @@ CREATE TABLE `calendar_events` (
 
 /*Table structure for table `calendar_invites` */
 
-DROP TABLE IF EXISTS `calendar_invites`;
+-- DROP TABLE IF EXISTS `calendar_invites`;
 
-CREATE TABLE `calendar_invites` (
+CREATE TABLE IF NOT EXISTS `calendar_invites` (
   `InviteID` bigint(20) unsigned NOT NULL DEFAULT '0',
   `EventID` bigint(20) unsigned NOT NULL DEFAULT '0',
   `Invitee` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -247,9 +260,9 @@ CREATE TABLE `calendar_invites` (
 
 /*Table structure for table `challenge` */
 
-DROP TABLE IF EXISTS `challenge`;
+-- DROP TABLE IF EXISTS `challenge`;
 
-CREATE TABLE `challenge` (
+CREATE TABLE IF NOT EXISTS `challenge` (
   `ID` int(11) NOT NULL,
   `GuildID` bigint(20) NOT NULL DEFAULT '0',
   `MapID` mediumint(9) NOT NULL DEFAULT '0',
@@ -311,9 +324,9 @@ insert  into `challenge`(`ID`,`GuildID`,`MapID`,`ChallengeID`,`RecordTime`,`Date
 
 /*Table structure for table `challenge_key` */
 
-DROP TABLE IF EXISTS `challenge_key`;
+-- DROP TABLE IF EXISTS `challenge_key`;
 
-CREATE TABLE `challenge_key` (
+CREATE TABLE IF NOT EXISTS `challenge_key` (
   `guid` int(10) NOT NULL DEFAULT '0',
   `ID` mediumint(6) unsigned NOT NULL DEFAULT '0',
   `Level` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -332,9 +345,9 @@ CREATE TABLE `challenge_key` (
 
 /*Table structure for table `challenge_member` */
 
-DROP TABLE IF EXISTS `challenge_member`;
+-- DROP TABLE IF EXISTS `challenge_member`;
 
-CREATE TABLE `challenge_member` (
+CREATE TABLE IF NOT EXISTS `challenge_member` (
   `id` int(11) NOT NULL,
   `member` bigint(20) NOT NULL DEFAULT '0',
   `specID` mediumint(6) NOT NULL DEFAULT '0',
@@ -538,9 +551,9 @@ insert  into `challenge_member`(`id`,`member`,`specID`,`ChallengeLevel`,`Date`,`
 
 /*Table structure for table `challenge_oplote_loot` */
 
-DROP TABLE IF EXISTS `challenge_oplote_loot`;
+-- DROP TABLE IF EXISTS `challenge_oplote_loot`;
 
-CREATE TABLE `challenge_oplote_loot` (
+CREATE TABLE IF NOT EXISTS `challenge_oplote_loot` (
   `guid` int(10) NOT NULL DEFAULT '0',
   `chestListID` varchar(150) NOT NULL DEFAULT '',
   `date` int(10) NOT NULL DEFAULT '0',
@@ -552,9 +565,9 @@ CREATE TABLE `challenge_oplote_loot` (
 
 /*Table structure for table `channels` */
 
-DROP TABLE IF EXISTS `channels`;
+-- DROP TABLE IF EXISTS `channels`;
 
-CREATE TABLE `channels` (
+CREATE TABLE IF NOT EXISTS `channels` (
   `name` varchar(128) NOT NULL,
   `team` int(10) unsigned NOT NULL,
   `announce` tinyint(3) unsigned NOT NULL DEFAULT '1',
@@ -569,9 +582,9 @@ CREATE TABLE `channels` (
 
 /*Table structure for table `character_account_data` */
 
-DROP TABLE IF EXISTS `character_account_data`;
+-- DROP TABLE IF EXISTS `character_account_data`;
 
-CREATE TABLE `character_account_data` (
+CREATE TABLE IF NOT EXISTS `character_account_data` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `time` int(10) unsigned NOT NULL DEFAULT '0',
@@ -583,9 +596,9 @@ CREATE TABLE `character_account_data` (
 
 /*Table structure for table `character_achievement` */
 
-DROP TABLE IF EXISTS `character_achievement`;
+-- DROP TABLE IF EXISTS `character_achievement`;
 
-CREATE TABLE `character_achievement` (
+CREATE TABLE IF NOT EXISTS `character_achievement` (
   `guid` bigint(20) unsigned NOT NULL,
   `achievement` int(10) unsigned NOT NULL,
   `date` int(10) unsigned NOT NULL DEFAULT '0',
@@ -596,9 +609,9 @@ CREATE TABLE `character_achievement` (
 
 /*Table structure for table `character_achievement_progress` */
 
-DROP TABLE IF EXISTS `character_achievement_progress`;
+-- DROP TABLE IF EXISTS `character_achievement_progress`;
 
-CREATE TABLE `character_achievement_progress` (
+CREATE TABLE IF NOT EXISTS `character_achievement_progress` (
   `guid` bigint(20) unsigned NOT NULL,
   `criteria` int(10) unsigned NOT NULL,
   `counter` bigint(20) unsigned NOT NULL,
@@ -610,9 +623,9 @@ CREATE TABLE `character_achievement_progress` (
 
 /*Table structure for table `character_action` */
 
-DROP TABLE IF EXISTS `character_action`;
+-- DROP TABLE IF EXISTS `character_action`;
 
-CREATE TABLE `character_action` (
+CREATE TABLE IF NOT EXISTS `character_action` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `spec` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `button` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -625,9 +638,9 @@ CREATE TABLE `character_action` (
 
 /*Table structure for table `character_adventure_quest` */
 
-DROP TABLE IF EXISTS `character_adventure_quest`;
+-- DROP TABLE IF EXISTS `character_adventure_quest`;
 
-CREATE TABLE `character_adventure_quest` (
+CREATE TABLE IF NOT EXISTS `character_adventure_quest` (
   `guid` bigint(20) unsigned NOT NULL,
   `questID` int(11) unsigned NOT NULL,
   PRIMARY KEY (`guid`) USING BTREE,
@@ -639,9 +652,9 @@ CREATE TABLE `character_adventure_quest` (
 
 /*Table structure for table `character_archaeology_branchs` */
 
-DROP TABLE IF EXISTS `character_archaeology_branchs`;
+-- DROP TABLE IF EXISTS `character_archaeology_branchs`;
 
-CREATE TABLE `character_archaeology_branchs` (
+CREATE TABLE IF NOT EXISTS `character_archaeology_branchs` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `projectId` smallint(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`,`projectId`)
@@ -651,9 +664,9 @@ CREATE TABLE `character_archaeology_branchs` (
 
 /*Table structure for table `character_archaeology_digsites` */
 
-DROP TABLE IF EXISTS `character_archaeology_digsites`;
+-- DROP TABLE IF EXISTS `character_archaeology_digsites`;
 
-CREATE TABLE `character_archaeology_digsites` (
+CREATE TABLE IF NOT EXISTS `character_archaeology_digsites` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `digsiteId` smallint(5) unsigned NOT NULL DEFAULT '0',
   `point_x` float DEFAULT '0',
@@ -666,9 +679,9 @@ CREATE TABLE `character_archaeology_digsites` (
 
 /*Table structure for table `character_archaeology_history` */
 
-DROP TABLE IF EXISTS `character_archaeology_history`;
+-- DROP TABLE IF EXISTS `character_archaeology_history`;
 
-CREATE TABLE `character_archaeology_history` (
+CREATE TABLE IF NOT EXISTS `character_archaeology_history` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `time` int(10) unsigned NOT NULL DEFAULT '0',
   `projectId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -680,9 +693,9 @@ CREATE TABLE `character_archaeology_history` (
 
 /*Table structure for table `character_arena_data` */
 
-DROP TABLE IF EXISTS `character_arena_data`;
+-- DROP TABLE IF EXISTS `character_arena_data`;
 
-CREATE TABLE `character_arena_data` (
+CREATE TABLE IF NOT EXISTS `character_arena_data` (
   `guid` bigint(20) unsigned NOT NULL,
   `slot` tinyint(3) unsigned NOT NULL,
   `rating` int(10) unsigned NOT NULL DEFAULT '0',
@@ -705,9 +718,9 @@ CREATE TABLE `character_arena_data` (
 
 /*Table structure for table `character_aura` */
 
-DROP TABLE IF EXISTS `character_aura`;
+-- DROP TABLE IF EXISTS `character_aura`;
 
-CREATE TABLE `character_aura` (
+CREATE TABLE IF NOT EXISTS `character_aura` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `casterGuid` binary(16) NOT NULL COMMENT 'Full Global Unique Identifier',
   `itemGuid` binary(16) NOT NULL,
@@ -727,9 +740,9 @@ CREATE TABLE `character_aura` (
 
 /*Table structure for table `character_aura_effect` */
 
-DROP TABLE IF EXISTS `character_aura_effect`;
+-- DROP TABLE IF EXISTS `character_aura_effect`;
 
-CREATE TABLE `character_aura_effect` (
+CREATE TABLE IF NOT EXISTS `character_aura_effect` (
   `guid` bigint(20) unsigned NOT NULL,
   `casterGuid` binary(16) NOT NULL COMMENT 'Full Global Unique Identifier',
   `itemGuid` binary(16) NOT NULL,
@@ -745,9 +758,9 @@ CREATE TABLE `character_aura_effect` (
 
 /*Table structure for table `character_banned` */
 
-DROP TABLE IF EXISTS `character_banned`;
+-- DROP TABLE IF EXISTS `character_banned`;
 
-CREATE TABLE `character_banned` (
+CREATE TABLE IF NOT EXISTS `character_banned` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `bandate` int(10) unsigned NOT NULL DEFAULT '0',
   `unbandate` int(10) unsigned NOT NULL DEFAULT '0',
@@ -761,9 +774,9 @@ CREATE TABLE `character_banned` (
 
 /*Table structure for table `character_battleground_data` */
 
-DROP TABLE IF EXISTS `character_battleground_data`;
+-- DROP TABLE IF EXISTS `character_battleground_data`;
 
-CREATE TABLE `character_battleground_data` (
+CREATE TABLE IF NOT EXISTS `character_battleground_data` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `instanceId` int(10) unsigned NOT NULL COMMENT 'Instance Identifier',
   `team` smallint(5) unsigned NOT NULL,
@@ -782,9 +795,9 @@ CREATE TABLE `character_battleground_data` (
 
 /*Table structure for table `character_battleground_random` */
 
-DROP TABLE IF EXISTS `character_battleground_random`;
+-- DROP TABLE IF EXISTS `character_battleground_random`;
 
-CREATE TABLE `character_battleground_random` (
+CREATE TABLE IF NOT EXISTS `character_battleground_random` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -793,9 +806,9 @@ CREATE TABLE `character_battleground_random` (
 
 /*Table structure for table `character_completed_challenges` */
 
-DROP TABLE IF EXISTS `character_completed_challenges`;
+-- DROP TABLE IF EXISTS `character_completed_challenges`;
 
-CREATE TABLE `character_completed_challenges` (
+CREATE TABLE IF NOT EXISTS `character_completed_challenges` (
   `guid` bigint(20) unsigned NOT NULL,
   `KeyId` int(10) unsigned NOT NULL DEFAULT '0',
   `MapId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -810,9 +823,9 @@ CREATE TABLE `character_completed_challenges` (
 
 /*Table structure for table `character_cuf_profiles` */
 
-DROP TABLE IF EXISTS `character_cuf_profiles`;
+-- DROP TABLE IF EXISTS `character_cuf_profiles`;
 
-CREATE TABLE `character_cuf_profiles` (
+CREATE TABLE IF NOT EXISTS `character_cuf_profiles` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Character Guid',
   `id` tinyint(3) unsigned NOT NULL COMMENT 'Profile Id (0-4)',
   `name` varchar(12) NOT NULL COMMENT 'Profile Name',
@@ -835,9 +848,9 @@ CREATE TABLE `character_cuf_profiles` (
 
 /*Table structure for table `character_currency` */
 
-DROP TABLE IF EXISTS `character_currency`;
+-- DROP TABLE IF EXISTS `character_currency`;
 
-CREATE TABLE `character_currency` (
+CREATE TABLE IF NOT EXISTS `character_currency` (
   `CharacterGuid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `Currency` smallint(5) unsigned NOT NULL,
   `Quantity` int(10) unsigned NOT NULL,
@@ -852,9 +865,9 @@ CREATE TABLE `character_currency` (
 
 /*Table structure for table `character_declinedname` */
 
-DROP TABLE IF EXISTS `character_declinedname`;
+-- DROP TABLE IF EXISTS `character_declinedname`;
 
-CREATE TABLE `character_declinedname` (
+CREATE TABLE IF NOT EXISTS `character_declinedname` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `genitive` varchar(15) NOT NULL DEFAULT '',
   `dative` varchar(15) NOT NULL DEFAULT '',
@@ -868,9 +881,9 @@ CREATE TABLE `character_declinedname` (
 
 /*Table structure for table `character_equipmentsets` */
 
-DROP TABLE IF EXISTS `character_equipmentsets`;
+-- DROP TABLE IF EXISTS `character_equipmentsets`;
 
-CREATE TABLE `character_equipmentsets` (
+CREATE TABLE IF NOT EXISTS `character_equipmentsets` (
   `guid` bigint(20) NOT NULL DEFAULT '0',
   `setguid` bigint(20) NOT NULL AUTO_INCREMENT,
   `setindex` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -906,9 +919,9 @@ CREATE TABLE `character_equipmentsets` (
 
 /*Table structure for table `character_favorite_auctions` */
 
-DROP TABLE IF EXISTS `character_favorite_auctions`;
+-- DROP TABLE IF EXISTS `character_favorite_auctions`;
 
-CREATE TABLE `character_favorite_auctions` (
+CREATE TABLE IF NOT EXISTS `character_favorite_auctions` (
   `guid` bigint(20) unsigned NOT NULL,
   `order` int(10) unsigned NOT NULL DEFAULT '0',
   `itemId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -922,9 +935,9 @@ CREATE TABLE `character_favorite_auctions` (
 
 /*Table structure for table `character_fishingsteps` */
 
-DROP TABLE IF EXISTS `character_fishingsteps`;
+-- DROP TABLE IF EXISTS `character_fishingsteps`;
 
-CREATE TABLE `character_fishingsteps` (
+CREATE TABLE IF NOT EXISTS `character_fishingsteps` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `fishingSteps` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`guid`)
@@ -934,9 +947,9 @@ CREATE TABLE `character_fishingsteps` (
 
 /*Table structure for table `character_garrison` */
 
-DROP TABLE IF EXISTS `character_garrison`;
+-- DROP TABLE IF EXISTS `character_garrison`;
 
-CREATE TABLE `character_garrison` (
+CREATE TABLE IF NOT EXISTS `character_garrison` (
   `guid` bigint(20) unsigned NOT NULL,
   `type` tinyint(3) unsigned NOT NULL,
   `siteLevelId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -948,9 +961,9 @@ CREATE TABLE `character_garrison` (
 
 /*Table structure for table `character_garrison_blueprints` */
 
-DROP TABLE IF EXISTS `character_garrison_blueprints`;
+-- DROP TABLE IF EXISTS `character_garrison_blueprints`;
 
-CREATE TABLE `character_garrison_blueprints` (
+CREATE TABLE IF NOT EXISTS `character_garrison_blueprints` (
   `guid` bigint(20) unsigned NOT NULL,
   `garrison_type` tinyint(3) unsigned NOT NULL,
   `buildingId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -961,9 +974,9 @@ CREATE TABLE `character_garrison_blueprints` (
 
 /*Table structure for table `character_garrison_buildings` */
 
-DROP TABLE IF EXISTS `character_garrison_buildings`;
+-- DROP TABLE IF EXISTS `character_garrison_buildings`;
 
-CREATE TABLE `character_garrison_buildings` (
+CREATE TABLE IF NOT EXISTS `character_garrison_buildings` (
   `guid` bigint(20) unsigned NOT NULL,
   `garrison_type` tinyint(3) unsigned NOT NULL,
   `plotInstanceId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -977,9 +990,9 @@ CREATE TABLE `character_garrison_buildings` (
 
 /*Table structure for table `character_garrison_follower_abilities` */
 
-DROP TABLE IF EXISTS `character_garrison_follower_abilities`;
+-- DROP TABLE IF EXISTS `character_garrison_follower_abilities`;
 
-CREATE TABLE `character_garrison_follower_abilities` (
+CREATE TABLE IF NOT EXISTS `character_garrison_follower_abilities` (
   `dbId` bigint(20) unsigned NOT NULL,
   `abilityId` int(10) unsigned NOT NULL,
   `slot` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -991,9 +1004,9 @@ CREATE TABLE `character_garrison_follower_abilities` (
 
 /*Table structure for table `character_garrison_followers` */
 
-DROP TABLE IF EXISTS `character_garrison_followers`;
+-- DROP TABLE IF EXISTS `character_garrison_followers`;
 
-CREATE TABLE `character_garrison_followers` (
+CREATE TABLE IF NOT EXISTS `character_garrison_followers` (
   `dbId` bigint(20) unsigned NOT NULL,
   `guid` bigint(20) unsigned NOT NULL,
   `garrison_type` tinyint(3) unsigned NOT NULL,
@@ -1015,9 +1028,9 @@ CREATE TABLE `character_garrison_followers` (
 
 /*Table structure for table `character_garrison_mission_rewards` */
 
-DROP TABLE IF EXISTS `character_garrison_mission_rewards`;
+-- DROP TABLE IF EXISTS `character_garrison_mission_rewards`;
 
-CREATE TABLE `character_garrison_mission_rewards` (
+CREATE TABLE IF NOT EXISTS `character_garrison_mission_rewards` (
   `dbId` int(10) unsigned NOT NULL,
   `type` tinyint(3) unsigned NOT NULL,
   `itemId` int(10) NOT NULL DEFAULT '0',
@@ -1032,9 +1045,9 @@ CREATE TABLE `character_garrison_mission_rewards` (
 
 /*Table structure for table `character_garrison_missions` */
 
-DROP TABLE IF EXISTS `character_garrison_missions`;
+-- DROP TABLE IF EXISTS `character_garrison_missions`;
 
-CREATE TABLE `character_garrison_missions` (
+CREATE TABLE IF NOT EXISTS `character_garrison_missions` (
   `dbId` bigint(20) unsigned NOT NULL,
   `guid` bigint(20) unsigned NOT NULL,
   `garrison_type` tinyint(3) unsigned NOT NULL,
@@ -1049,9 +1062,9 @@ CREATE TABLE `character_garrison_missions` (
 
 /*Table structure for table `character_garrison_work_order` */
 
-DROP TABLE IF EXISTS `character_garrison_work_order`;
+-- DROP TABLE IF EXISTS `character_garrison_work_order`;
 
-CREATE TABLE `character_garrison_work_order` (
+CREATE TABLE IF NOT EXISTS `character_garrison_work_order` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `garrison_id` bigint(20) unsigned NOT NULL,
   `plot_instance_id` int(10) unsigned NOT NULL,
@@ -1066,9 +1079,9 @@ CREATE TABLE `character_garrison_work_order` (
 
 /*Table structure for table `character_gifts` */
 
-DROP TABLE IF EXISTS `character_gifts`;
+-- DROP TABLE IF EXISTS `character_gifts`;
 
-CREATE TABLE `character_gifts` (
+CREATE TABLE IF NOT EXISTS `character_gifts` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `item_guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `entry` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1081,9 +1094,9 @@ CREATE TABLE `character_gifts` (
 
 /*Table structure for table `character_glyphs` */
 
-DROP TABLE IF EXISTS `character_glyphs`;
+-- DROP TABLE IF EXISTS `character_glyphs`;
 
-CREATE TABLE `character_glyphs` (
+CREATE TABLE IF NOT EXISTS `character_glyphs` (
   `guid` bigint(20) unsigned NOT NULL,
   `talentGroup` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `glyphId` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -1094,9 +1107,9 @@ CREATE TABLE `character_glyphs` (
 
 /*Table structure for table `character_homebind` */
 
-DROP TABLE IF EXISTS `character_homebind`;
+-- DROP TABLE IF EXISTS `character_homebind`;
 
-CREATE TABLE `character_homebind` (
+CREATE TABLE IF NOT EXISTS `character_homebind` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `mapId` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Map Identifier',
   `zoneId` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT 'Zone Identifier',
@@ -1110,9 +1123,9 @@ CREATE TABLE `character_homebind` (
 
 /*Table structure for table `character_instance` */
 
-DROP TABLE IF EXISTS `character_instance`;
+-- DROP TABLE IF EXISTS `character_instance`;
 
-CREATE TABLE `character_instance` (
+CREATE TABLE IF NOT EXISTS `character_instance` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `instance` int(10) unsigned NOT NULL DEFAULT '0',
   `permanent` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1125,9 +1138,9 @@ CREATE TABLE `character_instance` (
 
 /*Table structure for table `character_inventory` */
 
-DROP TABLE IF EXISTS `character_inventory`;
+-- DROP TABLE IF EXISTS `character_inventory`;
 
-CREATE TABLE `character_inventory` (
+CREATE TABLE IF NOT EXISTS `character_inventory` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `bag` bigint(20) unsigned NOT NULL DEFAULT '0',
   `slot` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1141,9 +1154,9 @@ CREATE TABLE `character_inventory` (
 
 /*Table structure for table `character_pet` */
 
-DROP TABLE IF EXISTS `character_pet`;
+-- DROP TABLE IF EXISTS `character_pet`;
 
-CREATE TABLE `character_pet` (
+CREATE TABLE IF NOT EXISTS `character_pet` (
   `id` int(10) unsigned NOT NULL DEFAULT '0',
   `entry` int(10) unsigned NOT NULL DEFAULT '0',
   `owner` bigint(10) unsigned NOT NULL DEFAULT '0',
@@ -1171,9 +1184,9 @@ CREATE TABLE `character_pet` (
 
 /*Table structure for table `character_pet_declinedname` */
 
-DROP TABLE IF EXISTS `character_pet_declinedname`;
+-- DROP TABLE IF EXISTS `character_pet_declinedname`;
 
-CREATE TABLE `character_pet_declinedname` (
+CREATE TABLE IF NOT EXISTS `character_pet_declinedname` (
   `id` int(10) unsigned NOT NULL DEFAULT '0',
   `owner` int(10) unsigned NOT NULL DEFAULT '0',
   `genitive` varchar(12) NOT NULL DEFAULT '',
@@ -1189,9 +1202,9 @@ CREATE TABLE `character_pet_declinedname` (
 
 /*Table structure for table `character_pvp_talent` */
 
-DROP TABLE IF EXISTS `character_pvp_talent`;
+-- DROP TABLE IF EXISTS `character_pvp_talent`;
 
-CREATE TABLE `character_pvp_talent` (
+CREATE TABLE IF NOT EXISTS `character_pvp_talent` (
   `guid` bigint(20) unsigned NOT NULL,
   `talentId0` int(10) unsigned NOT NULL,
   `talentId1` int(10) unsigned NOT NULL,
@@ -1205,9 +1218,9 @@ CREATE TABLE `character_pvp_talent` (
 
 /*Table structure for table `character_queststatus` */
 
-DROP TABLE IF EXISTS `character_queststatus`;
+-- DROP TABLE IF EXISTS `character_queststatus`;
 
-CREATE TABLE `character_queststatus` (
+CREATE TABLE IF NOT EXISTS `character_queststatus` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `quest` int(10) unsigned NOT NULL DEFAULT '0',
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1220,9 +1233,9 @@ CREATE TABLE `character_queststatus` (
 
 /*Table structure for table `character_queststatus_daily` */
 
-DROP TABLE IF EXISTS `character_queststatus_daily`;
+-- DROP TABLE IF EXISTS `character_queststatus_daily`;
 
-CREATE TABLE `character_queststatus_daily` (
+CREATE TABLE IF NOT EXISTS `character_queststatus_daily` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `quest` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Quest Identifier',
   `time` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1234,9 +1247,9 @@ CREATE TABLE `character_queststatus_daily` (
 
 /*Table structure for table `character_queststatus_monthly` */
 
-DROP TABLE IF EXISTS `character_queststatus_monthly`;
+-- DROP TABLE IF EXISTS `character_queststatus_monthly`;
 
-CREATE TABLE `character_queststatus_monthly` (
+CREATE TABLE IF NOT EXISTS `character_queststatus_monthly` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `quest` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Quest Identifier',
   PRIMARY KEY (`guid`,`quest`),
@@ -1247,9 +1260,9 @@ CREATE TABLE `character_queststatus_monthly` (
 
 /*Table structure for table `character_queststatus_objectives` */
 
-DROP TABLE IF EXISTS `character_queststatus_objectives`;
+-- DROP TABLE IF EXISTS `character_queststatus_objectives`;
 
-CREATE TABLE `character_queststatus_objectives` (
+CREATE TABLE IF NOT EXISTS `character_queststatus_objectives` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `quest` int(10) unsigned NOT NULL DEFAULT '0',
   `objective` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1261,9 +1274,9 @@ CREATE TABLE `character_queststatus_objectives` (
 
 /*Table structure for table `character_queststatus_objectives_criteria` */
 
-DROP TABLE IF EXISTS `character_queststatus_objectives_criteria`;
+-- DROP TABLE IF EXISTS `character_queststatus_objectives_criteria`;
 
-CREATE TABLE `character_queststatus_objectives_criteria` (
+CREATE TABLE IF NOT EXISTS `character_queststatus_objectives_criteria` (
   `guid` bigint(20) unsigned NOT NULL,
   `questObjectiveId` int(10) unsigned NOT NULL,
   PRIMARY KEY (`guid`,`questObjectiveId`)
@@ -1273,9 +1286,9 @@ CREATE TABLE `character_queststatus_objectives_criteria` (
 
 /*Table structure for table `character_queststatus_objectives_criteria_progress` */
 
-DROP TABLE IF EXISTS `character_queststatus_objectives_criteria_progress`;
+-- DROP TABLE IF EXISTS `character_queststatus_objectives_criteria_progress`;
 
-CREATE TABLE `character_queststatus_objectives_criteria_progress` (
+CREATE TABLE IF NOT EXISTS `character_queststatus_objectives_criteria_progress` (
   `guid` bigint(20) unsigned NOT NULL,
   `criteriaId` int(10) unsigned NOT NULL,
   `counter` bigint(20) unsigned NOT NULL,
@@ -1287,9 +1300,9 @@ CREATE TABLE `character_queststatus_objectives_criteria_progress` (
 
 /*Table structure for table `character_queststatus_rewarded` */
 
-DROP TABLE IF EXISTS `character_queststatus_rewarded`;
+-- DROP TABLE IF EXISTS `character_queststatus_rewarded`;
 
-CREATE TABLE `character_queststatus_rewarded` (
+CREATE TABLE IF NOT EXISTS `character_queststatus_rewarded` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `quest` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Quest Identifier',
   `active` tinyint(10) unsigned NOT NULL DEFAULT '1',
@@ -1300,9 +1313,9 @@ CREATE TABLE `character_queststatus_rewarded` (
 
 /*Table structure for table `character_queststatus_seasonal` */
 
-DROP TABLE IF EXISTS `character_queststatus_seasonal`;
+-- DROP TABLE IF EXISTS `character_queststatus_seasonal`;
 
-CREATE TABLE `character_queststatus_seasonal` (
+CREATE TABLE IF NOT EXISTS `character_queststatus_seasonal` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `quest` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Quest Identifier',
   `event` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Event Identifier',
@@ -1314,9 +1327,9 @@ CREATE TABLE `character_queststatus_seasonal` (
 
 /*Table structure for table `character_queststatus_weekly` */
 
-DROP TABLE IF EXISTS `character_queststatus_weekly`;
+-- DROP TABLE IF EXISTS `character_queststatus_weekly`;
 
-CREATE TABLE `character_queststatus_weekly` (
+CREATE TABLE IF NOT EXISTS `character_queststatus_weekly` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `quest` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Quest Identifier',
   PRIMARY KEY (`guid`,`quest`),
@@ -1327,9 +1340,9 @@ CREATE TABLE `character_queststatus_weekly` (
 
 /*Table structure for table `character_recovery` */
 
-DROP TABLE IF EXISTS `character_recovery`;
+-- DROP TABLE IF EXISTS `character_recovery`;
 
-CREATE TABLE `character_recovery` (
+CREATE TABLE IF NOT EXISTS `character_recovery` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `delivered` tinyint(1) DEFAULT '0',
   `account` int(11) unsigned NOT NULL,
@@ -1350,9 +1363,9 @@ CREATE TABLE `character_recovery` (
 
 /*Table structure for table `character_reputation` */
 
-DROP TABLE IF EXISTS `character_reputation`;
+-- DROP TABLE IF EXISTS `character_reputation`;
 
-CREATE TABLE `character_reputation` (
+CREATE TABLE IF NOT EXISTS `character_reputation` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `faction` smallint(5) unsigned NOT NULL DEFAULT '0',
   `standing` int(11) NOT NULL DEFAULT '0',
@@ -1364,9 +1377,9 @@ CREATE TABLE `character_reputation` (
 
 /*Table structure for table `character_shop` */
 
-DROP TABLE IF EXISTS `character_shop`;
+-- DROP TABLE IF EXISTS `character_shop`;
 
-CREATE TABLE `character_shop` (
+CREATE TABLE IF NOT EXISTS `character_shop` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `guid` bigint(20) NOT NULL,
   `type` tinyint(3) NOT NULL,
@@ -1380,9 +1393,9 @@ CREATE TABLE `character_shop` (
 
 /*Table structure for table `character_skills` */
 
-DROP TABLE IF EXISTS `character_skills`;
+-- DROP TABLE IF EXISTS `character_skills`;
 
-CREATE TABLE `character_skills` (
+CREATE TABLE IF NOT EXISTS `character_skills` (
   `guid` bigint(20) unsigned NOT NULL COMMENT 'Global Unique Identifier',
   `skill` smallint(5) unsigned NOT NULL,
   `value` smallint(5) unsigned NOT NULL,
@@ -1394,9 +1407,9 @@ CREATE TABLE `character_skills` (
 
 /*Table structure for table `character_social` */
 
-DROP TABLE IF EXISTS `character_social`;
+-- DROP TABLE IF EXISTS `character_social`;
 
-CREATE TABLE `character_social` (
+CREATE TABLE IF NOT EXISTS `character_social` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Character Global Unique Identifier',
   `friend` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Friend Global Unique Identifier',
   `flags` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'Friend Flags',
@@ -1409,9 +1422,9 @@ CREATE TABLE `character_social` (
 
 /*Table structure for table `character_spell` */
 
-DROP TABLE IF EXISTS `character_spell`;
+-- DROP TABLE IF EXISTS `character_spell`;
 
-CREATE TABLE `character_spell` (
+CREATE TABLE IF NOT EXISTS `character_spell` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `spell` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell Identifier',
   `active` tinyint(3) unsigned NOT NULL DEFAULT '1',
@@ -1423,9 +1436,9 @@ CREATE TABLE `character_spell` (
 
 /*Table structure for table `character_spell_charges` */
 
-DROP TABLE IF EXISTS `character_spell_charges`;
+-- DROP TABLE IF EXISTS `character_spell_charges`;
 
-CREATE TABLE `character_spell_charges` (
+CREATE TABLE IF NOT EXISTS `character_spell_charges` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier, Low part',
   `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'SpellCategory.dbc Identifier',
   `rechargeStart` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1437,9 +1450,9 @@ CREATE TABLE `character_spell_charges` (
 
 /*Table structure for table `character_spell_cooldown` */
 
-DROP TABLE IF EXISTS `character_spell_cooldown`;
+-- DROP TABLE IF EXISTS `character_spell_cooldown`;
 
-CREATE TABLE `character_spell_cooldown` (
+CREATE TABLE IF NOT EXISTS `character_spell_cooldown` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier, Low part',
   `spell` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell Identifier',
   `item` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Item Identifier',
@@ -1453,9 +1466,9 @@ CREATE TABLE `character_spell_cooldown` (
 
 /*Table structure for table `character_stats` */
 
-DROP TABLE IF EXISTS `character_stats`;
+-- DROP TABLE IF EXISTS `character_stats`;
 
-CREATE TABLE `character_stats` (
+CREATE TABLE IF NOT EXISTS `character_stats` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier, Low part',
   `maxhealth` int(10) unsigned NOT NULL DEFAULT '0',
   `maxpower1` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1492,9 +1505,9 @@ CREATE TABLE `character_stats` (
 
 /*Table structure for table `character_talent` */
 
-DROP TABLE IF EXISTS `character_talent`;
+-- DROP TABLE IF EXISTS `character_talent`;
 
-CREATE TABLE `character_talent` (
+CREATE TABLE IF NOT EXISTS `character_talent` (
   `guid` bigint(20) unsigned NOT NULL,
   `talentId` mediumint(8) unsigned NOT NULL,
   `talentGroup` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1505,9 +1518,9 @@ CREATE TABLE `character_talent` (
 
 /*Table structure for table `character_transmog_outfits` */
 
-DROP TABLE IF EXISTS `character_transmog_outfits`;
+-- DROP TABLE IF EXISTS `character_transmog_outfits`;
 
-CREATE TABLE `character_transmog_outfits` (
+CREATE TABLE IF NOT EXISTS `character_transmog_outfits` (
   `guid` bigint(20) NOT NULL DEFAULT '0',
   `setguid` bigint(20) NOT NULL AUTO_INCREMENT,
   `setindex` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1544,9 +1557,9 @@ CREATE TABLE `character_transmog_outfits` (
 
 /*Table structure for table `character_void_storage` */
 
-DROP TABLE IF EXISTS `character_void_storage`;
+-- DROP TABLE IF EXISTS `character_void_storage`;
 
-CREATE TABLE `character_void_storage` (
+CREATE TABLE IF NOT EXISTS `character_void_storage` (
   `itemId` bigint(20) unsigned NOT NULL,
   `playerGuid` bigint(20) unsigned NOT NULL,
   `itemEntry` mediumint(8) unsigned NOT NULL,
@@ -1572,9 +1585,9 @@ CREATE TABLE `character_void_storage` (
 
 /*Table structure for table `character_world_quest` */
 
-DROP TABLE IF EXISTS `character_world_quest`;
+-- DROP TABLE IF EXISTS `character_world_quest`;
 
-CREATE TABLE `character_world_quest` (
+CREATE TABLE IF NOT EXISTS `character_world_quest` (
   `guid` bigint(20) unsigned NOT NULL,
   `questId` int(10) unsigned NOT NULL,
   `lastupdate` int(10) unsigned NOT NULL,
@@ -1588,9 +1601,9 @@ CREATE TABLE `character_world_quest` (
 
 /*Table structure for table `characters` */
 
-DROP TABLE IF EXISTS `characters`;
+-- DROP TABLE IF EXISTS `characters`;
 
-CREATE TABLE `characters` (
+CREATE TABLE IF NOT EXISTS `characters` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `account` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Account Identifier',
   `name` varchar(12) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -1686,9 +1699,9 @@ CREATE TABLE `characters` (
 
 /*Table structure for table `corpse` */
 
-DROP TABLE IF EXISTS `corpse`;
+-- DROP TABLE IF EXISTS `corpse`;
 
-CREATE TABLE `corpse` (
+CREATE TABLE IF NOT EXISTS `corpse` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Character Global Unique Identifier',
   `posX` float NOT NULL DEFAULT '0',
   `posY` float NOT NULL DEFAULT '0',
@@ -1714,9 +1727,9 @@ CREATE TABLE `corpse` (
 
 /*Table structure for table `corpse_phases` */
 
-DROP TABLE IF EXISTS `corpse_phases`;
+-- DROP TABLE IF EXISTS `corpse_phases`;
 
-CREATE TABLE `corpse_phases` (
+CREATE TABLE IF NOT EXISTS `corpse_phases` (
   `OwnerGuid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `PhaseId` int(10) unsigned NOT NULL,
   PRIMARY KEY (`OwnerGuid`,`PhaseId`)
@@ -1726,9 +1739,9 @@ CREATE TABLE `corpse_phases` (
 
 /*Table structure for table `creature_respawn` */
 
-DROP TABLE IF EXISTS `creature_respawn`;
+-- DROP TABLE IF EXISTS `creature_respawn`;
 
-CREATE TABLE `creature_respawn` (
+CREATE TABLE IF NOT EXISTS `creature_respawn` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `respawnTime` int(10) unsigned NOT NULL DEFAULT '0',
   `mapId` smallint(10) unsigned NOT NULL DEFAULT '0',
@@ -1741,9 +1754,9 @@ CREATE TABLE `creature_respawn` (
 
 /*Table structure for table `daily_players_reports` */
 
-DROP TABLE IF EXISTS `daily_players_reports`;
+-- DROP TABLE IF EXISTS `daily_players_reports`;
 
-CREATE TABLE `daily_players_reports` (
+CREATE TABLE IF NOT EXISTS `daily_players_reports` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0',
   `creation_time` int(10) unsigned NOT NULL DEFAULT '0',
   `average` float NOT NULL DEFAULT '0',
@@ -1761,9 +1774,9 @@ CREATE TABLE `daily_players_reports` (
 
 /*Table structure for table `game_event_condition_save` */
 
-DROP TABLE IF EXISTS `game_event_condition_save`;
+-- DROP TABLE IF EXISTS `game_event_condition_save`;
 
-CREATE TABLE `game_event_condition_save` (
+CREATE TABLE IF NOT EXISTS `game_event_condition_save` (
   `eventEntry` tinyint(3) unsigned NOT NULL,
   `condition_id` int(10) unsigned NOT NULL DEFAULT '0',
   `done` float DEFAULT '0',
@@ -1774,9 +1787,9 @@ CREATE TABLE `game_event_condition_save` (
 
 /*Table structure for table `game_event_save` */
 
-DROP TABLE IF EXISTS `game_event_save`;
+-- DROP TABLE IF EXISTS `game_event_save`;
 
-CREATE TABLE `game_event_save` (
+CREATE TABLE IF NOT EXISTS `game_event_save` (
   `eventEntry` tinyint(3) unsigned NOT NULL,
   `state` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `next_start` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1787,9 +1800,9 @@ CREATE TABLE `game_event_save` (
 
 /*Table structure for table `gameobject_respawn` */
 
-DROP TABLE IF EXISTS `gameobject_respawn`;
+-- DROP TABLE IF EXISTS `gameobject_respawn`;
 
-CREATE TABLE `gameobject_respawn` (
+CREATE TABLE IF NOT EXISTS `gameobject_respawn` (
   `guid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `respawnTime` int(10) unsigned NOT NULL DEFAULT '0',
   `mapId` smallint(10) unsigned NOT NULL DEFAULT '0',
@@ -1802,9 +1815,9 @@ CREATE TABLE `gameobject_respawn` (
 
 /*Table structure for table `gm_bug` */
 
-DROP TABLE IF EXISTS `gm_bug`;
+-- DROP TABLE IF EXISTS `gm_bug`;
 
-CREATE TABLE `gm_bug` (
+CREATE TABLE IF NOT EXISTS `gm_bug` (
   `id` int(10) unsigned NOT NULL,
   `playerGuid` bigint(20) unsigned NOT NULL,
   `note` text NOT NULL,
@@ -1824,9 +1837,9 @@ CREATE TABLE `gm_bug` (
 
 /*Table structure for table `gm_complaint` */
 
-DROP TABLE IF EXISTS `gm_complaint`;
+-- DROP TABLE IF EXISTS `gm_complaint`;
 
-CREATE TABLE `gm_complaint` (
+CREATE TABLE IF NOT EXISTS `gm_complaint` (
   `id` int(10) unsigned NOT NULL,
   `playerGuid` bigint(20) unsigned NOT NULL,
   `note` text NOT NULL,
@@ -1849,9 +1862,9 @@ CREATE TABLE `gm_complaint` (
 
 /*Table structure for table `gm_complaint_chatlog` */
 
-DROP TABLE IF EXISTS `gm_complaint_chatlog`;
+-- DROP TABLE IF EXISTS `gm_complaint_chatlog`;
 
-CREATE TABLE `gm_complaint_chatlog` (
+CREATE TABLE IF NOT EXISTS `gm_complaint_chatlog` (
   `complaintId` int(10) unsigned NOT NULL,
   `lineId` int(10) unsigned NOT NULL,
   `timestamp` int(10) unsigned NOT NULL,
@@ -1863,9 +1876,9 @@ CREATE TABLE `gm_complaint_chatlog` (
 
 /*Table structure for table `gm_suggestion` */
 
-DROP TABLE IF EXISTS `gm_suggestion`;
+-- DROP TABLE IF EXISTS `gm_suggestion`;
 
-CREATE TABLE `gm_suggestion` (
+CREATE TABLE IF NOT EXISTS `gm_suggestion` (
   `id` int(10) unsigned NOT NULL,
   `playerGuid` bigint(20) unsigned NOT NULL,
   `note` text NOT NULL,
@@ -1885,9 +1898,9 @@ CREATE TABLE `gm_suggestion` (
 
 /*Table structure for table `group_instance` */
 
-DROP TABLE IF EXISTS `group_instance`;
+-- DROP TABLE IF EXISTS `group_instance`;
 
-CREATE TABLE `group_instance` (
+CREATE TABLE IF NOT EXISTS `group_instance` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0',
   `instance` int(10) unsigned NOT NULL DEFAULT '0',
   `permanent` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1899,9 +1912,9 @@ CREATE TABLE `group_instance` (
 
 /*Table structure for table `group_member` */
 
-DROP TABLE IF EXISTS `group_member`;
+-- DROP TABLE IF EXISTS `group_member`;
 
-CREATE TABLE `group_member` (
+CREATE TABLE IF NOT EXISTS `group_member` (
   `guid` int(10) unsigned NOT NULL,
   `memberGuid` bigint(20) unsigned NOT NULL,
   `memberFlags` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1914,9 +1927,9 @@ CREATE TABLE `group_member` (
 
 /*Table structure for table `groups` */
 
-DROP TABLE IF EXISTS `groups`;
+-- DROP TABLE IF EXISTS `groups`;
 
-CREATE TABLE `groups` (
+CREATE TABLE IF NOT EXISTS `groups` (
   `guid` int(10) unsigned NOT NULL,
   `leaderGuid` bigint(20) unsigned NOT NULL,
   `lootMethod` tinyint(3) unsigned NOT NULL,
@@ -1943,9 +1956,9 @@ CREATE TABLE `groups` (
 
 /*Table structure for table `guild` */
 
-DROP TABLE IF EXISTS `guild`;
+-- DROP TABLE IF EXISTS `guild`;
 
-CREATE TABLE `guild` (
+CREATE TABLE IF NOT EXISTS `guild` (
   `guildid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `name` varchar(24) NOT NULL DEFAULT '',
   `leaderguid` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -1966,9 +1979,9 @@ CREATE TABLE `guild` (
 
 /*Table structure for table `guild_achievement` */
 
-DROP TABLE IF EXISTS `guild_achievement`;
+-- DROP TABLE IF EXISTS `guild_achievement`;
 
-CREATE TABLE `guild_achievement` (
+CREATE TABLE IF NOT EXISTS `guild_achievement` (
   `guildId` bigint(20) unsigned NOT NULL,
   `achievement` int(10) unsigned NOT NULL,
   `date` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1980,9 +1993,9 @@ CREATE TABLE `guild_achievement` (
 
 /*Table structure for table `guild_achievement_progress` */
 
-DROP TABLE IF EXISTS `guild_achievement_progress`;
+-- DROP TABLE IF EXISTS `guild_achievement_progress`;
 
-CREATE TABLE `guild_achievement_progress` (
+CREATE TABLE IF NOT EXISTS `guild_achievement_progress` (
   `guildId` bigint(20) unsigned NOT NULL,
   `criteria` int(10) unsigned NOT NULL,
   `counter` bigint(20) unsigned NOT NULL,
@@ -1995,9 +2008,9 @@ CREATE TABLE `guild_achievement_progress` (
 
 /*Table structure for table `guild_bank_eventlog` */
 
-DROP TABLE IF EXISTS `guild_bank_eventlog`;
+-- DROP TABLE IF EXISTS `guild_bank_eventlog`;
 
-CREATE TABLE `guild_bank_eventlog` (
+CREATE TABLE IF NOT EXISTS `guild_bank_eventlog` (
   `guildid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Guild Identificator',
   `LogGuid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Log record identificator - auxiliary column',
   `TabId` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'Guild bank TabId',
@@ -2017,9 +2030,9 @@ CREATE TABLE `guild_bank_eventlog` (
 
 /*Table structure for table `guild_bank_item` */
 
-DROP TABLE IF EXISTS `guild_bank_item`;
+-- DROP TABLE IF EXISTS `guild_bank_item`;
 
-CREATE TABLE `guild_bank_item` (
+CREATE TABLE IF NOT EXISTS `guild_bank_item` (
   `guildid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `TabId` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `SlotId` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -2033,9 +2046,9 @@ CREATE TABLE `guild_bank_item` (
 
 /*Table structure for table `guild_bank_right` */
 
-DROP TABLE IF EXISTS `guild_bank_right`;
+-- DROP TABLE IF EXISTS `guild_bank_right`;
 
-CREATE TABLE `guild_bank_right` (
+CREATE TABLE IF NOT EXISTS `guild_bank_right` (
   `guildid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `TabId` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `rid` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -2049,9 +2062,9 @@ CREATE TABLE `guild_bank_right` (
 
 /*Table structure for table `guild_bank_tab` */
 
-DROP TABLE IF EXISTS `guild_bank_tab`;
+-- DROP TABLE IF EXISTS `guild_bank_tab`;
 
-CREATE TABLE `guild_bank_tab` (
+CREATE TABLE IF NOT EXISTS `guild_bank_tab` (
   `guildid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `TabId` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `TabName` varchar(16) NOT NULL DEFAULT '',
@@ -2065,9 +2078,9 @@ CREATE TABLE `guild_bank_tab` (
 
 /*Table structure for table `guild_challenges` */
 
-DROP TABLE IF EXISTS `guild_challenges`;
+-- DROP TABLE IF EXISTS `guild_challenges`;
 
-CREATE TABLE `guild_challenges` (
+CREATE TABLE IF NOT EXISTS `guild_challenges` (
   `GuildId` int(10) unsigned NOT NULL,
   `ChallengeType` int(1) NOT NULL DEFAULT '0',
   `ChallengeCount` int(1) DEFAULT NULL,
@@ -2078,9 +2091,9 @@ CREATE TABLE `guild_challenges` (
 
 /*Table structure for table `guild_eventlog` */
 
-DROP TABLE IF EXISTS `guild_eventlog`;
+-- DROP TABLE IF EXISTS `guild_eventlog`;
 
-CREATE TABLE `guild_eventlog` (
+CREATE TABLE IF NOT EXISTS `guild_eventlog` (
   `guildid` bigint(20) unsigned NOT NULL COMMENT 'Guild Identificator',
   `LogGuid` int(10) unsigned NOT NULL COMMENT 'Log record identificator - auxiliary column',
   `EventType` tinyint(3) unsigned NOT NULL COMMENT 'Event type',
@@ -2098,9 +2111,9 @@ CREATE TABLE `guild_eventlog` (
 
 /*Table structure for table `guild_finder_applicant` */
 
-DROP TABLE IF EXISTS `guild_finder_applicant`;
+-- DROP TABLE IF EXISTS `guild_finder_applicant`;
 
-CREATE TABLE `guild_finder_applicant` (
+CREATE TABLE IF NOT EXISTS `guild_finder_applicant` (
   `guildId` bigint(20) unsigned NOT NULL DEFAULT '0',
   `playerGuid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `availability` tinyint(3) unsigned DEFAULT '0',
@@ -2115,9 +2128,9 @@ CREATE TABLE `guild_finder_applicant` (
 
 /*Table structure for table `guild_finder_guild_settings` */
 
-DROP TABLE IF EXISTS `guild_finder_guild_settings`;
+-- DROP TABLE IF EXISTS `guild_finder_guild_settings`;
 
-CREATE TABLE `guild_finder_guild_settings` (
+CREATE TABLE IF NOT EXISTS `guild_finder_guild_settings` (
   `guildId` bigint(20) unsigned NOT NULL,
   `availability` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `classRoles` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -2132,9 +2145,9 @@ CREATE TABLE `guild_finder_guild_settings` (
 
 /*Table structure for table `guild_member` */
 
-DROP TABLE IF EXISTS `guild_member`;
+-- DROP TABLE IF EXISTS `guild_member`;
 
-CREATE TABLE `guild_member` (
+CREATE TABLE IF NOT EXISTS `guild_member` (
   `guildid` bigint(20) unsigned NOT NULL COMMENT 'Guild Identificator',
   `guid` bigint(20) unsigned NOT NULL,
   `rank` tinyint(3) unsigned NOT NULL,
@@ -2149,9 +2162,9 @@ CREATE TABLE `guild_member` (
 
 /*Table structure for table `guild_member_withdraw` */
 
-DROP TABLE IF EXISTS `guild_member_withdraw`;
+-- DROP TABLE IF EXISTS `guild_member_withdraw`;
 
-CREATE TABLE `guild_member_withdraw` (
+CREATE TABLE IF NOT EXISTS `guild_member_withdraw` (
   `guid` bigint(20) unsigned NOT NULL,
   `tab0` int(10) unsigned NOT NULL DEFAULT '0',
   `tab1` int(10) unsigned NOT NULL DEFAULT '0',
@@ -2169,9 +2182,9 @@ CREATE TABLE `guild_member_withdraw` (
 
 /*Table structure for table `guild_newslog` */
 
-DROP TABLE IF EXISTS `guild_newslog`;
+-- DROP TABLE IF EXISTS `guild_newslog`;
 
-CREATE TABLE `guild_newslog` (
+CREATE TABLE IF NOT EXISTS `guild_newslog` (
   `guildid` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Guild Identificator',
   `LogGuid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Log record identificator - auxiliary column',
   `EventType` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'Event type',
@@ -2189,9 +2202,9 @@ CREATE TABLE `guild_newslog` (
 
 /*Table structure for table `guild_rank` */
 
-DROP TABLE IF EXISTS `guild_rank`;
+-- DROP TABLE IF EXISTS `guild_rank`;
 
-CREATE TABLE `guild_rank` (
+CREATE TABLE IF NOT EXISTS `guild_rank` (
   `guildid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `rid` tinyint(3) unsigned NOT NULL,
   `rname` varchar(20) NOT NULL DEFAULT '',
@@ -2205,9 +2218,9 @@ CREATE TABLE `guild_rank` (
 
 /*Table structure for table `instance` */
 
-DROP TABLE IF EXISTS `instance`;
+-- DROP TABLE IF EXISTS `instance`;
 
-CREATE TABLE `instance` (
+CREATE TABLE IF NOT EXISTS `instance` (
   `id` int(10) unsigned NOT NULL DEFAULT '0',
   `map` smallint(5) unsigned NOT NULL DEFAULT '0',
   `resettime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -2225,9 +2238,9 @@ CREATE TABLE `instance` (
 
 /*Table structure for table `instance_reset` */
 
-DROP TABLE IF EXISTS `instance_reset`;
+-- DROP TABLE IF EXISTS `instance_reset`;
 
-CREATE TABLE `instance_reset` (
+CREATE TABLE IF NOT EXISTS `instance_reset` (
   `mapid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `difficulty` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `resettime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -2239,9 +2252,9 @@ CREATE TABLE `instance_reset` (
 
 /*Table structure for table `instance_scenario_progress` */
 
-DROP TABLE IF EXISTS `instance_scenario_progress`;
+-- DROP TABLE IF EXISTS `instance_scenario_progress`;
 
-CREATE TABLE `instance_scenario_progress` (
+CREATE TABLE IF NOT EXISTS `instance_scenario_progress` (
   `id` int(10) unsigned NOT NULL,
   `criteria` int(10) unsigned NOT NULL,
   `counter` bigint(20) unsigned NOT NULL,
@@ -2253,9 +2266,9 @@ CREATE TABLE `instance_scenario_progress` (
 
 /*Table structure for table `item_instance` */
 
-DROP TABLE IF EXISTS `item_instance`;
+-- DROP TABLE IF EXISTS `item_instance`;
 
-CREATE TABLE `item_instance` (
+CREATE TABLE IF NOT EXISTS `item_instance` (
   `guid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `itemEntry` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `owner_guid` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -2286,9 +2299,9 @@ CREATE TABLE `item_instance` (
 
 /*Table structure for table `item_instance_artifact` */
 
-DROP TABLE IF EXISTS `item_instance_artifact`;
+-- DROP TABLE IF EXISTS `item_instance_artifact`;
 
-CREATE TABLE `item_instance_artifact` (
+CREATE TABLE IF NOT EXISTS `item_instance_artifact` (
   `itemGuid` bigint(20) unsigned NOT NULL,
   `xp` bigint(20) unsigned NOT NULL DEFAULT '0',
   `artifactAppearanceId` int(10) unsigned NOT NULL DEFAULT '0',
@@ -2300,9 +2313,9 @@ CREATE TABLE `item_instance_artifact` (
 
 /*Table structure for table `item_instance_artifact_powers` */
 
-DROP TABLE IF EXISTS `item_instance_artifact_powers`;
+-- DROP TABLE IF EXISTS `item_instance_artifact_powers`;
 
-CREATE TABLE `item_instance_artifact_powers` (
+CREATE TABLE IF NOT EXISTS `item_instance_artifact_powers` (
   `itemGuid` bigint(20) unsigned NOT NULL,
   `artifactPowerId` int(10) unsigned NOT NULL,
   `purchasedRank` tinyint(3) unsigned DEFAULT '0',
@@ -2313,9 +2326,9 @@ CREATE TABLE `item_instance_artifact_powers` (
 
 /*Table structure for table `item_instance_azerite` */
 
-DROP TABLE IF EXISTS `item_instance_azerite`;
+-- DROP TABLE IF EXISTS `item_instance_azerite`;
 
-CREATE TABLE `item_instance_azerite` (
+CREATE TABLE IF NOT EXISTS `item_instance_azerite` (
   `itemGuid` bigint(20) unsigned NOT NULL,
   `xp` bigint(20) unsigned NOT NULL DEFAULT '0',
   `level` int(10) unsigned NOT NULL DEFAULT '1',
@@ -2347,9 +2360,9 @@ CREATE TABLE `item_instance_azerite` (
 
 /*Table structure for table `item_instance_azerite_empowered` */
 
-DROP TABLE IF EXISTS `item_instance_azerite_empowered`;
+-- DROP TABLE IF EXISTS `item_instance_azerite_empowered`;
 
-CREATE TABLE `item_instance_azerite_empowered` (
+CREATE TABLE IF NOT EXISTS `item_instance_azerite_empowered` (
   `itemGuid` bigint(20) unsigned NOT NULL,
   `azeritePowerId1` int(11) NOT NULL,
   `azeritePowerId2` int(11) NOT NULL,
@@ -2363,9 +2376,9 @@ CREATE TABLE `item_instance_azerite_empowered` (
 
 /*Table structure for table `item_instance_azerite_milestone_power` */
 
-DROP TABLE IF EXISTS `item_instance_azerite_milestone_power`;
+-- DROP TABLE IF EXISTS `item_instance_azerite_milestone_power`;
 
-CREATE TABLE `item_instance_azerite_milestone_power` (
+CREATE TABLE IF NOT EXISTS `item_instance_azerite_milestone_power` (
   `itemGuid` bigint(20) unsigned NOT NULL,
   `azeriteItemMilestonePowerId` int(10) unsigned NOT NULL,
   PRIMARY KEY (`itemGuid`,`azeriteItemMilestonePowerId`)
@@ -2375,9 +2388,9 @@ CREATE TABLE `item_instance_azerite_milestone_power` (
 
 /*Table structure for table `item_instance_azerite_unlocked_essence` */
 
-DROP TABLE IF EXISTS `item_instance_azerite_unlocked_essence`;
+-- DROP TABLE IF EXISTS `item_instance_azerite_unlocked_essence`;
 
-CREATE TABLE `item_instance_azerite_unlocked_essence` (
+CREATE TABLE IF NOT EXISTS `item_instance_azerite_unlocked_essence` (
   `itemGuid` bigint(20) unsigned NOT NULL,
   `azeriteEssenceId` int(10) unsigned NOT NULL,
   `rank` int(10) unsigned NOT NULL,
@@ -2388,9 +2401,9 @@ CREATE TABLE `item_instance_azerite_unlocked_essence` (
 
 /*Table structure for table `item_instance_gems` */
 
-DROP TABLE IF EXISTS `item_instance_gems`;
+-- DROP TABLE IF EXISTS `item_instance_gems`;
 
-CREATE TABLE `item_instance_gems` (
+CREATE TABLE IF NOT EXISTS `item_instance_gems` (
   `itemGuid` bigint(20) unsigned NOT NULL,
   `gemItemId1` int(10) unsigned NOT NULL DEFAULT '0',
   `gemBonuses1` text,
@@ -2411,9 +2424,9 @@ CREATE TABLE `item_instance_gems` (
 
 /*Table structure for table `item_instance_modifiers` */
 
-DROP TABLE IF EXISTS `item_instance_modifiers`;
+-- DROP TABLE IF EXISTS `item_instance_modifiers`;
 
-CREATE TABLE `item_instance_modifiers` (
+CREATE TABLE IF NOT EXISTS `item_instance_modifiers` (
   `itemGuid` bigint(20) unsigned NOT NULL,
   `fixedScalingLevel` int(10) unsigned DEFAULT '0',
   `artifactKnowledgeLevel` int(10) unsigned DEFAULT '0',
@@ -2430,9 +2443,9 @@ CREATE TABLE `item_instance_modifiers` (
 
 /*Table structure for table `item_instance_transmog` */
 
-DROP TABLE IF EXISTS `item_instance_transmog`;
+-- DROP TABLE IF EXISTS `item_instance_transmog`;
 
-CREATE TABLE `item_instance_transmog` (
+CREATE TABLE IF NOT EXISTS `item_instance_transmog` (
   `itemGuid` bigint(20) unsigned NOT NULL,
   `itemModifiedAppearanceAllSpecs` int(11) NOT NULL DEFAULT '0',
   `itemModifiedAppearanceSpec1` int(11) NOT NULL DEFAULT '0',
@@ -2451,9 +2464,9 @@ CREATE TABLE `item_instance_transmog` (
 
 /*Table structure for table `item_loot_items` */
 
-DROP TABLE IF EXISTS `item_loot_items`;
+-- DROP TABLE IF EXISTS `item_loot_items`;
 
-CREATE TABLE `item_loot_items` (
+CREATE TABLE IF NOT EXISTS `item_loot_items` (
   `container_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'guid of container (item_instance.guid)',
   `item_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'loot item entry (item_instance.itemEntry)',
   `item_count` int(10) NOT NULL DEFAULT '0' COMMENT 'stack size',
@@ -2473,9 +2486,9 @@ CREATE TABLE `item_loot_items` (
 
 /*Table structure for table `item_loot_money` */
 
-DROP TABLE IF EXISTS `item_loot_money`;
+-- DROP TABLE IF EXISTS `item_loot_money`;
 
-CREATE TABLE `item_loot_money` (
+CREATE TABLE IF NOT EXISTS `item_loot_money` (
   `container_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'guid of container (item_instance.guid)',
   `money` int(10) NOT NULL DEFAULT '0' COMMENT 'money loot (in copper)',
   PRIMARY KEY (`container_id`)
@@ -2485,9 +2498,9 @@ CREATE TABLE `item_loot_money` (
 
 /*Table structure for table `item_refund_instance` */
 
-DROP TABLE IF EXISTS `item_refund_instance`;
+-- DROP TABLE IF EXISTS `item_refund_instance`;
 
-CREATE TABLE `item_refund_instance` (
+CREATE TABLE IF NOT EXISTS `item_refund_instance` (
   `item_guid` bigint(20) unsigned NOT NULL COMMENT 'Item GUID',
   `player_guid` bigint(20) unsigned NOT NULL COMMENT 'Player GUID',
   `paidMoney` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -2499,9 +2512,9 @@ CREATE TABLE `item_refund_instance` (
 
 /*Table structure for table `item_soulbound_trade_data` */
 
-DROP TABLE IF EXISTS `item_soulbound_trade_data`;
+-- DROP TABLE IF EXISTS `item_soulbound_trade_data`;
 
-CREATE TABLE `item_soulbound_trade_data` (
+CREATE TABLE IF NOT EXISTS `item_soulbound_trade_data` (
   `itemGuid` bigint(20) unsigned NOT NULL COMMENT 'Item GUID',
   `allowedPlayers` text NOT NULL COMMENT 'Space separated GUID list of players who can receive this item in trade',
   PRIMARY KEY (`itemGuid`)
@@ -2511,9 +2524,9 @@ CREATE TABLE `item_soulbound_trade_data` (
 
 /*Table structure for table `lfg_data` */
 
-DROP TABLE IF EXISTS `lfg_data`;
+-- DROP TABLE IF EXISTS `lfg_data`;
 
-CREATE TABLE `lfg_data` (
+CREATE TABLE IF NOT EXISTS `lfg_data` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `dungeon` int(10) unsigned NOT NULL DEFAULT '0',
   `state` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -2524,9 +2537,9 @@ CREATE TABLE `lfg_data` (
 
 /*Table structure for table `log_gm` */
 
-DROP TABLE IF EXISTS `log_gm`;
+-- DROP TABLE IF EXISTS `log_gm`;
 
-CREATE TABLE `log_gm` (
+CREATE TABLE IF NOT EXISTS `log_gm` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `date` datetime DEFAULT NULL,
   `gm_account_id` bigint(20) DEFAULT NULL,
@@ -2547,9 +2560,9 @@ CREATE TABLE `log_gm` (
 
 /*Table structure for table `mail` */
 
-DROP TABLE IF EXISTS `mail`;
+-- DROP TABLE IF EXISTS `mail`;
 
-CREATE TABLE `mail` (
+CREATE TABLE IF NOT EXISTS `mail` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
   `messageType` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `stationery` tinyint(3) NOT NULL DEFAULT '41',
@@ -2572,9 +2585,9 @@ CREATE TABLE `mail` (
 
 /*Table structure for table `mail_items` */
 
-DROP TABLE IF EXISTS `mail_items`;
+-- DROP TABLE IF EXISTS `mail_items`;
 
-CREATE TABLE `mail_items` (
+CREATE TABLE IF NOT EXISTS `mail_items` (
   `mail_id` int(10) unsigned NOT NULL DEFAULT '0',
   `item_guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `receiver` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Character Global Unique Identifier',
@@ -2587,9 +2600,9 @@ CREATE TABLE `mail_items` (
 
 /*Table structure for table `pet_aura` */
 
-DROP TABLE IF EXISTS `pet_aura`;
+-- DROP TABLE IF EXISTS `pet_aura`;
 
-CREATE TABLE `pet_aura` (
+CREATE TABLE IF NOT EXISTS `pet_aura` (
   `guid` int(10) unsigned NOT NULL COMMENT 'Global Unique Identifier',
   `casterGuid` binary(16) NOT NULL COMMENT 'Full Global Unique Identifier',
   `spell` int(10) unsigned NOT NULL,
@@ -2606,9 +2619,9 @@ CREATE TABLE `pet_aura` (
 
 /*Table structure for table `pet_aura_effect` */
 
-DROP TABLE IF EXISTS `pet_aura_effect`;
+-- DROP TABLE IF EXISTS `pet_aura_effect`;
 
-CREATE TABLE `pet_aura_effect` (
+CREATE TABLE IF NOT EXISTS `pet_aura_effect` (
   `guid` int(10) unsigned NOT NULL COMMENT 'Global Unique Identifier',
   `casterGuid` binary(16) NOT NULL COMMENT 'Full Global Unique Identifier',
   `spell` int(10) unsigned NOT NULL,
@@ -2623,9 +2636,9 @@ CREATE TABLE `pet_aura_effect` (
 
 /*Table structure for table `pet_spell` */
 
-DROP TABLE IF EXISTS `pet_spell`;
+-- DROP TABLE IF EXISTS `pet_spell`;
 
-CREATE TABLE `pet_spell` (
+CREATE TABLE IF NOT EXISTS `pet_spell` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier',
   `spell` mediumint(8) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell Identifier',
   `active` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -2636,9 +2649,9 @@ CREATE TABLE `pet_spell` (
 
 /*Table structure for table `pet_spell_charges` */
 
-DROP TABLE IF EXISTS `pet_spell_charges`;
+-- DROP TABLE IF EXISTS `pet_spell_charges`;
 
-CREATE TABLE `pet_spell_charges` (
+CREATE TABLE IF NOT EXISTS `pet_spell_charges` (
   `guid` int(10) unsigned NOT NULL,
   `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'SpellCategory.dbc Identifier',
   `rechargeStart` int(10) unsigned NOT NULL DEFAULT '0',
@@ -2650,9 +2663,9 @@ CREATE TABLE `pet_spell_charges` (
 
 /*Table structure for table `pet_spell_cooldown` */
 
-DROP TABLE IF EXISTS `pet_spell_cooldown`;
+-- DROP TABLE IF EXISTS `pet_spell_cooldown`;
 
-CREATE TABLE `pet_spell_cooldown` (
+CREATE TABLE IF NOT EXISTS `pet_spell_cooldown` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Global Unique Identifier, Low part',
   `spell` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Spell Identifier',
   `time` int(10) unsigned NOT NULL DEFAULT '0',
@@ -2665,9 +2678,9 @@ CREATE TABLE `pet_spell_cooldown` (
 
 /*Table structure for table `petition` */
 
-DROP TABLE IF EXISTS `petition`;
+-- DROP TABLE IF EXISTS `petition`;
 
-CREATE TABLE `petition` (
+CREATE TABLE IF NOT EXISTS `petition` (
   `ownerguid` bigint(20) unsigned NOT NULL,
   `petitionguid` bigint(20) unsigned DEFAULT '0',
   `name` varchar(24) NOT NULL,
@@ -2679,9 +2692,9 @@ CREATE TABLE `petition` (
 
 /*Table structure for table `petition_sign` */
 
-DROP TABLE IF EXISTS `petition_sign`;
+-- DROP TABLE IF EXISTS `petition_sign`;
 
-CREATE TABLE `petition_sign` (
+CREATE TABLE IF NOT EXISTS `petition_sign` (
   `ownerguid` bigint(20) unsigned NOT NULL,
   `petitionguid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `playerguid` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -2695,9 +2708,9 @@ CREATE TABLE `petition_sign` (
 
 /*Table structure for table `players_reports_status` */
 
-DROP TABLE IF EXISTS `players_reports_status`;
+-- DROP TABLE IF EXISTS `players_reports_status`;
 
-CREATE TABLE `players_reports_status` (
+CREATE TABLE IF NOT EXISTS `players_reports_status` (
   `guid` int(10) unsigned NOT NULL DEFAULT '0',
   `creation_time` int(10) unsigned NOT NULL DEFAULT '0',
   `average` float NOT NULL DEFAULT '0',
@@ -2715,9 +2728,9 @@ CREATE TABLE `players_reports_status` (
 
 /*Table structure for table `pool_quest_save` */
 
-DROP TABLE IF EXISTS `pool_quest_save`;
+-- DROP TABLE IF EXISTS `pool_quest_save`;
 
-CREATE TABLE `pool_quest_save` (
+CREATE TABLE IF NOT EXISTS `pool_quest_save` (
   `pool_id` int(10) unsigned NOT NULL DEFAULT '0',
   `quest_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`pool_id`,`quest_id`)
@@ -2727,9 +2740,9 @@ CREATE TABLE `pool_quest_save` (
 
 /*Table structure for table `pvpstats_battlegrounds` */
 
-DROP TABLE IF EXISTS `pvpstats_battlegrounds`;
+-- DROP TABLE IF EXISTS `pvpstats_battlegrounds`;
 
-CREATE TABLE `pvpstats_battlegrounds` (
+CREATE TABLE IF NOT EXISTS `pvpstats_battlegrounds` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `winner_faction` tinyint(4) NOT NULL,
   `bracket_id` tinyint(3) unsigned NOT NULL,
@@ -2742,9 +2755,9 @@ CREATE TABLE `pvpstats_battlegrounds` (
 
 /*Table structure for table `pvpstats_players` */
 
-DROP TABLE IF EXISTS `pvpstats_players`;
+-- DROP TABLE IF EXISTS `pvpstats_players`;
 
-CREATE TABLE `pvpstats_players` (
+CREATE TABLE IF NOT EXISTS `pvpstats_players` (
   `battleground_id` bigint(20) unsigned NOT NULL,
   `character_guid` bigint(20) unsigned NOT NULL,
   `winner` bit(1) NOT NULL,
@@ -2766,9 +2779,9 @@ CREATE TABLE `pvpstats_players` (
 
 /*Table structure for table `quest_tracker` */
 
-DROP TABLE IF EXISTS `quest_tracker`;
+-- DROP TABLE IF EXISTS `quest_tracker`;
 
-CREATE TABLE `quest_tracker` (
+CREATE TABLE IF NOT EXISTS `quest_tracker` (
   `id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `character_guid` bigint(20) unsigned NOT NULL DEFAULT '0',
   `quest_accept_time` datetime NOT NULL,
@@ -2784,9 +2797,9 @@ CREATE TABLE `quest_tracker` (
 
 /*Table structure for table `reserved_name` */
 
-DROP TABLE IF EXISTS `reserved_name`;
+-- DROP TABLE IF EXISTS `reserved_name`;
 
-CREATE TABLE `reserved_name` (
+CREATE TABLE IF NOT EXISTS `reserved_name` (
   `name` varchar(12) NOT NULL DEFAULT '',
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Player Reserved Names';
@@ -2795,9 +2808,9 @@ CREATE TABLE `reserved_name` (
 
 /*Table structure for table `updates` */
 
-DROP TABLE IF EXISTS `updates`;
+-- DROP TABLE IF EXISTS `updates`;
 
-CREATE TABLE `updates` (
+CREATE TABLE IF NOT EXISTS `updates` (
   `name` varchar(200) NOT NULL COMMENT 'filename with extension of the update.',
   `hash` char(40) DEFAULT '' COMMENT 'sha1 hash of the sql file.',
   `state` enum('RELEASED','ARCHIVED') NOT NULL DEFAULT 'RELEASED' COMMENT 'defines if an update is released or archived.',
@@ -2808,11 +2821,18 @@ CREATE TABLE `updates` (
 
 /*Data for the table `updates` */
 
+-- Pre-populated: these 2 character updates are already merged into this base SQL file.
+-- The auto-updater will skip them if the files reappear in sql/updates/characters/.
+-- Uses REPLACE INTO so this import is idempotent (safe to re-run).
+REPLACE INTO `updates` (`name`, `hash`, `state`, `speed`) VALUES
+('2021_12_23_Update_default_inventory.sql', '21084ae8b5e94fbf41a6209cd8243ccd47023221', 'RELEASED', 0),
+('2022_03_26_00_vulpera_fix_spell.sql', 'df2495aebcc177b8617f695ab8a9413e0286b8b1', 'RELEASED', 0);
+
 /*Table structure for table `updates_include` */
 
-DROP TABLE IF EXISTS `updates_include`;
+-- DROP TABLE IF EXISTS `updates_include`;
 
-CREATE TABLE `updates_include` (
+CREATE TABLE IF NOT EXISTS `updates_include` (
   `path` varchar(200) NOT NULL COMMENT 'directory to include. $ means relative to the source directory.',
   `state` enum('RELEASED','ARCHIVED') NOT NULL DEFAULT 'RELEASED' COMMENT 'defines if the directory contains released or archived updates.',
   PRIMARY KEY (`path`)
@@ -2825,9 +2845,9 @@ insert  into `updates_include`(`path`,`state`) values
 
 /*Table structure for table `warden_action` */
 
-DROP TABLE IF EXISTS `warden_action`;
+-- DROP TABLE IF EXISTS `warden_action`;
 
-CREATE TABLE `warden_action` (
+CREATE TABLE IF NOT EXISTS `warden_action` (
   `wardenId` smallint(5) unsigned NOT NULL,
   `action` tinyint(3) unsigned DEFAULT NULL,
   PRIMARY KEY (`wardenId`)
@@ -2837,9 +2857,9 @@ CREATE TABLE `warden_action` (
 
 /*Table structure for table `world_quest` */
 
-DROP TABLE IF EXISTS `world_quest`;
+-- DROP TABLE IF EXISTS `world_quest`;
 
-CREATE TABLE `world_quest` (
+CREATE TABLE IF NOT EXISTS `world_quest` (
   `id` int(10) unsigned NOT NULL,
   `rewardid` int(10) unsigned NOT NULL,
   `starttime` int(10) unsigned NOT NULL,
@@ -2850,9 +2870,9 @@ CREATE TABLE `world_quest` (
 
 /*Table structure for table `worldstates` */
 
-DROP TABLE IF EXISTS `worldstates`;
+-- DROP TABLE IF EXISTS `worldstates`;
 
-CREATE TABLE `worldstates` (
+CREATE TABLE IF NOT EXISTS `worldstates` (
   `entry` int(10) unsigned NOT NULL DEFAULT '0',
   `value` int(10) unsigned NOT NULL DEFAULT '0',
   `comment` tinytext,
@@ -2861,10 +2881,11 @@ CREATE TABLE `worldstates` (
 
 /*Data for the table `worldstates` */
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+-- NOTE: Original mysqldump restore lines removed.
+-- @OLD_FOREIGN_KEY_CHECKS / @OLD_UNIQUE_CHECKS / @OLD_SQL_NOTES were
+-- never initialised in this reorganised file, so restoring them would trigger
+-- MariaDB 11.8 ERROR 1231.  Session variables are managed by the explicit
+-- SET FOREIGN_KEY_CHECKS and SET SESSION lines at top/bottom of this file.
 
 -- ===========================================================================
 -- Updates from sql/updates/characters/  (applied in filename-sorted order)
@@ -2909,9 +2930,9 @@ ADD COLUMN `camp_mapid` smallint(5) NULL DEFAULT NULL AFTER `camp_o`;
  *  NOT covered by the base GPL framework license. Development/evaluation only.
  * ===========================================================================
  */
-DROP TABLE IF EXISTS `ai_playerbot_custom_strategy`;
+-- DROP TABLE IF EXISTS `ai_playerbot_custom_strategy`;
 
-CREATE TABLE `ai_playerbot_custom_strategy` (
+CREATE TABLE IF NOT EXISTS `ai_playerbot_custom_strategy` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `idx` bigint(20),
@@ -2941,9 +2962,9 @@ INSERT INTO `ai_playerbot_custom_strategy` VALUES
  *  NOT covered by the base GPL framework license. Development/evaluation only.
  * ===========================================================================
  */
-DROP TABLE IF EXISTS `ai_playerbot_db_store`;
+-- DROP TABLE IF EXISTS `ai_playerbot_db_store`;
 
-CREATE TABLE `ai_playerbot_db_store` (
+CREATE TABLE IF NOT EXISTS `ai_playerbot_db_store` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `guid` bigint(20) NOT NULL,
   `preset` varchar(32) NOT NULL,
@@ -2963,8 +2984,8 @@ CREATE TABLE `ai_playerbot_db_store` (
  *  NOT covered by the base GPL framework license. Development/evaluation only.
  * ===========================================================================
  */
-DROP TABLE IF EXISTS `ai_playerbot_random_bots`;
-CREATE TABLE `ai_playerbot_random_bots` (
+-- DROP TABLE IF EXISTS `ai_playerbot_random_bots`;
+CREATE TABLE IF NOT EXISTS `ai_playerbot_random_bots` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `owner` bigint(20) NOT NULL,
   `bot` bigint(20) NOT NULL,
@@ -3000,3 +3021,9 @@ CREATE TABLE IF NOT EXISTS `psychobot_strategies` (
   KEY `idx_psychobot_strategies_guid` (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
   COMMENT='mod-psychobot: per-bot saved (master-toggled) combat strategies';
+
+-- Re-enable FK checks (tables are all created now, references are valid).
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Restore sql_notes
+SET SESSION sql_notes = 1;
